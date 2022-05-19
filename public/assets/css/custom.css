@@ -1,3 +1,494 @@
 .nav-header {
   background-color: #fff;
 }
+
+// Here you can add other styles
+body{
+  background-color:#fbfbfb;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #23282c;
+  text-align: left;
+}
+
+
+// Here you can add other styles
+body{
+  background-color:#fbfbfb;
+}
+
+.app-header.navbar button.d-lg-none.navbar-toggler:last-child{
+  display:none!important;
+}
+.logo{
+  display:block;
+  width:30%;
+  margin:0 auto;
+  text-align:center;
+  margin-bottom: 30px;
+}
+.navbar-brand img{
+  width: 80%;
+  object-fit: contain;
+  height: 80%;
+}
+.logo img{
+  width:100%;
+}
+.phone_label{
+  font-size: 16px;
+  margin-right: 20px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+ .app-body .card {
+  background-color: #fbfbfb;
+  border:0px;
+}
+.dashboard .card-body {
+  background-color: #f0f3f5;
+border-bottom: 1px solid #c8ced3;
+}
+ .dashboard.dash .tasks .card-body{
+   background-color: #fff;
+   border-right: 1px solid #c8ced3;
+ }
+ .dashboard .brand-card .brand-card-body .small {
+  color: #444 !important;
+  font-size: 100%;
+  font-weight: 600;
+}
+.dashboard .brand-card {
+    margin-bottom: 0rem;
+  }
+
+.app-header.navbar button.d-lg-block.d-none.navbar-toggler:nth-last-child(2){
+  display:none!important;
+}
+
+
+// enter otp screen css
+
+.otp .height-100 {
+    height: 100vh
+}
+
+.otp .card {
+    width: 400px;
+    border: none;
+    height: unset;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.otp .card h6 {
+    color: #0072b0;
+    font-size: 20px
+}
+
+.otp .inputs input {
+    width: 40px;
+    height: 40px
+}
+
+.otp input[type=number]::-webkit-inner-spin-button,
+.otp input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0
+}
+
+.otp .card-2 {
+    background-color: #fff;
+    padding: 10px;
+    width: 350px;
+    height: 100px;
+    bottom: -50px;
+    left: 20px;
+    position: absolute;
+    border-radius: 5px
+}
+
+.otp .card-2 .content {
+    margin-top: 50px
+}
+
+.otp .card-2 .content a {
+    color: #0072b0
+}
+
+.otp .form-control:focus {
+    box-shadow: none;
+    border: 2px solid #0072b0;
+}
+
+.otp .validate {
+    border-radius: 20px;
+    height: 40px;
+    background-color: #0072b0;
+    border: 1px solid #0072b0;
+    width: 140px
+}
+
+// profile css
+
+
+#msform input[type="file"] { 
+  opacity: 0; /* make transparent */
+  z-index: -1; /* move under anything else */
+  position: absolute; /* don't let it take up space */
+  width: 80%;
+  margin: 0 auto;
+  right: 0;
+}
+
+
+#msform input[type="file"]:focus + label {
+  outline: 2px solid;  /* example focus style */
+}
+/*form styles*/
+#msform {
+  width: 400px;
+  margin: 50px auto;
+  text-align: center;
+  position: relative;
+}
+#msform fieldset {
+  background: #fbfbfb;
+  border: 0 none;
+  border-radius: 3px;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  padding: 20px 30px;
+  box-sizing: border-box;
+  width: 95%;
+  margin: 0 2%;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+#msform fieldset:not(:first-of-type) {
+  display: block;
+  margin-bottom: 20px;
+}
+/*inputs*/
+#msform input, #msform textarea, #msform select, #msform label {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: montserrat;
+  color: #2C3E50;
+  font-size: 13px;
+  background: #fff;
+}
+
+#msform .profile_img{
+  width: 50px;
+height: 50px;
+margin: 0 auto;
+margin-top: 10px;
+}
+#msform .profile_img{
+  width:100%;
+  height:100%;
+}
+
+/*buttons*/
+#msform .action-button {
+  width: 100px;
+background: #0072b0;
+font-weight: bold;
+color: white;
+border: 0 none;
+border-radius: 1px;
+cursor: pointer;
+padding: 10px 5px;
+margin: 10px 5px;
+border-radius: 12px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #0072b0;
+}
+/*headings*/
+.fs-title {
+  font-size: 15px;
+  text-transform: uppercase;
+  color: #2C3E50;
+  margin-bottom: 10px;
+}
+.fs-subtitle {
+  font-weight: normal;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+  margin-bottom: -10px;
+  overflow: hidden;
+  /*CSS counters to number the steps*/
+  counter-reset: step;
+  padding-left: 0;
+}
+#progressbar li {
+  list-style-type: none;
+  color: white;
+  text-transform: uppercase;
+  font-size: 9px;
+  width: 33.33%;
+  float: left;
+  position: relative;
+}
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 20px;
+  line-height: 20px;
+  display: block;
+  font-size: 10px;
+  color: #333;
+  background: white;
+  border-radius: 3px;
+  margin: 0 auto 5px auto;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: white;
+  position: absolute;
+  left: -50%;
+  top: 9px;
+  z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+  content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,  #progressbar li.active:after{
+  background: #0072B0;
+  color: white;
+}
+
+.card.volunter{
+  width: 60%;
+margin: 40px auto;
+}
+.card.volunter input{
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: montserrat;
+  color: #2C3E50;
+  font-size: 13px;
+  background: #fff;
+}
+
+.card.volunter .add-btn {
+  width: 100px;
+  background: #0072b0;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 1px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+  border-radius: 12px;
+}
+
+.card.volunter .add-btn:hover, .card.volunter .add-btn:focus {
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #0072b0;
+}
+.volunter_list{
+  width: 60%;
+margin: 40px auto;
+}
+.volunter_list .btn-info {
+  color: #0474b1;
+  background-color: unset;
+  border-color: unset;
+  padding: 6px 14px;
+}
+.volunter_list .btn-danger {
+  color: red;
+  padding: 6px 14px;
+} 
+#msform fieldset {
+  border: 0 none;
+  border-radius: 3px;
+  box-shadow: 0 0 0px 0px rgba(0, 0, 0, 0.4);
+  padding: 20px 30px 10px;
+  box-sizing: border-box;
+  width: 95%;
+  margin: 0 2%;
+    margin-bottom: 0px;
+  position: relative;
+  margin-bottom: 0px;
+}
+#msform fieldset:not(:first-of-type) {
+  display: block;
+  margin-bottom: 0px;
+  padding-top: 0;
+}
+.dashboard .tasks.panding .card {
+  background-color: #f0f3f5;
+  border: 0px;
+}
+.dashboard .tasks.panding .card-body {
+  background-color: #fff;
+  border-right: 0px solid #c8ced3;
+  width: 33%;
+  border-bottom: 0px solid #c8ced3;
+}
+
+.breadcrumb {
+  position: relative;
+  border-radius: 0;
+  border-bottom: 1px solid #c8ced3;
+  border-top: 1px solid #c8ced3;
+  margin-left: -1.95rem;
+  margin-right: -1.95rem;
+}
+[data-header-position="fixed"] .content-body {
+  padding-top: 2.15rem;
+}
+.notification_dropdown{
+      display: none !important;
+}
+.quixnav .metismenu > li > a {
+  color: #fff;
+  padding: 0.75rem 1rem;
+}
+.quixnav .metismenu > li > a.active {
+  color: #fff;
+  background: #3a4248;
+}
+.quixnav .metismenu > li > a:hover {
+  color: #fff;
+  background: #20a8d8;
+}
+.quixnav .metismenu > li > a.mm-active {
+  color: #fff;
+  background: #3a4248;
+}
+.quixnav .metismenu > li > a.mm-active i{
+  color: #20a8d8;
+}
+.hamburger.is-active{
+  left: 50px;
+}
+[data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .brand-title{
+  display: block;
+}
+.login .card{
+  background-color: transparent;
+  background-clip: border-box;
+  border: 0px solid #c8ced3;
+  box-shadow: unset;
+}
+.login .btn-primary:first-child{
+  margin-right: 10px;
+}
+
+.task_status .card {
+  background-color: transparent;
+  border: 0px solid #c8ced3;
+  box-shadow: unset;
+}
+.card-header {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #f0f3f5;
+  border-bottom: 1px solid #c8ced3;
+  justify-content: unset;
+}
+.header-right .header-profile span{
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 8px;
+  color: #2f353a;
+}
+
+@media (max-width:640px){
+  .logo {
+    width: 50%;
+  }
+  .text-left.mobile{
+    text-align: right !important;
+  }
+  .navbar-brand img{
+    width: 100%;
+    object-fit: contain;
+    height: 90%;
+  }
+  .otp .card {
+    width: 360px;
+  }
+  .otp .card h6 {
+    color: #0072b0;
+    font-size: 18px;
+  }
+  .card.volunter {
+    width: 100%;
+    margin: 20px auto;
+  }
+  .volunter_list{
+  width: 100%;
+  margin: 20px auto;
+}
+.add-btns{
+  text-align:center;
+}
+
+#msform fieldset {
+  border: 0 none;
+  border-radius: 3px;
+  box-shadow: 0 0 0px 0px rgba(0, 0, 0, 0.4);
+  padding: 20px 30px 10px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 2%;
+    margin-bottom: 0px;
+  position: relative;
+  margin-bottom: 0px;
+}
+#msform fieldset:not(:first-of-type) {
+  display: block;
+  margin-bottom: 0px;
+  padding-top: 0;
+}
+.app-body.profile{
+  margin-top: 50px;
+}
+#msform {
+  width: 100%;
+  margin: 0px auto;
+}
+.dashboard .tasks.panding .card-body {
+  width: 100%;
+}
+.app, app-dashboard, app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: unset;
+}
+.otp .height-100 {
+  height: unset;
+}
+}

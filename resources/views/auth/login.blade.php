@@ -7,14 +7,55 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Login</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset ('assets/images/favicon.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset ('assets/images/aap_logo.png')}}">
     <link href="{{ asset ('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{ asset ('assets/css/custom.css')}}" rel="stylesheet">
 
 </head>
 
 <body class="h-100">
-    <div class="authincation h-100">
+    <div class="authincation h-100 login">
+        <div class="container-fluid h-100">
+            <div class="row justify-content-center h-100 align-items-center">
+                <div class="col-md-5 mx-auto">
+                  <div class="card-group">
+                    <div class="card p-4">
+                      <div class="card-body">
+                          <div class="logo">
+                            <img src="{{ asset ('assets/images/aap_logo.png')}}" class="img" alt="admin"/>
+                          </div>
+                          <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                            {{ csrf_field() }}
+                              <div class="input-group mb-3">
+                                <label for="mobileno" class="phone_label">Phone No.</label>
+                                <input type="text" class="form-control" id="mobileno" name="mobileno" placeholder="Enter Phone No." value="{{ old('mobileno') }}" required autofocus>
+                                @if ($errors->has('mobileno'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('mobileno') }}</strong>
+                                    </span>
+                                @endif
+                              </div>
+                              <div class="row">
+                                <div class="col-5 text-left mobile" style="padding: 0px;">
+                                  
+                                </div>
+                                <div class="col-7 text-right">
+                                  <a href="{{ route('register') }}" class="btn btn-primary mt-3">Register</a>
+                                  <button type="submit" class="btn btn-primary px-4 mt-3">Login</button></a>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="authincation h-100" style="display:none;">
         <div class="container-fluid h-100">
             <div class="row justify-content-center h-100 align-items-center">
                 <div class="col-md-6">
@@ -70,7 +111,6 @@
             </div>
         </div>
     </div>
-
 
 
     <!--**********************************
