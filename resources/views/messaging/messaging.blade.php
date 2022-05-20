@@ -66,6 +66,12 @@
                         <option>Booth Prabhari</option>
                         <option>Gali Prabhari</option>
                       </select> -->
+                      <!-- <select class="selectpicker" multiple data-live-search="true">
+                          <option>Ward Prabhari</option>
+                          <option>Mandal Prabhari</option>
+                          <option>Booth Prabhari</option>
+                          <option>Gali Prabhari</option>
+                      </select> -->
                     </div>
                 </div>
                 <!-- <div class="send_label">
@@ -143,7 +149,12 @@
 </div>
 </div>
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
 @endsection
 
 @section('script')
+<script>
+$('select').selectpicker();
+</script>
 @endsection

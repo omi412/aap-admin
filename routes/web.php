@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\VolunteerController;
+use App\Http\Controllers\FirebaseController;
+  
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('auth/login');
 });
+
+Route::get('otp-login', [FirebaseController::class, 'index']);
 
 Auth::routes();
 
@@ -23,9 +28,20 @@ Auth::routes();
 //Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-    Route::get('/volunteer-types', function () {
+    //Route::resource('volunteer-types', VolunteerController::class);
+
+
+    Route::get('volunteer-types', [VolunteerController::class, 'index']);
+    Route::post('volunteer-types', [VolunteerController::class, 'store']);
+    Route::get('fetch-volunteer-types', [VolunteerController::class, 'fetchvolunteer']);
+    Route::get('edit-volunteer-type/{id}', [VolunteerController::class, 'edit']);
+    Route::put('update-volunteer-type/{id}', [VolunteerController::class, 'update']);
+    Route::delete('delete-volunteer-type/{id}', [VolunteerController::class, 'destroy']);
+
+    /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');
-    });
+    });*/
+
     Route::get('/task-status', function () {
         return view('task_status/task_status');
     });
@@ -38,6 +54,23 @@ Auth::routes();
     Route::get('/messaging', function () {
         return view('messaging/messaging');
     });
+
+    Route::get('/house-data', function () {
+        return view('house_data/house_data');
+    });
+
+    Route::get('/contacts', function () {
+        return view('contacts/contact');
+    });
+
+    Route::get('/hierarchy', function () {
+        return view('hierarchy/hierarchy');
+    });
+
+    Route::get('/pending-approval', function () {
+        return view('pending_approval/pending_approval');
+    });
+
 //});
 
 // user protected routes

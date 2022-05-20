@@ -27,21 +27,21 @@
                                 class="icon icon-plug"></i><span class="nav-text">Messaging</span></a>
                         
                     </li>
-                    <li><a href="widget-basic.html" aria-expanded="false"><i class="icon icon-globe-2"></i><span
+                    <li><a href="{{ url('house-data') }}" aria-expanded="false"><i class="icon icon-globe-2"></i><span
                                 class="nav-text">House Data</span></a></li>
                    
-                    <li><a class="has-arrow1 nav-link" href="{{ route('register') }}" aria-expanded="false"><i
+                    <li><a class="has-arrow1 nav-link" href="{{ url('contacts') }}" aria-expanded="false"><i
                                 class="icon icon-form"></i><span class="nav-text">Contacts</span></a>
                        
                     </li>
                     
-                    <li><a class="has-arrow1 nav-link" href="{{ route('register') }}" aria-expanded="false"><i
+                    <li><a class="has-arrow1 nav-link" href="{{ url('hierarchy') }}" aria-expanded="false"><i
                                 class="icon icon-layout-25"></i><span class="nav-text">Hierarchy</span></a>
                         
                     </li>
 
                    
-                    <li><a class="has-arrow1 nav-link" href="{{ route('register') }}" aria-expanded="false"><i
+                    <li><a class="has-arrow1 nav-link" href="{{ url('pending-approval') }}" aria-expanded="false"><i
                                 class="icon icon-single-copy-06"></i><span class="nav-text">Pending Approval</span></a>
                     </li>
                 </ul>

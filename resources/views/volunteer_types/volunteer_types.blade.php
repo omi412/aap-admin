@@ -22,29 +22,38 @@
 <div class="animated fadeIn dashboard">
   <div class="row">
     <div class="col-md-12">
+      <div class="volunter msg">
+        <div id="success_message" style="margin: 20px 0px;"></div>
+      </div>
       <div class="card volunter">
         <div class="card-header">
-          Add Volunter
+          Add Volunteer
         </div>
+        <ul id="update_msgList"></ul>
         <div class="card-body">
-         <div class="row">
-          <div class="col-sm-6 col-lg-9">
-            <div class="volunter_add">
-                <div>
-                  <input type="text" name="name" placeholder="Volunter Types" />
+          <form id="volunteer" name="postForm" method="POST">
+             <div class="row">
+              <div class="col-sm-6 col-lg-9">
+                <div class="volunter_add">
+                  <input type="hidden" id="volunteer_id" />
+                    <div>
+                      <input type="text" name="volunteer_types" class="volunteer_types" id="valunteer_type" placeholder="Volunteer Types" />
+                    </div>
                 </div>
-            </div>
-          </div><!--/.col-->
-          <div class="col-sm-6 col-lg-3">
-            <div class="add-btns">
-                <a href="#" class="btn add-btn"><i class="fa fa-plus" style="margin-right: 6px;"></i>Add</a>
-            </div>
-          </div>
-        </div><!--/.row-->
+              </div><!--/.col-->
+              <div class="col-sm-6 col-lg-3">
+                <div class="add-btns">
+                    <button type="submit" class="btn add-btn"><i class="fa fa-plus" style="margin-right: 6px;"></i>Add</button>
+                </div>
+              </div>
+            </div><!--/.row-->
+          </form>
         </div>
       </div>
     </div><!--/.col-->
   </div>
+
+  
   <div class="volunter_list">
     <div class="row">
     <div class="col-lg-12">
@@ -56,25 +65,12 @@
           <table class="table table-striped">
             <thead>
               <tr>
+                <th>S No.</th>
                 <th>Volunteer Types</th>
                 <th style="text-align: right;">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Ward Prabhari</td>
-                <td style="text-align: right;">
-                  <a href="#" class="btn btn-info"><i class="fa fa-pencil fa-lg"></i></a>
-                  <a href="#" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                </td>
-              </tr>
-              <tr>
-                <td>Mandal Prabhari</td>
-                <td style="text-align: right;">
-                  <a href="#" class="btn btn-info"><i class="fa fa-pencil fa-lg"></i></a>
-                  <a href="#" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                </td>
-              </tr>
             </tbody>
           </table>
           </div>
@@ -84,11 +80,172 @@
   </div><!--/.row-->
 </div>
 
-
+{{-- Delete Modal --}}
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Student Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Confirm to Delete Data ?</h4>
+                <input type="hidden" id="deleteing_id">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary delete_student">Yes Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- End - Delete Modal --}}
 
         <!--**********************************
             Content body end
         ***********************************-->
   
 @endsection
-   
+@section('script')
+<script type="text/javascript">
+
+  $(document).ready(function () {
+
+        fetchvolunteer();
+
+        function fetchvolunteer() {
+          //alert("working");
+            $.ajax({
+                type: "GET",
+                url: "/fetch-volunteer-types",
+                dataType: "json",
+                success: function (response) {
+                     console.log(response);
+                    $('tbody').html("");
+                    $.each(response.volunteer, function (key, item) {
+                        $('tbody').append('<tr>\
+                            <td>' + item.id + '</td>\
+                            <td>' + item.volunteer_type + '</td>\
+                            <td width=10px><button type="button" value="' + item.id + '" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button></td>\
+                            <td width=10px><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>\
+                        \</tr>');
+                    });
+                }
+            });
+        }
+
+       $('#volunteer').on('submit', function(e) {
+            e.preventDefault();
+
+            var data = {
+                'volunteer_types': $('.volunteer_types').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/volunteer-types",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#save_msgList').html("");
+                        $('#save_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#save_msgList').append('<li>' + err_value + '</li>');
+                        });
+                        $('.add_student').text('Save');
+                    } else {
+                        $('#save_msgList').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#AddStudentModal').find('input').val('');
+                        $('.add_student').text('Save');
+                        fetchvolunteer();
+                    }
+                }
+            });
+
+        });
+
+       /* edit ajax*/
+
+       $(document).on('click', '.editbtn', function (e) {
+            e.preventDefault();
+            var valunteer_id = $(this).val();
+            $('#volunteer').form();
+
+             //alert(valunteer_id);
+            $.ajax({
+                type: "GET",
+                url: "/edit-volunteer-type/" + valunteer_id,
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                    } else {
+                        // console.log(response.student.name);
+                        $('#valunteer_type').val(response.valunteer.valunteer_type);
+                        $('#valunteer_id').val(valunteer_id);
+                    }
+                }
+            });
+
+        });
+
+       /* edit ajax*/
+
+       /* delete volunteer */
+
+        $(document).on('click', '.deletebtn', function () {
+            var stud_id = $(this).val();
+            $('#DeleteModal').modal('show');
+            $('#deleteing_id').val(stud_id);
+        });
+
+        $(document).on('click', '.delete_student', function (e) {
+            e.preventDefault();
+
+            $(this).text('Deleting..');
+            var volunteer_id = $('#deleteing_id').val();
+            //alert(volunteer_id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-volunteer-type/" + volunteer_id,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                    } else {
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                        $('#DeleteModal').modal('hide');
+                        fetchvolunteer();
+                    }
+                }
+            });
+        });
+
+       /* delete volunteer */
+
+    });
+
+</script>
+@endsection
