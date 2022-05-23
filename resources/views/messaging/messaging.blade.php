@@ -14,7 +14,7 @@
       <a ng-reflect-router-link="/" href="#/">Home</a>
     </li>
     <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
-      <span tabindex="0" ng-reflect-router-link="//dashboard/">messaging</span>
+      <span tabindex="0" ng-reflect-router-link="//dashboard/">Messaging</span>
     </li>
   </ol>
 </cui-breadcrumb>
@@ -22,6 +22,9 @@
 <div class="animated fadeIn dashboard">
   <div class="row" *ngIf="(activeUser=='admin')">
     <div class="col-md-12">
+      <div class="volunter msg">
+        <div id="success_message" style="margin: 20px 0px;"></div>
+      </div>
       <div class="card volunter">
         <div class="card-header">
          <i class="fa fa-align-justify"></i> Messages
@@ -30,13 +33,13 @@
          <div class="row">
           <div class="col-sm-6 col-lg-12">
             <div class="volunter_add messaging">
-                <div>
+                <form id="volunteer" name="postForm" method="POST">
                   <div class="form-group row">
                     <div class="col-md-3">
                       <label for="password1">Message</label>
                     </div>
                     <div class="col-md-9">
-                      <textarea name="message" placeholder="Message"></textarea>
+                      <textarea name="message" id="message" class="message" placeholder="Message"></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -44,7 +47,7 @@
                       <label for="password1">Send to</label>
                     </div>
                     <div class="col-md-9">
-                      <div class="form-check form-check-inline">
+                      <!-- <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
                         <label class="form-check-label" for="inlineCheckbox1">Ward Prabhari</label>
                       </div>
@@ -59,28 +62,28 @@
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
                         <label class="form-check-label" for="inlineCheckbox4">Gali Prabhari</label>
-                      </div>
+                      </div> -->
                       <!-- <select class="selectpicker" multiple data-live-search="true">
                         <option>Ward Prabhari</option>
                         <option>Mandal Prabhari</option>
                         <option>Booth Prabhari</option>
                         <option>Gali Prabhari</option>
                       </select> -->
-                      <!-- <select class="selectpicker" multiple data-live-search="true">
-                          <option>Ward Prabhari</option>
-                          <option>Mandal Prabhari</option>
-                          <option>Booth Prabhari</option>
-                          <option>Gali Prabhari</option>
-                      </select> -->
+                      <select class="selectpicker send_to" id="send_to" name="send_to[]" multiple data-live-search="true">
+                          <option value="Ward Prabhari">Ward Prabhari</option>
+                          <option value="Mandal Prabhari">Mandal Prabhari</option>
+                          <option value="Booth Prabhari">Booth Prabhari</option>
+                          <option value="Gali Prabhari">Gali Prabhari</option>
+                      </select>
                     </div>
                 </div>
                 <!-- <div class="send_label">
                     <label>Send to</label>
                   </div> -->
                   <div class="add-btns">
-                    <a href="#" class="btn add-btn"><i class="fa fa-location-arrow" style="margin-right: 6px;"></i>Send</a>
+                    <button class="btn add-btn" type="submit"><i class="fa fa-location-arrow" style="margin-right: 6px;"></i>Send</button>
                   </div>
-                </div>
+                </form>
             </div>
           </div><!--/.col-->
         </div><!--/.row-->
@@ -96,6 +99,12 @@
           <i class="fa fa-align-justify"></i> Message History
         </div>
         <div class="card-body">
+          <div class="search_box">
+            <div class="input-group">
+              <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+              <!-- <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i> </button> -->
+            </div>
+          </div>
           <table class="table table-striped responsive all_table">
             <thead>
               <tr>
@@ -126,6 +135,7 @@
       </div>
     </div>
   </div><!--/.row-->
+  </div>
   <div class="modal fade pending_approval" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -147,7 +157,6 @@
     </div>
   </div>
 </div>
-</div>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 
@@ -157,4 +166,187 @@
 <script>
 $('select').selectpicker();
 </script>
+<script type="text/javascript">
+
+  $(document).ready(function () {
+
+        
+       $('#volunteer').on('submit', function(e) {
+            e.preventDefault();
+
+            var data = {
+                'message': $('.message').val(),
+                'send_to': $('.send_to').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/messaging",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                     console.log(response);
+                    if (response.status == 400) {
+                        $('#save_msgList').html("");
+                        $('#save_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#save_msgList').append('<li>' + err_value + '</li>');
+                        });
+                        $('.add_student').text('Save');
+                    } else {
+                        $('#save_msgList').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#AddStudentModal').find('input').val('');
+                        $('.add_student').text('Save');
+                    }
+                }
+            });
+
+        });
+
+       /* edit ajax*/
+
+       $(document).on('click', '.editbtn', function (e) {
+            e.preventDefault();
+            var volunteer_id = $(this).val();
+            //alert(volunteer_id);
+            $('#editModal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/edit-volunteer-type/" + volunteer_id,
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').modal('hide');
+                    } else {
+                         console.log(response.volunteer.volunteer_type);
+                        $('#volunteer_types').val(response.volunteer.volunteer_type);
+                        $('#volunteer_id').val(volunteer_id);
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
+
+        });
+
+        $(document).on('click', '.update_volunteer', function (e) {
+            e.preventDefault();
+
+            $(this).text('Updating..');
+            var id = $('#volunteer_id').val();
+            // alert(id);
+
+            var data = {
+                'volunteer_types': $('#volunteer_types').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "PUT",
+                url: "/update-volunteer-type/" + id,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#update_msgList').html("");
+                        $('#update_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#update_msgList').append('<li>' + err_value +
+                                '</li>');
+                        });
+                        $('.update_volunteer').text('Update');
+                    } else {
+                        $('#update_msgList').html("");
+
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').find('input').val('');
+                        $('.update_volunteer').text('Update');
+                        $('#editModal').modal('hide');
+                       
+                    }
+                }
+            });
+
+        });
+
+       /* edit ajax*/
+
+       /* delete volunteer */
+
+        $(document).on('click', '.deletebtn', function () {
+            var stud_id = $(this).val();
+            $('#DeleteModal').modal('show');
+            $('#deleteing_id').val(stud_id);
+        });
+
+        $(document).on('click', '.delete_student', function (e) {
+            e.preventDefault();
+
+            $(this).text('Deleting..');
+            var volunteer_id = $('#deleteing_id').val();
+            //alert(volunteer_id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-volunteer-type/" + volunteer_id,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                    } else {
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                        $('#DeleteModal').modal('hide');
+                       
+                    }
+                }
+            });
+        });
+
+       /* delete volunteer */
+
+    });
+
+</script>
+
+<!-- /* search function */ -->
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+ <!-- /* search function */ -->
+
+
+
 @endsection

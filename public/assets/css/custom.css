@@ -428,6 +428,50 @@ margin: 40px auto;
   width: 60%;
   margin: 40px auto;
 }
+.bootstrap-select .btn-light {
+  color: #2C3E50 !important;
+}
+.modal-content {
+  border: 0px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0rem;
+}
+.modal-header {
+  background: #0072b0;
+  border-bottom: 0px solid #c8ced3;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+}
+.btn-close {
+  color: #fff;
+  padding: 0;
+  margin: 0;
+}
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-footer .btn-primary {
+  color: #fff;
+  background-color: #0072b0;
+  border-color: #0072b0;
+  width: 100px;
+  background: #0072b0;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 1px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+  border-radius: 12px;
+}
+.modal-footer .btn-primary:hover{
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #0072b0;
+}
+
+
+
 
 @media (max-width:640px){
   .logo {
@@ -494,5 +538,13 @@ margin: 40px auto;
 }
 .otp .height-100 {
   height: unset;
+}
+.nav-header .logo-compact {
+  display: block;
+  width: 75%;
+}
+.header .header-content {
+  padding-left: 2.375rem;
+  padding-right: 0.2rem;
 }
 }

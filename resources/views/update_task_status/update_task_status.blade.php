@@ -30,8 +30,8 @@
         <div class="card-body">
           <div class="search_box">
             <div class="input-group">
-              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-              <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
+              <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+              <!-- <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i> </button> -->
             </div>
           </div>
           <table class="table table-striped responsive all_table">
@@ -44,34 +44,36 @@
                 <th style="text-align: right;">To Be started</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="myTable">
+               @foreach ( $taskStatus as $data)
               <tr>
-                <td><a href="{{ url('add-assign') }}">1</a></td>
-                <td><a href="{{ url('add-assign') }}">Add new ward prabhari</a></td>
-                <td><a href="{{ url('add-assign') }}">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092</a></td>
-                <td><a href="{{ url('add-assign') }}">Ramesh Sharma</a></td>
-                <td style="text-align: right;"><a href="{{ url('add-assign') }}">
+                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">1</a></td>
+                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">Add new ward prabhari</a></td>
+                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092</a></td>
+                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">Ramesh Sharma</a></td>
+                <td style="text-align: right;"><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">
                   <span class="badge badge-success">In Progress</span></a>
                 </td>
               </tr>
-              <tr>
-                <td><a href="{{ url('add-assign') }}">2</a></td>
-                <td><a href="{{ url('add-assign') }}">Add new Mandal prabhari</a></td>
-                <td><a href="{{ url('add-assign') }}">133, South Avenue, New Delhi, Delhi-110001</a></td>
-                <td><a href="{{ url('add-assign') }}">Meenakshi Jain</a></td>
-                <td style="text-align: right;"><a href="{{ url('add-assign') }}">
+            @endforeach
+              <!-- <tr>
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">2</a></td>
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">Add new Mandal prabhari</a></td>
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">133, South Avenue, New Delhi, Delhi-110001</a></td>
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">Meenakshi Jain</a></td>
+                <td style="text-align: right;"><a href="{{ url('/banner/'.$data->id.'/edit') }}">
                   <span class="badge badge-danger">Complete</span></a>
                 </td>
               </tr>
               <tr>
-                <td><a href="{{ url('add-assign') }}">3</a></td>
-                <td><a href="{{ url('add-assign') }}">Add new Booth prabhari</a></td>
-                <td><a href="{{ url('add-assign') }}">153, South Avenue, New Delhi, Delhi-110001</a></td>
-                <td><a href="{{ url('add-assign') }}">Rahul Garg</a></td>
-                <td style="text-align: right;"><a href="{{ url('add-assign') }}">
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">3</a></td>
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">Add new Booth prabhari</a></td>
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">153, South Avenue, New Delhi, Delhi-110001</a></td>
+                <td><a href="{{ url('/banner/'.$data->id.'/edit') }}">Rahul Garg</a></td>
+                <td style="text-align: right;"><a href="{{ url('/banner/'.$data->id.'/edit') }}">
                   <span class="badge badge-success">In Progress</span></a>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
           </div>
@@ -148,7 +150,203 @@
   </div>
 </div>
 
+<style type="text/css">
+  [data-header-position="fixed"] .content-body {
+  padding-top: 3.5rem;
+}
+</style>
+
 @endsection
 
 @section('script')
+<script>
+  
+  $(document).ready(function () {
+
+
+       /*$('#task_status').on('submit', function(e) {
+            e.preventDefault();
+            var data = {
+                'task_title': $('.task_title').val(),
+                'assign_to': $('.assign_to').val(),
+                'task_description': $('.task_description').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/task-status",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#save_msgList').html("");
+                        $('#save_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#save_msgList').append('<li>' + err_value + '</li>');
+                        });
+                    } else {
+                        $('#save_msgList').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#task_status')[0].reset();
+                        $('#section_second').hide();
+                        $('#section_first').show();
+                      
+                    }
+                }
+            });
+
+        });*/
+
+       /* edit ajax*/
+
+       $(document).on('click', '.editbtn', function (e) {
+            e.preventDefault();
+            var task_id = $(this).val();
+            //alert(volunteer_id);
+            $('#section_second').show();
+            $('#section_first').hide();
+            $('.sub_task').hide();
+            $('.update_task').show();
+            $.ajax({
+                type: "GET",
+                url: "/edit-task-status/" + task_id,
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').modal('hide');
+                    } else {
+                         console.log(response.taskStatus.task_title);
+                        $('#task_title').val(response.taskStatus.task_title);
+                        $('#assign_to').val(response.taskStatus.assign_to);
+                        $('#task_description').val(response.taskStatus.task_description);
+                        $('#task_id').val(task_id);
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
+
+        });
+
+        $(document).on('click', '.update_task', function (e) {
+            e.preventDefault();
+
+            $(this).text('Updating..');
+            var id = $('#task_id').val();
+            // alert(id);
+
+            var data = {
+                'task_title': $('.task_title').val(),
+                'assign_to': $('.assign_to').val(),
+                'task_description': $('.task_description').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "PUT",
+                url: "/update-task-status/" + id,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#update_msgList').html("");
+                        $('#update_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#update_msgList').append('<li>' + err_value +
+                                '</li>');
+                        });
+                        $('.update_volunteer').text('Update');
+                    } else {
+                        $('#update_msgList').html("");
+
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.update_task').text('Update');
+                        $('#section_second').hide();
+                        $('#section_first').show();
+                        
+                    }
+                }
+            });
+
+        });
+
+       /* edit ajax*/
+
+       /* delete volunteer */
+
+        $(document).on('click', '.deletebtn', function () {
+            var task_id = $(this).val();
+            $('#DeleteModal').modal('show');
+            $('#deleteing_id').val(task_id);
+        });
+
+        $(document).on('click', '.delete_student', function (e) {
+            e.preventDefault();
+
+            $(this).text('Deleting..');
+            var task_id = $('#deleteing_id').val();
+            //alert(task_id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-task-status/" + task_id,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                    } else {
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                        $('#DeleteModal').modal('hide');
+                       
+                    }
+                }
+            });
+        });
+
+       /* delete volunteer */
+
+    });
+
+</script>
+
+<!-- /* search function */ -->
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+ <!-- /* search function */ -->
+
+
 @endsection

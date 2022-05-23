@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Volunteer;
+use App\Models\Messaging;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class VolunteerController extends Controller
+class MessagingController extends Controller
 {
     public function index()
     {
-        return view('volunteer_types.volunteer_types');
+        return view('messaging.messaging');
     }
 
     public function fetchvolunteer()
@@ -24,7 +24,8 @@ class VolunteerController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-             'volunteer_types'=> 'required|max:191',
+             'message'=> 'required|max:191',
+             'send_to'=> 'required',
         ]);
 
         if($validator->fails())
@@ -36,12 +37,14 @@ class VolunteerController extends Controller
         }
         else
         {
-            $Volunteer = new Volunteer;
-            $volunteer->volunteer_type = $request->input('volunteer_types');
-            $Volunteer->save();
+            $message = new Messaging;
+            $message->message = $request->input('message');
+            $message->send_to = $request->input('send_to');
+            $message->appreance = implode(',', $tags);
+            $message->save();
             return response()->json([
                 'status'=>200,
-                'message'=>'Volunteer Added Successfully.'
+                'message'=>'Message Added Successfully.'
             ]);
         }
 

@@ -62,6 +62,12 @@
           <i class="fa fa-align-justify"></i> Volunteer Lists
         </div>
         <div class="card-body">
+          <div class="search_box">
+            <div class="input-group">
+              <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+              <!-- <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i> </button> -->
+            </div>
+          </div>
           <table class="table table-striped">
             <thead>
               <tr>
@@ -70,7 +76,7 @@
                 <th style="text-align: right;">Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="myTable">
             </tbody>
           </table>
           </div>
@@ -79,21 +85,48 @@
     </div>
   </div><!--/.row-->
 </div>
+{{-- Edit Modal --}}
 
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit & Update Volunteer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul id="update_msgList"></ul>
+
+        <input type="hidden" id="volunteer_id" />
+
+        <div class="form-group mb-3">
+            <input type="text" name="volunteer_types" class="volunteer_types form-control" id="volunteer_types" placeholder="Volunteer Types" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary update_volunteer">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{-- Edn- Edit Modal --}}
 {{-- Delete Modal --}}
 <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Student Data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="exampleModalLabel">Delete Volunteer </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <h4>Confirm to Delete Data ?</h4>
                 <input type="hidden" id="deleteing_id">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary delete_student">Yes Delete</button>
             </div>
         </div>
@@ -122,7 +155,7 @@
                 success: function (response) {
                      console.log(response);
                     $('tbody').html("");
-                    $.each(response.volunteer, function (key, item) {
+                    $.each(response.volunteers, function (key, item) {
                         $('tbody').append('<tr>\
                             <td>' + item.id + '</td>\
                             <td>' + item.volunteer_type + '</td>\
@@ -178,21 +211,69 @@
 
        $(document).on('click', '.editbtn', function (e) {
             e.preventDefault();
-            var valunteer_id = $(this).val();
-            $('#volunteer').form();
-
-             //alert(valunteer_id);
+            var volunteer_id = $(this).val();
+            //alert(volunteer_id);
+            $('#editModal').modal('show');
             $.ajax({
                 type: "GET",
-                url: "/edit-volunteer-type/" + valunteer_id,
+                url: "/edit-volunteer-type/" + volunteer_id,
                 success: function (response) {
                     if (response.status == 404) {
                         $('#success_message').addClass('alert alert-success');
                         $('#success_message').text(response.message);
+                        $('#editModal').modal('hide');
                     } else {
-                        // console.log(response.student.name);
-                        $('#valunteer_type').val(response.valunteer.valunteer_type);
-                        $('#valunteer_id').val(valunteer_id);
+                         console.log(response.volunteer.volunteer_type);
+                        $('#volunteer_types').val(response.volunteer.volunteer_type);
+                        $('#volunteer_id').val(volunteer_id);
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
+
+        });
+
+        $(document).on('click', '.update_volunteer', function (e) {
+            e.preventDefault();
+
+            $(this).text('Updating..');
+            var id = $('#volunteer_id').val();
+            // alert(id);
+
+            var data = {
+                'volunteer_types': $('#volunteer_types').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "PUT",
+                url: "/update-volunteer-type/" + id,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#update_msgList').html("");
+                        $('#update_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#update_msgList').append('<li>' + err_value +
+                                '</li>');
+                        });
+                        $('.update_volunteer').text('Update');
+                    } else {
+                        $('#update_msgList').html("");
+
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').find('input').val('');
+                        $('.update_volunteer').text('Update');
+                        $('#editModal').modal('hide');
+                        fetchvolunteer();
                     }
                 }
             });
@@ -248,4 +329,19 @@
     });
 
 </script>
+
+<!-- /* search function */ -->
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+ <!-- /* search function */ -->
+
+
 @endsection

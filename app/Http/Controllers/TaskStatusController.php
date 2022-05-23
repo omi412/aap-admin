@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Volunteer;
+use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class VolunteerController extends Controller
+class TaskStatusController extends Controller
 {
     public function index()
     {
-        return view('volunteer_types.volunteer_types');
+        return view('task_status.task_status');
     }
 
-    public function fetchvolunteer()
+    public function fetchtaskstatus()
     {
-        $volunteers = Volunteer::all();
+        $taskStatus = TaskStatus::all();
         return response()->json([
-            'volunteers'=>$volunteers,
+            'taskStatus'=>$taskStatus,
         ]);
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-             'volunteer_types'=> 'required|max:191',
+             'task_title'=> 'required|max:191',
+             'assign_to'=> 'required|max:191',
+             'task_description'=> 'required|max:191',
         ]);
 
         if($validator->fails())
@@ -36,12 +38,14 @@ class VolunteerController extends Controller
         }
         else
         {
-            $Volunteer = new Volunteer;
-            $volunteer->volunteer_type = $request->input('volunteer_types');
-            $Volunteer->save();
+            $taskStatus = new TaskStatus;
+            $taskStatus->task_title = $request->input('task_title');
+            $taskStatus->assign_to = $request->input('assign_to');
+            $taskStatus->task_description = $request->input('task_description');
+            $taskStatus->save();
             return response()->json([
                 'status'=>200,
-                'message'=>'Volunteer Added Successfully.'
+                'message'=>'Task Status Added Successfully.'
             ]);
         }
 
@@ -49,12 +53,12 @@ class VolunteerController extends Controller
 
     public function edit($id)
     {
-        $volunteer = Volunteer::find($id);
-        if($volunteer)
+        $taskStatus = TaskStatus::find($id);
+        if($taskStatus)
         {
             return response()->json([
                 'status'=>200,
-                'volunteer'=> $volunteer,
+                'taskStatus'=> $taskStatus,
             ]);
         }
         else
@@ -70,7 +74,9 @@ class VolunteerController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'volunteer_types'=> 'required|max:191',
+             'task_title'=> 'required|max:191',
+             'assign_to'=> 'required|max:191',
+             'task_description'=> 'required|max:191',
         ]);
 
         if($validator->fails())
@@ -82,21 +88,23 @@ class VolunteerController extends Controller
         }
         else
         {
-            $volunteer = Volunteer::find($id);
-            if($volunteer)
+            $taskStatus = TaskStatus::find($id);
+            if($taskStatus)
             {
-                 $volunteer->volunteer_type = $request->input('volunteer_types');
-                $volunteer->update();
+                $taskStatus->task_title = $request->input('task_title');
+                $taskStatus->assign_to = $request->input('assign_to');
+                $taskStatus->task_description = $request->input('task_description');
+                $taskStatus->update();
                 return response()->json([
                     'status'=>200,
-                    'message'=>'Volunteer Updated Successfully.'
+                    'message'=>'Task Status Updated Successfully.'
                 ]);
             }
             else
             {
                 return response()->json([
                     'status'=>404,
-                    'message'=>'No Volunteer Found.'
+                    'message'=>'No Task Status Found.'
                 ]);
             }
 
@@ -105,20 +113,20 @@ class VolunteerController extends Controller
 
     public function destroy($id)
     {
-        $Volunteer = Volunteer::find($id);
-        if($Volunteer)
+        $taskStatus = TaskStatus::find($id);
+        if($taskStatus)
         {
-            $Volunteer->delete();
+            $taskStatus->delete();
             return response()->json([
                 'status'=>200,
-                'message'=>'Volunteer Deleted Successfully.'
+                'message'=>'Task Status Deleted Successfully.'
             ]);
         }
         else
         {
             return response()->json([
                 'status'=>404,
-                'message'=>'No Volunteer Found.'
+                'message'=>'No Task Status Found.'
             ]);
         }
     }
