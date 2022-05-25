@@ -25,7 +25,7 @@ class MessagingController extends Controller
     {
         $validator = Validator::make($request->all(), [
              'message'=> 'required|max:191',
-             'send_to'=> 'required',
+             'send_to.*'=> 'required',
         ]);
 
         if($validator->fails())

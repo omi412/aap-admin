@@ -10,6 +10,6 @@ class Volunteer extends Model
     use HasFactory;
     protected $table = 'volunteers';
     protected $fillable = [
-        'volunteer-type'
+        'volunteer_type'
     ];
 }

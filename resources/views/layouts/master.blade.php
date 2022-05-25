@@ -108,7 +108,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
    <!--  <script src="{{ asset ('assets/js/dashboard/dashboard-1.js')}}"></script> -->
-
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+    function notification(type,text,timer=3000){
+      swal({
+        title: "",
+        text:text,
+        icon: type,
+        timer:timer,
+        showConfirmButton:false
+      });
+    }    
+    </script>
     @yield('script')
 
 

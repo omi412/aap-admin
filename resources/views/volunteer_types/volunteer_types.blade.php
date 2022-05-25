@@ -37,7 +37,7 @@
                 <div class="volunter_add">
                   <input type="hidden" id="volunteer_id" />
                     <div>
-                      <input type="text" name="volunteer_types" class="volunteer_types" id="valunteer_type" placeholder="Volunteer Types" />
+                      <input type="text" required name="volunteer_types" class="volunteer_types" id="valunteer_type" placeholder="Volunteer Types" />
                     </div>
                 </div>
               </div><!--/.col-->
@@ -140,6 +140,7 @@
   
 @endsection
 @section('script')
+
 <script type="text/javascript">
 
   $(document).ready(function () {
@@ -194,14 +195,20 @@
                             $('#save_msgList').append('<li>' + err_value + '</li>');
                         });
                         $('.add_student').text('Save');
-                    } else {
-                        $('#save_msgList').html("");
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#AddStudentModal').find('input').val('');
+                    } else if(response.status == 200) {
+                        $('#volunteer')[0].reset();
+                        //$('#save_msgList').html("");
+                        //$('#success_message').addClass('alert alert-success');
+                        //$('#success_message').text(response.message);
+                        //$('#AddStudentModal').find('input').val('');
                         $('.add_student').text('Save');
+                        notification('success',response.message,3000);
                         fetchvolunteer();
+                    }else{
+                      notification('danger',response.error,5000);
                     }
+                },error:function(error){
+                  notification('danger','Oops! Something went wrong.',3000);
                 }
             });
 
@@ -327,7 +334,6 @@
        /* delete volunteer */
 
     });
-
 </script>
 
 <!-- /* search function */ -->
