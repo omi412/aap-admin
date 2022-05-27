@@ -65,12 +65,8 @@ Auth::routes();
     Route::delete('delete-add-assign/{id}', [addAssignController::class, 'destroy']);
 
 
-    Route::get('messaging', [MessagingController::class, 'index']);
-    Route::post('messaging', [MessagingController::class, 'store']);
-    Route::get('fetch-messaging', [MessagingController::class, 'fetchtaskstatus']);
-    Route::get('edit-messaging/{id}', [MessagingController::class, 'edit']);
-    Route::put('update-messaging/{id}', [MessagingController::class, 'update']);
-    Route::delete('delete-messaging/{id}', [MessagingController::class, 'destroy']);
+    Route::resource('messaging', MessagingController::class);
+    Route::get('fetch-messaging', [MessagingController::class, 'fetchMessages']);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');

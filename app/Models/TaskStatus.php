@@ -12,6 +12,10 @@ class TaskStatus extends Model
     protected $fillable = [
         'task_title',
         'assign_to',
-        'task_description'
+        'task_description',
+        'volunteer_name',
+        'address',
+        'status',
+        'remarks'
     ];
 }

@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class messaging extends Model
+use Carbon\Carbon;
+class Messaging extends Model
 {
     use HasFactory;
     protected $table = 'messagings';
@@ -13,4 +13,9 @@ class messaging extends Model
         'message',
         'send_to'
     ];
+
+    public function getSendDateAttribute($value)
+    {
+        return Carbon::parse($this->created_at)->format('d/m/Y g:i A');
+    }
 }

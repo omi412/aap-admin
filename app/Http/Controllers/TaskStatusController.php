@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class TaskStatusController extends Controller
 {
@@ -24,9 +25,11 @@ class TaskStatusController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-             'task_title'=> 'required|max:191',
-             'assign_to'=> 'required|max:191',
-             'task_description'=> 'required|max:191',
+             'task_title'=> 'required|max:100',
+             'assign_to'=> 'required|max:100',
+             'task_description'=> 'required|max:200',
+             'volunteer'=>'required|max:150',
+             'address'=>'required|max:200'
         ]);
 
         if($validator->fails())
@@ -38,15 +41,27 @@ class TaskStatusController extends Controller
         }
         else
         {
-            $taskStatus = new TaskStatus;
-            $taskStatus->task_title = $request->input('task_title');
-            $taskStatus->assign_to = $request->input('assign_to');
-            $taskStatus->task_description = $request->input('task_description');
-            $taskStatus->save();
-            return response()->json([
-                'status'=>200,
-                'message'=>'Task Status Added Successfully.'
-            ]);
+            try{
+                TaskStatus::create([
+                    "task_title"=>$request->task_title,
+                    "assign_to"=>$request->assign_to,
+                    "task_description"=>$request->task_description,
+                    "volunteer_name"=>$request->volunteer,
+                    "address"=>$request->address,
+                    "status"=>'',
+                    "remarks"=>'',
+
+                ]);
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Task Status Added Successfully.'
+                ]);
+            }catch(Exception $e){
+                return response()->json([
+                    'status'=>500,
+                    'error'=>$e->getMessage()
+                ]);
+            }
         }
 
     }
@@ -74,9 +89,11 @@ class TaskStatusController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-             'task_title'=> 'required|max:191',
-             'assign_to'=> 'required|max:191',
-             'task_description'=> 'required|max:191',
+             'task_title'=> 'required|max:100',
+             'assign_to'=> 'required|max:100',
+             'task_description'=> 'required|max:200',
+             'volunteer'=>'required|max:150',
+             'address'=>'required|max:200'
         ]);
 
         if($validator->fails())
@@ -91,14 +108,24 @@ class TaskStatusController extends Controller
             $taskStatus = TaskStatus::find($id);
             if($taskStatus)
             {
-                $taskStatus->task_title = $request->input('task_title');
-                $taskStatus->assign_to = $request->input('assign_to');
-                $taskStatus->task_description = $request->input('task_description');
-                $taskStatus->update();
-                return response()->json([
-                    'status'=>200,
-                    'message'=>'Task Status Updated Successfully.'
-                ]);
+                try{
+                    $taskStatus->task_title = $request->input('task_title');
+                    $taskStatus->assign_to = $request->input('assign_to');
+                    $taskStatus->task_description = $request->input('task_description');
+                    $taskStatus->volunteer_name = $request->input('volunteer');
+                    $taskStatus->address = $request->input('address');
+                    $taskStatus->update();
+                    return response()->json([
+                        'status'=>200,
+                        'message'=>'Task Status Updated Successfully.'
+                    ]);
+                }catch(Exception $e){
+                    return response()->json([
+                        'status'=>500,
+                        'message'=>$e->getMessage()
+                    ]);
+                }
+                
             }
             else
             {

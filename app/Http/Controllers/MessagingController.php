@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Messaging;
 use Illuminate\Http\Request;
+use App\Http\Resources\MessagingResource;
 use Illuminate\Support\Facades\Validator;
 
 class MessagingController extends Controller
@@ -13,18 +14,18 @@ class MessagingController extends Controller
         return view('messaging.messaging');
     }
 
-    public function fetchvolunteer()
+    public function fetchMessages()
     {
-        $volunteers = Volunteer::all();
+        $messages = Messaging::all();
         return response()->json([
-            'volunteers'=>$volunteers,
+            'messages'=>MessagingResource::collection($messages),
         ]);
     }
 
     public function store(Request $request)
-    {
+    {   
         $validator = Validator::make($request->all(), [
-             'message'=> 'required|max:191',
+             'message'=> 'required|max:100',
              'send_to.*'=> 'required',
         ]);
 
@@ -37,92 +38,38 @@ class MessagingController extends Controller
         }
         else
         {
-            $message = new Messaging;
-            $message->message = $request->input('message');
-            $message->send_to = $request->input('send_to');
-            $message->appreance = implode(',', $tags);
-            $message->save();
-            return response()->json([
-                'status'=>200,
-                'message'=>'Message Added Successfully.'
-            ]);
+            try{
+                Messaging::create([
+                    "message"=>$request->message,
+                    "send_to"=>implode(',', $request->send_to),
+                ]);
+            
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Message Added Successfully.'
+                ]);
+            }catch(Exception $e){
+                return response()->json([
+                    'status'=>500,
+                    'message'=>$e->getMessage()
+                ]);
+            }
         }
 
     }
 
     public function edit($id)
     {
-        $volunteer = Volunteer::find($id);
-        if($volunteer)
-        {
-            return response()->json([
-                'status'=>200,
-                'volunteer'=> $volunteer,
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                'status'=>404,
-                'message'=>'No Volunteer Found.'
-            ]);
-        }
 
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'volunteer_types'=> 'required|max:191',
-        ]);
 
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=>$validator->messages()
-            ]);
-        }
-        else
-        {
-            $volunteer = Volunteer::find($id);
-            if($volunteer)
-            {
-                 $volunteer->volunteer_type = $request->input('volunteer_types');
-                $volunteer->update();
-                return response()->json([
-                    'status'=>200,
-                    'message'=>'Volunteer Updated Successfully.'
-                ]);
-            }
-            else
-            {
-                return response()->json([
-                    'status'=>404,
-                    'message'=>'No Volunteer Found.'
-                ]);
-            }
-
-        }
     }
 
     public function destroy($id)
     {
-        $Volunteer = Volunteer::find($id);
-        if($Volunteer)
-        {
-            $Volunteer->delete();
-            return response()->json([
-                'status'=>200,
-                'message'=>'Volunteer Deleted Successfully.'
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                'status'=>404,
-                'message'=>'No Volunteer Found.'
-            ]);
-        }
+        
     }
 }

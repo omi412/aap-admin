@@ -33,13 +33,15 @@
          <div class="row">
           <div class="col-sm-6 col-lg-12">
             <div class="volunter_add messaging">
-                <form id="volunteer" name="postForm" method="POST">
+              <ul id="save_msgList"></ul>
+                <form id="messaging-form" method="POST">
+                  @csrf
                   <div class="form-group row">
                     <div class="col-md-3">
                       <label for="password1">Message</label>
                     </div>
                     <div class="col-md-9">
-                      <textarea name="message" id="message" class="message" placeholder="Message"></textarea>
+                      <textarea name="message" required id="message" class="message" placeholder="Message"></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -69,7 +71,7 @@
                         <option>Booth Prabhari</option>
                         <option>Gali Prabhari</option>
                       </select> -->
-                      <select class="selectpicker send_to" id="send_to" name="send_to[]" multiple data-live-search="true">
+                      <select class="selectpicker send_to" required id="send_to" name="send_to[]" multiple data-live-search="true">
                           <option value="Ward Prabhari">Ward Prabhari</option>
                           <option value="Mandal Prabhari">Mandal Prabhari</option>
                           <option value="Booth Prabhari">Booth Prabhari</option>
@@ -108,24 +110,18 @@
           <table class="table table-striped responsive all_table">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Message</th>
                 <th>Date</th>
                 <th style="text-align: right;">Sent to</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="message-tbody">
               <tr>
                 <td><a href="#" data-toggle="modal" data-target="#form" style="color: #000;">Can i join to Both Prabhari in Uttar vindhan sabha</a></td>
                 <td>04/02/2022</td>
                 <td style="text-align: right;">
                   Booth Prabhari
-                </td>
-              </tr>
-              <tr>
-                <td><a href="#" data-toggle="modal" data-target="#form" style="color: #000;">Can i join to Ward Prabhari in South Madhay vindhan sabha</a></td>
-                <td>04/02/2022</td>
-                <td style="text-align: right;">
-                  Ward Prabhari
                 </td>
               </tr>
             </tbody>
@@ -167,170 +163,59 @@
 $('select').selectpicker();
 </script>
 <script type="text/javascript">
-
+  function fetchMessaging() {
+      $.ajax({
+          type: "GET",
+          url: "{{ url('fetch-messaging') }}",
+          dataType: "json",
+          success: function (response) {
+              
+              $('#message-tbody').html("");
+              var counter = 1;
+              $.each(response.messages, function (key, item) {
+                  $('#message-tbody').append(`<tr>
+                    <td>` + counter + `</td>
+                    <td><a href="#" data-toggle="modal" data-target="#form" style="color: #000;">`+item.message+`</a></td>
+                    <td>` + item.send_date + `</td>
+                    <td>` + item.send_to + `</td>
+                  </tr>`);
+                  counter++;
+              });
+          }
+      });
+  }
   $(document).ready(function () {
 
-        
-       $('#volunteer').on('submit', function(e) {
-            e.preventDefault();
+    fetchMessaging();    
+    $('#messaging-form').on('submit', function(e) {
+          e.preventDefault();
 
-            var data = {
-                'message': $('.message').val(),
-                'send_to': $('.send_to').val(),
-            }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/messaging",
-                data: data,
-                dataType: "json",
-                success: function (response) {
-                     console.log(response);
-                    if (response.status == 400) {
-                        $('#save_msgList').html("");
-                        $('#save_msgList').addClass('alert alert-danger');
-                        $.each(response.errors, function (key, err_value) {
-                            $('#save_msgList').append('<li>' + err_value + '</li>');
-                        });
-                        $('.add_student').text('Save');
-                    } else {
-                        $('#save_msgList').html("");
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#AddStudentModal').find('input').val('');
-                        $('.add_student').text('Save');
-                    }
-                }
-            });
-
-        });
-
-       /* edit ajax*/
-
-       $(document).on('click', '.editbtn', function (e) {
-            e.preventDefault();
-            var volunteer_id = $(this).val();
-            //alert(volunteer_id);
-            $('#editModal').modal('show');
-            $.ajax({
-                type: "GET",
-                url: "/edit-volunteer-type/" + volunteer_id,
-                success: function (response) {
-                    if (response.status == 404) {
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#editModal').modal('hide');
-                    } else {
-                         console.log(response.volunteer.volunteer_type);
-                        $('#volunteer_types').val(response.volunteer.volunteer_type);
-                        $('#volunteer_id').val(volunteer_id);
-                    }
-                }
-            });
-            $('.btn-close').find('input').val('');
-
-        });
-
-        $(document).on('click', '.update_volunteer', function (e) {
-            e.preventDefault();
-
-            $(this).text('Updating..');
-            var id = $('#volunteer_id').val();
-            // alert(id);
-
-            var data = {
-                'volunteer_types': $('#volunteer_types').val(),
-            }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: "PUT",
-                url: "/update-volunteer-type/" + id,
-                data: data,
-                dataType: "json",
-                success: function (response) {
-                    // console.log(response);
-                    if (response.status == 400) {
-                        $('#update_msgList').html("");
-                        $('#update_msgList').addClass('alert alert-danger');
-                        $.each(response.errors, function (key, err_value) {
-                            $('#update_msgList').append('<li>' + err_value +
-                                '</li>');
-                        });
-                        $('.update_volunteer').text('Update');
-                    } else {
-                        $('#update_msgList').html("");
-
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#editModal').find('input').val('');
-                        $('.update_volunteer').text('Update');
-                        $('#editModal').modal('hide');
-                       
-                    }
-                }
-            });
-
-        });
-
-       /* edit ajax*/
-
-       /* delete volunteer */
-
-        $(document).on('click', '.deletebtn', function () {
-            var stud_id = $(this).val();
-            $('#DeleteModal').modal('show');
-            $('#deleteing_id').val(stud_id);
-        });
-
-        $(document).on('click', '.delete_student', function (e) {
-            e.preventDefault();
-
-            $(this).text('Deleting..');
-            var volunteer_id = $('#deleteing_id').val();
-            //alert(volunteer_id);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: "DELETE",
-                url: "/delete-volunteer-type/" + volunteer_id,
-                dataType: "json",
-                success: function (response) {
-                    // console.log(response);
-                    if (response.status == 404) {
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('.delete_student').text('Yes Delete');
-                    } else {
-                        $('#success_message').html("");
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('.delete_student').text('Yes Delete');
-                        $('#DeleteModal').modal('hide');
-                       
-                    }
-                }
-            });
-        });
-
-       /* delete volunteer */
+          $.ajax({
+              type: "POST",
+              url: "{{ url('messaging') }}",
+              data: $('#messaging-form').serialize(),
+              dataType: "json",
+              success: function (response) {
+                  if (response.status == 400) {
+                      $('#save_msgList').html("");
+                      $('#save_msgList').addClass('alert alert-danger');
+                      $.each(response.errors, function (key, err_value) {
+                          $('#save_msgList').append('<li>' + err_value + '</li>');
+                      });
+  
+                  } else if(response.status==200) {
+                    fetchMessaging();
+                    notification('success',response.message);
+                    $('#messaging-form')[0].reset()
+                  }else{
+                    notification('danger',response.error,5000);
+                  }
+              }
+          });
 
     });
+
+  });
 
 </script>
 
