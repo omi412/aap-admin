@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TaskStatus extends Model
+class HouseData extends Model
 {
     use HasFactory;
-    protected $table = 'task_status';
+    protected $table = 'house_data';
     protected $fillable = [
-        'task_title',
-        'assign_to',
-        'task_description',
-        'volunteer_name',
-        'address',
-        'status',
+        'owner',
+        'house_no',
+        'address_line_1',
+        'address_line_2',
+        'ward',
         'remarks'
     ];
 }

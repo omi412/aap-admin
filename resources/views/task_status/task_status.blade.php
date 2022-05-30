@@ -50,8 +50,11 @@
                 <th style="width: 70px;">S No.</th>
                 <th>Task Title</th>
                 <th>Task Description</th>
-                <th>Date</th>
-                <th style="text-align: right;">Status</th>
+                <th>Assign To</th>
+                <!-- <th>Address</th>
+                <th>Date</th> -->
+                <th>Status</th>
+                <th style="text-align: right;">Action</th>
               </tr>
             </thead>
             <tbody id="myTable">
@@ -74,7 +77,8 @@
           <i class="fa fa-align-justify"></i> Add Task
         </div>
         <div class="card-body pending_approval">
-            <form id="task_status" name="postForm" method="POST">
+          <form id="task_status" name="postForm" method="POST">
+            @csrf
             <div class="modal-body">
               <div class="form-group row">
                 <div class="col-md-3">
@@ -82,7 +86,7 @@
                   <label for="name">Task Title</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control task_title" name="task_title" id="task_title" aria-describedby="task_title" value="{{ old('task_title') }}" placeholder="Task Title">
+                  <input type="text" class="form-control task_title" name="task_title" id="task_title" aria-describedby="task_title" value="{{ old('task_title') }}" placeholder="Task Title" required >
                 <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
               </div>
               </div>
@@ -91,7 +95,7 @@
                 <label for="password1">Assign to</label>
               </div>
               <div class="col-md-9">
-                <select class="form-control assign_to" name="assign_to" id="assign_to">
+                <select class="form-control assign_to" name="assign_to" id="assign_to" required >
                     <option value="Ward Prabhari">Ward Prabhari</option>
                     <option value="Mandal Prabhari">Mandal Prabhari</option>
                     <option value="Booth Prabhari">Booth Prabhari</option>
@@ -101,10 +105,27 @@
               </div>
               <div class="form-group row">
                 <div class="col-md-3">
+                  <label for="name">Volunteer</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="text" id="volunteer" class="form-control" name="volunteer" aria-describedby="volunteer" value="{{ old('volunteer') }}" placeholder="Volunteer Name" required >
+                  <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-3">
+                  <label for="password1">Address</label>
+                </div>
+                <div class="col-md-9">
+                  <textarea name="address" id="address" class="form-control" placeholder="Address" required ></textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-3">
                   <label for="password1">Task Description</label>
                 </div>
                 <div class="col-md-9">
-                  <textarea name="task_description" id="task_description" class="form-control task_description" placeholder="Task Description"></textarea>
+                  <textarea name="task_description" id="task_description" class="form-control task_description" placeholder="Task Description" required ></textarea>
                 </div>
               </div>
             </div>
@@ -181,14 +202,16 @@
                      console.log(response);
                     $('tbody').html("");
                     $.each(response.taskStatus, function (key, item) {
-                        $('tbody').append('<tr>\
-                            <td>' + item.id + '</td>\
-                            <td>' + item.task_title + '</td>\
-                            <td>' + item.assign_to + '</td>\
-                            <td>' + item.task_description + '</td>\
-                            <td width=10px><button type="button" value="' + item.id + '" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button></td>\
-                            <td width=10px><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>\
-                        \</tr>');
+                        $('tbody').append(`<tr>
+                            <td>` + item.id + `</td>
+                            <td>` + item.task_title + `</td>
+                            <td>` + item.task_description + `</td>
+                            <td>` + item.assign_to + `</td>
+                            <td>N/A</td>
+                            
+                            <td><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
+                            <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>
+          </tr>`);
                     });
                 }
             });
@@ -196,22 +219,11 @@
 
        $('#task_status').on('submit', function(e) {
             e.preventDefault();
-            var data = {
-                'task_title': $('.task_title').val(),
-                'assign_to': $('.assign_to').val(),
-                'task_description': $('.task_description').val(),
-            }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
+            
             $.ajax({
                 type: "POST",
-                url: "/task-status",
-                data: data,
+                url: "{{ url('task-status') }}",
+                data: $('#task_status').serialize(),
                 dataType: "json",
                 success: function (response) {
                     // console.log(response);
@@ -221,14 +233,15 @@
                         $.each(response.errors, function (key, err_value) {
                             $('#save_msgList').append('<li>' + err_value + '</li>');
                         });
-                    } else {
-                        $('#save_msgList').html("");
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
+                    } else if(response.status == 200) {
+                        notification('success',response.message);
+
                         $('#task_status')[0].reset();
                         $('#section_second').hide();
                         $('#section_first').show();
                         fetchtaskstatus();
+                    }else{
+                      notification('danger',response.error,5000);
                     }
                 }
             });
@@ -254,10 +267,12 @@
                         $('#success_message').text(response.message);
                         $('#editModal').modal('hide');
                     } else {
-                         console.log(response.taskStatus.task_title);
+                         //console.log(response.taskStatus.task_title);
                         $('#task_title').val(response.taskStatus.task_title);
                         $('#assign_to').val(response.taskStatus.assign_to);
                         $('#task_description').val(response.taskStatus.task_description);
+                        $('#address').val(response.taskStatus.address);
+                        $('#volunteer').val(response.taskStatus.volunteer_name);
                         $('#task_id').val(task_id);
                     }
                 }
@@ -271,14 +286,6 @@
 
             $(this).text('Updating..');
             var id = $('#task_id').val();
-            // alert(id);
-
-            var data = {
-                'task_title': $('.task_title').val(),
-                'assign_to': $('.assign_to').val(),
-                'task_description': $('.task_description').val(),
-            }
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -288,7 +295,7 @@
             $.ajax({
                 type: "PUT",
                 url: "/update-task-status/" + id,
-                data: data,
+                data: $('#task_status').serialize(),
                 dataType: "json",
                 success: function (response) {
                     // console.log(response);
@@ -300,15 +307,16 @@
                                 '</li>');
                         });
                         $('.update_volunteer').text('Update');
-                    } else {
+                    } else if(response.status == 200) {
                         $('#update_msgList').html("");
 
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
+                        notification('success',response.message);
                         $('.update_task').text('Update');
                         $('#section_second').hide();
                         $('#section_first').show();
                         fetchtaskstatus();
+                    }else{
+                      notification('danger',response.error,5000);
                     }
                 }
             });

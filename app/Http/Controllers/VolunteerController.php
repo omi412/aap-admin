@@ -36,13 +36,21 @@ class VolunteerController extends Controller
         }
         else
         {
-            $Volunteer = new Volunteer;
-            $volunteer->volunteer_type = $request->input('volunteer_types');
-            $Volunteer->save();
-            return response()->json([
-                'status'=>200,
-                'message'=>'Volunteer Added Successfully.'
-            ]);
+            try{
+                Volunteer::create([
+                    "volunteer_type"=>$request->volunteer_types
+                ]);
+            
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Volunteer Added Successfully.'
+                ]);
+            }catch(Exception $e){
+                return response()->json([
+                    'status'=>500,
+                    'error'=>$e->getMessage()
+                ]);
+            }
         }
 
     }
