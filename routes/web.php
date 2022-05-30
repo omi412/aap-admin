@@ -7,6 +7,7 @@ use App\Http\Controllers\UpdateTaskStatusController;
 use App\Http\Controllers\addAssignController;
 use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\FirebaseController;
+use App\Http\Controllers\HouseDataController;
   
 /*
 |--------------------------------------------------------------------------
@@ -64,9 +65,12 @@ Auth::routes();
     Route::put('update-add-assign/{id}', [addAssignController::class, 'update']);
     Route::delete('delete-add-assign/{id}', [addAssignController::class, 'destroy']);
 
-
     Route::resource('messaging', MessagingController::class);
     Route::get('fetch-messaging', [MessagingController::class, 'fetchMessages']);
+
+    Route::resource('house-data', HouseDataController::class);
+    Route::post('update-house-data/{id}', [HouseDataController::class,'update']);
+    Route::delete('delete-house-data/{id}', [HouseDataController::class, 'destroy']);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');
@@ -86,9 +90,9 @@ Auth::routes();
         return view('messaging/messaging');
     });*/
 
-    Route::get('/house-data', function () {
-        return view('house_data/house_data');
-    });
+    // Route::get('/house-data', function () {
+    //     return view('house_data/house_data');
+    // });
 
     Route::get('/contacts', function () {
         return view('contacts/contact');
