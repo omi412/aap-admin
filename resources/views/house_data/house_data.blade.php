@@ -36,7 +36,7 @@
         <div class="card-body">
           <div class="search_box">
             <div class="input-group">
-              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+              <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
               <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
             </div>
           </div>
@@ -51,7 +51,7 @@
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="myTable">
               
             </tbody>
           </table>
@@ -355,4 +355,18 @@
   });
 
 </script>
+
+<!-- /* search function */ -->
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+ <!-- /* search function */ -->
+
 @endsection

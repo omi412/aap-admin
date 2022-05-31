@@ -20,7 +20,7 @@
                 <div class="col-md-5 mx-auto">
                   <div class="card-group">
                     <div class="card p-4">
-                      <div class="alert alert-success" id="sentSuccess" style="display: none;"></div>
+                      <div class="alert alert-danger" id="error" style="display: none;"></div>
                       <div class="card-body">
                           <div class="logo">
                             <img src="{{ asset ('assets/images/aap_logo.png')}}" class="img" alt="admin"/>
@@ -37,6 +37,7 @@
                                     </span>
                                 @endif
                               </div>
+                              <div id="recaptcha-container"></div>
                               <div class="row">
                                 <div class="col-5 text-left mobile" style="padding: 0px;">
                                   
@@ -96,40 +97,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
 
-  
+    <script type="module">
 
-<script>
+  const firebaseConfig = {
 
-      
-
-  var firebaseConfig = {
-
-  apiKey: "AIzaSyDKtYOGeBpgJ1sIDdMLzV4cBeMIgl0WxZ0",
-
-  authDomain: "aap-admin.firebaseapp.com",
-
-  projectId: "aap-admin",
-
-  storageBucket: "aap-admin.appspot.com",
-
-  messagingSenderId: "948598536979",
-
-  appId: "1:948598536979:web:a48f2fa72f3710db7b38e6",
-
-  measurementId: "G-X5P4P1ES26"
-
+    apiKey: "AIzaSyAvBMAE6qDCryAC_xbrSxMhc9bsdIF_tRQ",
+    authDomain: "volunteer-mp-tour.firebaseapp.com",
+    projectId: "volunteer-mp-tour",
+    storageBucket: "volunteer-mp-tour.appspot.com",
+    messagingSenderId: "776607129027",
+    appId: "1:776607129027:web:df501d558a1edf8c777176",
+    measurementId: "G-J6SBLVXHFT"
 
   };
 
-    
 
-  firebase.initializeApp(firebaseConfig);
+  // Initialize Firebase
+
+    firebase.initializeApp(firebaseConfig);
 
 </script>
-
   
 
 <script type="text/javascript">
+
+  
+
+    window.onload=function () {
+
+      render();
+
+    };
+
+  
+
+    function render() {
+
+        window.recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container');
+
+        recaptchaVerifier.render();
+
+    }
+
+  
 
     function phoneSendAuth() {
 
@@ -137,9 +147,9 @@
 
         var number = $("#number").val();
 
-          
+        alert(number);
 
-        firebase.auth().signInWithPhoneNumber(number).then(function (confirmationResult) {
+        firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function (confirmationResult) {
 
               
 
@@ -160,6 +170,8 @@
         }).catch(function (error) {
 
             $("#error").text(error.message);
+
+            console.log(error.message);
 
             $("#error").show();
 

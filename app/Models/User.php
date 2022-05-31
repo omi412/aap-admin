@@ -23,6 +23,9 @@ class User extends Authenticatable
         'password',
         'mobileno',
         'role',
+        'approval',
+        'designation',
+        'manager',
     ];
 
     /**

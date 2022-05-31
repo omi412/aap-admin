@@ -8,6 +8,7 @@ use App\Http\Controllers\addAssignController;
 use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\HouseDataController;
+use App\Http\Controllers\PendingApprovalController;
   
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,12 @@ Auth::routes();
     Route::post('update-house-data/{id}', [HouseDataController::class,'update']);
     Route::delete('delete-house-data/{id}', [HouseDataController::class, 'destroy']);
 
+
+    Route::resource('pending-approval', PendingApprovalController::class);
+    Route::get('edit-pending-approval/{id}', [PendingApprovalController::class, 'edit']);
+    Route::post('update-pending-approval/{id}', [PendingApprovalController::class,'update']);
+    Route::delete('delete-pending-approval/{id}', [PendingApprovalController::class, 'destroy']);
+
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');
     });*/
@@ -102,9 +109,9 @@ Auth::routes();
         return view('hierarchy/hierarchy');
     });
 
-    Route::get('/pending-approval', function () {
+    /*Route::get('/pending-approval', function () {
         return view('pending_approval/pending_approval');
-    });
+    });*/
 
 //});
 

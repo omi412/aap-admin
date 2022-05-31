@@ -23,6 +23,11 @@
   <div class="volunter_list">
     <div class="row">
     <div class="col-lg-12">
+      <div class="msg">
+        <div id="success_message" style="margin: 20px 0px;"></div>
+      </div>
+      <ul id="update_msgList"></ul>
+      <ul id="save_msgList"></ul>
       <div class="card pen_appr">
         <div class="card-header">
           <i class="fa fa-align-justify"></i> Pending Approvals
@@ -30,7 +35,7 @@
         <div class="card-body">
           <div class="search_box">
             <div class="input-group">
-              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+              <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
               <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
             </div>
           </div>
@@ -39,24 +44,12 @@
               <tr>
                 <th>S No.</th>
                 <th>Name</th>
-                <th style="text-align: right;">Number</th>
+                <th>Number</th>
+                <th style="text-align: right;">Action</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><a href="#" data-toggle="modal" data-target="#form">01</a></td>
-                <td><a href="#" data-toggle="modal" data-target="#form">Sachin saxena</a></td>
-                <td style="text-align: right;"><a href="#" data-toggle="modal" data-target="#form">
-                  6352147890</a>
-                </td>
-              </tr>
-              <tr>
-                <td><a href="#" data-toggle="modal" data-target="#form">02</a></td>
-                <td><a href="#" data-toggle="modal" data-target="#form">Ashok Sharma</a></td>
-                <td style="text-align: right;"><a href="#" data-toggle="modal" data-target="#form">
-                  7896541230</a>
-                </td>
-              </tr>
+            <tbody id="myTable">
+              
             </tbody>
           </table>
           </div>
@@ -66,7 +59,7 @@
   </div><!--/.row-->
 </div>
 
-  <div class="modal fade pending_approval" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade pending_approval" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -75,14 +68,16 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form>
+      <form action="POST" id="pending-approval-form">
+        @csrf
+        <input type="hidden" name="pending_approval_id" id="pending-approval-id" value="">
         <div class="modal-body">
           <div class="form-group row">
             <div class="col-md-3">
               <label for="name">Name</label>
             </div>
             <div class="col-md-9">
-              <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Sachin saxena" readonly>
+              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" readonly>
             <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
           </div>
           </div>
@@ -91,7 +86,7 @@
               <label for="password1">Number</label>
             </div>
             <div class="col-md-9">
-              <input type="number" class="form-control" id="number" placeholder="6352147890" readonly>
+              <input type="number" class="form-control" name="mobileno" id="mobileno" readonly>
             </div>
           </div>
           <div class="form-group row">
@@ -100,7 +95,7 @@
           </div>
           <div class="col-md-9">
             <!-- <input type="text" class="form-control" id="approval" placeholder="Approval"> -->
-            <select name="approval" class="form-control">
+            <select name="approval" id="approval" class="form-control">
                   <option>Select Approval</option>
                   <option>Approved</option>
                   <option>Rejected</option>
@@ -112,7 +107,7 @@
             <label for="password1">Designation</label>
           </div>
           <div class="col-md-9">
-            <select name="approval" class="form-control">
+            <select name="designation" id="designation" class="form-control">
             <option>Ward Prabhari</option>
             <option>Mandal Prabhari</option>
             <option>Both Prabhari</option>
@@ -125,12 +120,12 @@
             <label for="password1">Manager</label>
           </div>
           <div class="col-md-9">
-            <input type="text" class="form-control" id="manager" placeholder="Manager">
+            <input type="text" class="form-control" name="manager" id="manager" placeholder="Manager">
           </div>
           </div>
         </div>
         <div class="modal-footer border-top-0 d-flex justify-content-center">
-          <button type="submit" class="btn btn-success">Submit</button>
+          <button type="submit" class="btn btn-success update_approval">Submit</button>
         </div>
       </form>
     </div>
@@ -158,4 +153,209 @@
   });
 
 </script>
+
+
+<script>
+
+  $(document).ready(function(){
+    fetchPendingApproval();
+
+        function fetchPendingApproval() {
+          //alert("working");
+            $.ajax({
+                type: "GET",
+                url: "{{ url('pending-approval') }}",
+                dataType: "json",
+                success: function (response) {
+                    $('tbody').html("");
+                    $.each(response.pending_approval, function (key, item) {
+                        $('tbody').append(`<tr>
+                            <td>` + item.id + `</td>
+                            <td>` + item.name + `</td>
+                            <td>` + item.mobileno + `</td>
+                            <td style="text-align: right;"><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
+                          </tr>`);
+                    });
+                }
+            });
+        }
+
+       $('#pending-approval-form').on('submit', function(e) {
+            e.preventDefault();
+            //check form submit is store or update
+            let pending_approval_id = $('#pending-approval-id').val();
+            let url = "{{ url('pending-approval.store') }}";
+  
+            if(pending_approval_id!=''){
+              url = "{{ url('update-pending-approval') }}/"+pending_approval_id;
+            }
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#pending-approval-form').serialize(),
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#save_msgList').html("");
+                        $('#save_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                          $('#save_msgList').append('<li>' + err_value + '</li>');
+                        });
+                    } else if(response.status == 200) {
+                        notification('success',response.message);
+
+                        $('#pending-approval-form')[0].reset();
+                        $('#section_second').hide();
+                        $('#section_first').show();
+                        $('#btn-submit').text('Save');
+                        $('#pending-approval-id').val('');
+                        fetchPendingApproval();
+                    }else{
+                      notification('danger',response.error,5000);
+                    }
+                }
+            });
+
+        });
+
+ /* edit ajax*/
+
+       $(document).on('click', '.editbtn', function (e) {
+            e.preventDefault();
+            var pending_approval_id = $(this).val();
+            //alert(pending_approval_id);
+            $('#editModal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/edit-pending-approval/" + pending_approval_id,
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').modal('hide');
+                    } else {
+                        // console.log(response.pending_approval.name);
+                        // console.log(response.pending_approval.mobileno);
+                        $('#name').val(response.pending_approval.name);
+                        $('#mobileno').val(response.pending_approval.mobileno);
+                        $('#pending-approval-id').val(pending_approval_id);
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
+
+        });
+
+        $(document).on('click', '.update_approval', function (e) {
+            e.preventDefault();
+
+            $(this).text('Updating..');
+            var id = $('#pending-approval-id').val();
+             //alert(id);
+
+            var data = {
+                'name': $('#name').val(),
+                'mobileno': $('#mobileno').val(),
+                'approval': $('#approval').val(),
+                'designation': $('#designation').val(),
+                'manager': $('#manager').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/update-pending-approval/" + id,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#update_msgList').html("");
+                        $('#update_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#update_msgList').append('<li>' + err_value +
+                                '</li>');
+                        });
+                        $('.update_approval').text('Update');
+                    } else {
+                        $('#update_msgList').html("");
+
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').find('input').val('');
+                        $('.update_approval').text('Update');
+                        $('#editModal').modal('hide');
+                        fetchPendingApproval();
+                    }
+                }
+            });
+
+        });
+
+       /* edit ajax*/
+
+
+       /* delete volunteer */
+
+        $(document).on('click', '.deletebtn', function () {
+            var house_data_id = $(this).val();
+            $('#DeleteModal').modal('show');
+            $('#deleteing_id').val(house_data_id);
+        });
+
+        $(document).on('click', '.delete_student', function (e) {
+            e.preventDefault();
+
+            $(this).text('Deleting..');
+            var house_data_id = $('#deleteing_id').val();
+            //alert(house_data_id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "{{ url('delete-house-data') }}/" + house_data_id,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                    } else {
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                        $('#DeleteModal').modal('hide');
+                        fetchPendingApproval();
+                    }
+                }
+            });
+        });
+  });
+
+</script>
+
+<!-- /* search function */ -->
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+ <!-- /* search function */ -->
 @endsection

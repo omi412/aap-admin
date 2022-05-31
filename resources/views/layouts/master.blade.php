@@ -15,7 +15,8 @@
     <link href="{{ asset ('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{ asset ('assets/css/custom.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-
+    <script src="https://www.gstatic.com/firebasejs/9.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.8.2/firebase-analytics.js"></script>
 
 </head>
 
