@@ -1,3 +1,14 @@
+------on 31/5/2022------
+ALTER TABLE `roles` ADD `guard_name` VARCHAR(125) NOT NULL DEFAULT 'web' AFTER `name`;
+
+CREATE TABLE `aap-admin`.`role_details` ( `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT , `role_id` BIGINT(20) UNSIGNED NOT NULL , `parent_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL , `name` VARCHAR(250) NOT NULL , `status` TINYINT NOT NULL COMMENT '1=Active 2=Inactive' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE `role_details` CHANGE `parent_id` `parent_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL COMMENT 'pk of this tbl', CHANGE `status` `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '1=Active 2=Inactive';
+
+CREATE TABLE `aap-admin`.`role_user` ( `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT , `role_id` BIGINT UNSIGNED NOT NULL , `user_id` BIGINT UNSIGNED NOT NULL , `role_details_id` BIGINT UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE `role_user` CHANGE `role_details_id` `role_details_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL;
+
 ----on 27/5/2022 (vishal)----
 ALTER TABLE `messagings` CHANGE `send_to` `send_to` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
 

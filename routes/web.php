@@ -8,6 +8,7 @@ use App\Http\Controllers\addAssignController;
 use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\HouseDataController;
+use App\Http\Controllers\RoleController;
   
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +72,8 @@ Auth::routes();
     Route::resource('house-data', HouseDataController::class);
     Route::post('update-house-data/{id}', [HouseDataController::class,'update']);
     Route::delete('delete-house-data/{id}', [HouseDataController::class, 'destroy']);
+
+    Route::resource('roles', RoleController::class);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');
