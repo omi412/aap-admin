@@ -30,7 +30,7 @@ class PermissionController extends Controller
         public function store(Request $request)
         {
         $request->validate([
-        'name' => 'required'
+        'name' => 'required|unique:permissions'
         ]);
         $permission = new Permission;
         $permission->name = $request->name;
@@ -69,7 +69,7 @@ class PermissionController extends Controller
         public function update(Request $request, $id)
         {
         $request->validate([
-        'name' => 'required'
+        'name' => 'required|unique:permissions,name,'.$id,
         ]);
         $permission = Permission::find($id);
         $permission->name = $request->name;

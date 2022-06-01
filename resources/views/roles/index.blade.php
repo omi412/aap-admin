@@ -2,55 +2,153 @@
 @section('head')
 
 @endsection
-
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Role Management</h2>
+        
+        <!--**********************************
+            Content body start
+        ***********************************-->
+
+<cui-breadcrumb>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" ng-reflect-ng-class="[object Object]">
+      <a ng-reflect-router-link="/" href="#/">Home</a>
+    </li>
+    <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
+      <span tabindex="0" ng-reflect-router-link="//dashboard/">Roles</span>
+    </li>
+  </ol>
+</cui-breadcrumb>
+
+<div class="animated fadeIn dashboard task_status">
+  <div class="volunter_list">
+    <div class="row">
+    <div class="col-lg-12">
+     @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
         </div>
-        <div class="pull-right">
-        @can('role-create')
-            <a class="btn btn-success" href="{{ route('roles.create') }}"> Create New Role</a>
-            @endcan
+      @endif
+      <div class="card">
+        <div class="search_box house_data">
+            <div class="input-group">
+              <a href="{{ route('roles.create') }}" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Role</a>
+            </div>
+          </div>
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Role List
+        </div>
+        <div class="card-body">
+          <div class="search_box">
+            <div class="input-group">
+              <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+              <!-- <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i> </button> -->
+            </div>
+          </div>
+          <table class="table table-striped responsive all_table">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Role Has Permissions</th>
+                <th style="text-align:right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="message-tbody">
+              @foreach ($roles as $role)
+                <tr>
+                    <td>{{$loop->iteration}}</td>
+                    <td>{{ $role->name }}</td>
+                    <td>
+                      @if(!empty($role->permissions))
+                      <h5>
+                         @foreach ($role->permissions as $key => $permission)
+                         <span class="badge badge-info">{{ $permission->name }}</span><br>
+                         @endforeach
+                      </h5>
+                      @else
+                      @endif
+                   </td>
+                    <td style="text-align:right;">
+                      <a class="btn btn-primary edit_btn" href="{{ route('roles.edit',$role->id) }}" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
+                    <form action="{{ route('roles.destroy',$role->id) }}" onsubmit="return confirm('Are you sure ?')" method="Post">
+                    @csrf
+                    @method('DELETE')
+                    
+                    <button type="submit" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></button>                    
+                    </form>
+                    
+                    </td>
+                </tr>
+                @endforeach
+
+            </tbody>
+          </table>
+          {!! $roles->links() !!}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!--/.row-->
+  </div>
+  {{-- Delete Modal --}}
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Volunteer </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Confirm to Delete Data ?</h4>
+            </div>
+            <div class="modal-footer">
+                <form action="" method="Post">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-primary">Yes Delete</button>
+                </form>
+                <button type="button" class="btn btn-cancel">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
+{{-- End - Delete Modal --}}
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 
-@if ($message = Session::get('success'))
-    <div class="alert alert-success">
-        <p>{{ $message }}</p>
-    </div>
-@endif
+@endsection
 
+@section('script')
+<script>
+$('select').selectpicker();
+</script>
 
-<table class="table table-bordered">
-  <tr>
-     <th>No</th>
-     <th>Name</th>
-     <th width="280px">Action</th>
-  </tr>
-    @foreach ($roles as $key => $role)
-    <tr>
-        <td>{{ ++$i }}</td>
-        <td>{{ $role->name }}</td>
-        <td>
-            <a class="btn btn-info" href="{{ route('roles.show',$role->id) }}">Show</a>
-            @can('role-edit')
-                <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
-            @endcan
-            @can('role-delete')
-                {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                {!! Form::close() !!}
-            @endcan
-        </td>
-    </tr>
-    @endforeach
-</table>
+<!-- /* search function */ -->
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#message-tbody tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+ <!-- /* search function */ -->
 
+<script>
+    /* delete  */
 
-{!! $roles->render() !!}
+        $(document).on('click', '.deletebtn', function () {
+            var permission_id = $(this).val();
+            alert(permission_id);
+            $('#DeleteModal').modal('show');
+        });
+
+       /* delete  */
+</script>
+
 
 @endsection
