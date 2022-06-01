@@ -53,6 +53,9 @@ class AdminUserSeeder extends Seeder
           'email' => 'admin@gmail.com',
           'password' => bcrypt('abcd1234'),
           'mobileno' => '9826098260',
+          'approval' => 'Approved',
+          'Designation' => 'Ward Prabhari',
+          'Manager' => 'Vijay',
         ]);
     
         $role = Role::create(['name' => 'Admin']);

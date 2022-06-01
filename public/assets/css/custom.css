@@ -366,7 +366,7 @@ margin: 40px auto;
   margin-right: -1.95rem;
 }
 [data-header-position="fixed"] .content-body {
-  padding-top: 2.15rem;
+  padding-top: 3.15rem;
 }
 .notification_dropdown{
       display: none !important;
@@ -470,7 +470,12 @@ margin: 40px auto;
   box-shadow: 0 0 0 2px white, 0 0 0 3px #0072b0;
 }
 
-
+.btn-primary.edit_btn{
+  background: unset;
+ border: 0px;
+ font-size: 16px;
+ color: #20a8d8;
+}
 
 
 @media (max-width:640px){

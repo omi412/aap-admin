@@ -12,7 +12,6 @@
     <link href="{{ asset ('assets/css/custom.css')}}" rel="stylesheet">
 
 </head>
-
 <body class="h-100">
     <div class="authincation h-100 login">
         <div class="container-fluid h-100">
@@ -20,31 +19,43 @@
                 <div class="col-md-5 mx-auto">
                   <div class="card-group">
                     <div class="card p-4">
+                      <div class="alert alert-danger" id="error" style="display: none;"></div>
                       <div class="card-body">
                           <div class="logo">
                             <img src="{{ asset ('assets/images/aap_logo.png')}}" class="img" alt="admin"/>
                           </div>
-                          <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                            {{ csrf_field() }}
-                              <div class="input-group mb-3">
-                                <label for="mobileno" class="phone_label">Phone No.</label>
-                                <input type="text" class="form-control" id="mobileno" name="mobileno" placeholder="Enter Phone No." value="{{ old('mobileno') }}" required autofocus>
-                                @if ($errors->has('mobileno'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('mobileno') }}</strong>
-                                    </span>
-                                @endif
-                              </div>
-                              <div class="row">
-                                <div class="col-5 text-left mobile" style="padding: 0px;">
-                                  
-                                </div>
-                                <div class="col-7 text-right">
-                                  <a href="{{ route('register') }}" class="btn btn-primary mt-3">Register</a>
-                                  <button type="submit" class="btn btn-primary px-4 mt-3">Login</button></a>
+
+                        <div class="container">
+                            <div class="alert alert-danger hide" id="error-message" style="display:none;"></div>
+                            <div class="alert alert-success hide" id="sent-message" style="display:none;"></div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                                        {{ csrf_field() }}
+                                        <div class="mb-3">
+                                            <label for="phone-number" class="form-label">Phone Number:</label>
+                                            <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="+1XXXXXXXXXX">
+                                        </div>
+                                        <div id="recaptcha-container"></div>
+                                        <a href="javascript:void(0)" class="btn btn-info" onclick="otpSend();">Send OTP</a>
+                                          <div class="input-group mb-3">
+                                            <label for="otp-code" class="phone_label">OTP code:</label>
+                                            <input type="text" id="otp-code" class="form-control" placeholder="Enter OTP Code">
+                                          </div>
+                                          <div class="row">
+                                            <div class="col-5 text-left mobile" style="padding: 0px;">
+                                              
+                                            </div>
+                                            <div class="col-7 text-right">
+                                              <a href="{{ route('register') }}" class="btn btn-primary mt-3">Register</a>
+                                              <button type="submit" class="btn btn-primary px-4 mt-3" onclick="otpVerify();">Login</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                        </form>
+                        </div>  
+                        
                       </div>
                     </div>
                   </div>
@@ -55,63 +66,6 @@
     </div>
 
 
-    <div class="authincation h-100" style="display:none;">
-        <div class="container-fluid h-100">
-            <div class="row justify-content-center h-100 align-items-center">
-                <div class="col-md-6">
-                    <div class="authincation-content">
-                        <div class="row no-gutters">
-                            <div class="col-xl-12">
-                                <div class="auth-form">
-                                    <h4 class="text-center mb-4">Sign in your account</h4>
-                                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                                    {{ csrf_field() }}
-                                    <div class="form-group row{{ $errors->has('mobileno') ? ' has-error' : '' }}">
-                                        <label for="mobileno" class="col-md-4 control-label">Enter Mobile No.</label>
-                                        <div class="col-md-8">
-                                            <input id="mobileno" type="text" class="form-control" name="mobileno" value="{{ old('mobileno') }}" required autofocus>
-                                            @if ($errors->has('mobileno'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('mobileno') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="col-md-6 col-md-offset-4">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="col-md-8 col-md-offset-4">
-                                            <button type="submit" class="btn btn-primary">
-                                                Login
-                                            </button>
-
-                                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                Forgot Your Password?
-                                            </a>
-                                        </div>
-                                    </div>
-                                </form>
-                                    <div class="new-account mt-3">
-                                        <p>Don't have an account? <a class="text-primary" href="{{ route('register') }}">Sign up</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <!--**********************************
         Scripts
@@ -120,6 +74,65 @@
     <script src="{{ asset ('assets/vendor/global/global.min.js')}}"></script>
     <script src="{{ asset ('assets/js/quixnav-init.js')}}"></script>
     <script src="{{ asset ('assets/js/custom.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js"></script>
+    <script type="text/javascript">
+        const config = {
+            apiKey: "AIzaSyBcHRKF1jNLB0iTaTjw3T73iglivfH4bVI",
+            authDomain: "volunteer-ff15c.firebaseapp.com",
+            projectId: "volunteer-ff15c",
+            storageBucket: "volunteer-ff15c.appspot.com",
+            messagingSenderId: "1030400604205",
+            appId: "1:1030400604205:web:006ebb3625e507b09460a4",
+            measurementId: "G-N5PKYGNYLN"
+        };
+        
+        firebase.initializeApp(config);
+    </script>
+    <script type="text/javascript">  
+        // reCAPTCHA widget    
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible',
+            'callback': (response) => {
+                // reCAPTCHA solved, allow signInWithPhoneNumber.
+                onSignInSubmit();
+            }
+        });
+
+        function otpSend() {
+            var phoneNumber = document.getElementById('phone-number').value;
+            const appVerifier = window.recaptchaVerifier;
+            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+                .then((confirmationResult) => {
+                    // SMS sent. Prompt user to type the code from the message, then sign the
+                    // user in with confirmationResult.confirm(code).
+                    window.confirmationResult = confirmationResult;
+
+                    document.getElementById("sent-message").innerHTML = "Message sent succesfully.";
+                    document.getElementById("sent-message").classList.add("d-block");
+                }).catch((error) => {
+                    document.getElementById("error-message").innerHTML = error.message;
+                    document.getElementById("error-message").classList.add("d-block");
+                });
+        }
+
+        function otpVerify() {
+            var code = document.getElementById('otp-code').value;
+            confirmationResult.confirm(code).then(function (result) {
+                // User signed in successfully.
+                var user = result.user;
+
+                document.getElementById("sent-message").innerHTML = "You are succesfully logged in.";
+                document.getElementById("sent-message").classList.add("d-block");
+      
+            }).catch(function (error) {
+                document.getElementById("error-message").innerHTML = error.message;
+                document.getElementById("error-message").classList.add("d-block");
+            });
+        }
+    </script>
 
 </body>
 

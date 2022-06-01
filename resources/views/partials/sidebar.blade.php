@@ -2,8 +2,6 @@
         <!--**********************************
             Sidebar start
         ***********************************-->
-
-        @if(Auth::check() && Auth::user()->role  == "admin")
         <div class="quixnav">
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
@@ -51,8 +49,7 @@
         </div>
 
         <!-- manager menu -->
-        @elseif (Auth::check() && Auth::user()->role  == "manager")
-        <div class="quixnav">
+        <div class="quixnav" style="display:none">
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
                     <li><a class="has-arrow1 nav-link" href="{{ url('task-status') }}" aria-expanded="false"><i
@@ -86,9 +83,7 @@
         <!-- manager menu -->
 
         <!-- user menu -->
-
-        @elseif (Auth::check() && Auth::user()->role  == "user")
-        <div class="quixnav">
+        <div class="quixnav" style="display:none;">
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
                     
@@ -115,7 +110,6 @@
 
         <!-- user menu -->
 
-        @endif
         <!--**********************************
             Sidebar end
         ***********************************-->

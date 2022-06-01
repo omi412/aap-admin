@@ -11,7 +11,9 @@ use App\Http\Controllers\HouseDataController;
 use App\Http\Controllers\PendingApprovalController;
 
 use App\Http\Controllers\RoleController;
-  
+use App\Http\Controllers\PermissionController;
+ 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -83,6 +85,7 @@ Auth::routes();
     Route::delete('delete-pending-approval/{id}', [PendingApprovalController::class, 'destroy']);
 
     Route::resource('roles', RoleController::class);
+    Route::resource('permission', PermissionController::class);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');
