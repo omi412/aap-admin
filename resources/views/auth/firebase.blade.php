@@ -141,11 +141,14 @@
 
   
 
+
+  phoneSendAuth();
     function phoneSendAuth() {
 
            
 
-        var number = $("#number").val();
+        //var number = $("#number").val();
+        var number = "9685546137";
 
         alert(number);
 

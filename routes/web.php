@@ -9,6 +9,8 @@ use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\HouseDataController;
 use App\Http\Controllers\PendingApprovalController;
+
+use App\Http\Controllers\RoleController;
   
 /*
 |--------------------------------------------------------------------------
@@ -74,10 +76,13 @@ Auth::routes();
     Route::delete('delete-house-data/{id}', [HouseDataController::class, 'destroy']);
 
 
+
     Route::resource('pending-approval', PendingApprovalController::class);
     Route::get('edit-pending-approval/{id}', [PendingApprovalController::class, 'edit']);
     Route::post('update-pending-approval/{id}', [PendingApprovalController::class,'update']);
     Route::delete('delete-pending-approval/{id}', [PendingApprovalController::class, 'destroy']);
+
+    Route::resource('roles', RoleController::class);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');
