@@ -14,7 +14,7 @@
       <a ng-reflect-router-link="/" href="#/">Home</a>
     </li>
     <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
-      <span tabindex="0" ng-reflect-router-link="//dashboard/">Permission</span>
+      <span tabindex="0" ng-reflect-router-link="//dashboard/">Role Details</span>
     </li>
   </ol>
 </cui-breadcrumb>
@@ -31,11 +31,11 @@
       <div class="card">
         <div class="search_box house_data">
             <div class="input-group">
-              <a href="{{ url('permission/create') }}" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Permission</a>
+              <a href="{{ url('permission/create') }}" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Role Detail</a>
             </div>
           </div>
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Permission List
+          <i class="fa fa-align-justify"></i> Role Details
         </div>
         <div class="card-body">
           <div class="search_box">
@@ -48,30 +48,35 @@
             <thead>
               <tr>
                 <th>S.No</th>
+                <th>Role</th>
+                <th>Parent Role</th>
                 <th>Name</th>
+                <th>Status</th>
                 <th style="text-align:right;">Action</th>
               </tr>
             </thead>
             <tbody id="message-tbody">
-              @foreach ($permissions as $permission)
                 <tr>
-                    <td>{{$loop->iteration}}</td>
-                    <td>{{ $permission->name }}</td>
+                    <td>1</td>
+                    <td>vijay</td>
+                    <td>N/A</td>
+                    <td>Bhopal Mandal Prabhari</td>
+                    <td>Active</td>
                     <td style="text-align:right;">
-                    <form action="{{ route('permission.destroy',$permission->id) }}" method="Post">
+                    <form action="" method="Post">
                     @csrf
                     @method('DELETE')
-                    <a class="btn btn-primary edit_btn" href="{{ route('permission.edit',$permission->id) }}" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a class="btn btn-primary edit_btn" href="" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     <button type="submit" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></button>                    
                     </form>
                     
                     </td>
                 </tr>
-                @endforeach
+                
 
             </tbody>
           </table>
-          {!! $permissions->links() !!}
+          
           </div>
         </div>
       </div>

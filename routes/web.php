@@ -12,6 +12,7 @@ use App\Http\Controllers\PendingApprovalController;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleDetailController;
  
 
 /*
@@ -86,6 +87,7 @@ Auth::routes();
 
     Route::resource('roles', RoleController::class);
     Route::resource('permission', PermissionController::class);
+    Route::resource('role-details', RoleDetailController::class);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');

@@ -34,7 +34,7 @@
                                         {{ csrf_field() }}
                                         <div class="mb-3">
                                             <label for="phone-number" class="form-label">Phone Number:</label>
-                                            <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="+1XXXXXXXXXX">
+                                            <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="+91XXXXXXXXXX">
                                         </div>
                                         <div id="recaptcha-container"></div>
                                         <a href="javascript:void(0)" class="btn btn-info" onclick="otpSend();">Send OTP</a>
@@ -47,7 +47,7 @@
                                               
                                             </div>
                                             <div class="col-7 text-right">
-                                              <a href="{{ route('register') }}" class="btn btn-primary mt-3">Register</a>
+                                              <button type="submit" class="btn btn-primary mt-3" onclick="otpVerify();">Register</button>
                                               <button type="submit" class="btn btn-primary px-4 mt-3" onclick="otpVerify();">Login</button>
                                             </div>
                                         </div>
