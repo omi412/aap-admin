@@ -30,19 +30,31 @@
                             <div class="alert alert-success hide" id="sent-message" style="display:none;"></div>
                             <div class="card">
                                 <div class="card-body">
+<<<<<<< HEAD
                                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                                         {{ csrf_field() }}
+=======
+                                    <div id="enter_mobile">
+>>>>>>> 2d42aa7 (live code)
                                         <div class="mb-3">
                                             <label for="phone-number" class="form-label">Phone Number:</label>
                                             <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="+91XXXXXXXXXX">
                                         </div>
                                         <div id="recaptcha-container"></div>
                                         <a href="javascript:void(0)" class="btn btn-info" onclick="otpSend();">Send OTP</a>
+<<<<<<< HEAD
+=======
+                                    </div>
+                                    <div id="verify_otp" style="display: none;">
+                                        <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                                        {{ csrf_field() }}
+>>>>>>> 2d42aa7 (live code)
                                           <div class="input-group mb-3">
                                             <label for="otp-code" class="phone_label">OTP code:</label>
                                             <input type="text" id="otp-code" class="form-control" placeholder="Enter OTP Code">
                                           </div>
                                           <div class="row">
+<<<<<<< HEAD
                                             <div class="col-5 text-left mobile" style="padding: 0px;">
                                               
                                             </div>
@@ -52,6 +64,16 @@
                                             </div>
                                         </div>
                                     </form>
+=======
+                                            <div class="col-12 text-right">
+                                              <!-- <a href="{{ route('register') }}" class="btn btn-primary mt-3">Register</a> -->
+                                              <button type="button" id="test" class="btn btn-primary px-4 mt-3" onclick="otpVerify();">Submit</button>
+                                              <button type="submit" id="sign_in" class="btn btn-primary px-4 mt-3" style="display: none;">Login</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+>>>>>>> 2d42aa7 (live code)
                                 </div>
                             </div>
                         </div>  
@@ -110,7 +132,14 @@
                     // user in with confirmationResult.confirm(code).
                     window.confirmationResult = confirmationResult;
 
+<<<<<<< HEAD
                     document.getElementById("sent-message").innerHTML = "Message sent succesfully.";
+=======
+                    document.getElementById("sent-message").innerHTML = "OTP sent succesfully.";
+                    document.getElementById("verify_otp").classList.add("d-block");
+                    document.getElementById("enter_mobile").classList.add("d-none");
+
+>>>>>>> 2d42aa7 (live code)
                     document.getElementById("sent-message").classList.add("d-block");
                 }).catch((error) => {
                     document.getElementById("error-message").innerHTML = error.message;
@@ -123,9 +152,19 @@
             confirmationResult.confirm(code).then(function (result) {
                 // User signed in successfully.
                 var user = result.user;
+<<<<<<< HEAD
 
                 document.getElementById("sent-message").innerHTML = "You are succesfully logged in.";
                 document.getElementById("sent-message").classList.add("d-block");
+=======
+                console.log(user);
+                //ajax request for check mobile no exist or not
+                
+                //$('#').trigger('click');
+                //document.getElementById("sign_in").click();
+                //document.getElementById("sent-message").innerHTML = "You are succesfully logged in.";
+                //document.getElementById("sent-message").classList.add("d-block");
+>>>>>>> 2d42aa7 (live code)
       
             }).catch(function (error) {
                 document.getElementById("error-message").innerHTML = error.message;
