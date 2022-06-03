@@ -32,6 +32,7 @@ Route::get('/', function () {
 });
 
 Route::get('otp-login', [FirebaseController::class, 'index']);
+Route::post('check-mobile-no', [HomeController::class, 'checkMobileNo'])->name('check-mobile-no');
 
 Auth::routes();
 
