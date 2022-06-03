@@ -56,22 +56,24 @@
               </tr>
             </thead>
             <tbody id="message-tbody">
+               @foreach ($roleDetails as $roleDetail)
                 <tr>
-                    <td>1</td>
-                    <td>vijay</td>
-                    <td>N/A</td>
-                    <td>Bhopal Mandal Prabhari</td>
-                    <td>Active</td>
+                    <td>{{$loop->iteration}}</td>
+                    <td>{{ $roleDetail->role_id }}</td>
+                    <td>{{ $roleDetail->parent_id }}</td>
+                    <td>{{ $roleDetail->name }}</td>
+                    <td>{{ $roleDetail->status }}</td>
                     <td style="text-align:right;">
-                    <form action="" method="Post">
+                    <form action="{{ url('roleDetail.destroy',$roleDetail->id) }}" method="Post">
                     @csrf
                     @method('DELETE')
-                    <a class="btn btn-primary edit_btn" href="" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a class="btn btn-primary edit_btn" href="{{ url('roleDetail.edit',$roleDetail->id) }}" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     <button type="submit" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></button>                    
                     </form>
                     
                     </td>
                 </tr>
+                @endforeach
                 
 
             </tbody>

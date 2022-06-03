@@ -40,7 +40,7 @@
          <div class="row">
           <div class="col-sm-6 col-lg-12">
             <div class="volunter_add messaging">
-                <form id="messaging-form" action="{{ route('role-details.store') }}" method="POST" enctype="multipart/form-data">
+                <form id="messaging-form" action="{{ route('role-details.store') }}" method="POST">
                     @csrf
                   <div class="form-group row">
                     <div class="col-md-3">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoleDetail;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleDetailController extends Controller
@@ -14,8 +15,8 @@ class RoleDetailController extends Controller
      */
     public function index()
     {
-        //$data['permissions'] = Permission::orderBy('id','desc')->paginate(5);
-        return view('role_details.index');
+        $data['roleDetails'] = RoleDetail::orderBy('id','desc')->paginate(5);
+        return view('role_details.index', $data);
     }
 
     /**
@@ -39,13 +40,18 @@ class RoleDetailController extends Controller
         $request->validate([
         'user_name' => 'required',
         'manager_name' => 'required',
-        'name' => 'required'
+        'name' => 'required',
+        'status' => 'required'
         ]);
+        $role = Role::with('roles')->where('roles.name','=','admin')->get();
+        dd($role);
+
         $roleDetail = new RoleDetail;
         $roleDetail->role_id = $request->user_name;
         $roleDetail->parent_id = $request->manager_name;
         $roleDetail->name = $request->name;
         $roleDetail->status = $request->status;
+        //dd($roleDetail);
         $roleDetail->save();
         return redirect()->route('role-details.index')
         ->with('success','Role Detail has been created successfully.');
