@@ -13,6 +13,7 @@ use App\Http\Controllers\PendingApprovalController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleDetailController;
+use App\Http\Controllers\HomeController;
  
 
 /*

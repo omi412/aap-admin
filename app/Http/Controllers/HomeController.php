@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -52,6 +52,8 @@ class HomeController extends Controller
         $user->assignRole($role);
 
         Auth::login($user);
+
+        return redirect()->route('dashboard');
     }
 }
 

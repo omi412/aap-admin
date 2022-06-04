@@ -35,30 +35,30 @@
                                        
                                           <div class="mb-3">
                                              <!-- <label for="phone-number" class="form-label">Phone Number:</label> -->
-                                             <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="(+91) Enter your mobile no">
+                                             <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="(+91) Enter your mobile no" minlength="13" maxlength="13">
                                              <span id="spn-err-mobile" class="err-msg"></span>
                                           </div>
                                           
                                           
-                                          <div class="input-group mb-3" id="div-otp-code" style="display: none;">
+                                          <div class="mb-3" id="div-otp-code" style="display: none;">
                                              <!-- <label for="otp-code" class="form-label">OTP code:</label> -->
                                              <input type="text" id="otp-code" class="form-control" placeholder="Enter OTP code">
                                              <span id="spn-err-otp" class="err-msg"></span>
                                           </div>
-                                          <div class="input-group mb-3" id="div-name" style="display: none;">
+                                          <div class="mb-3" id="div-name" style="display: none;">
                                              <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name">
                                             <span id="spn-err-name" class="err-msg"></span>
                                           </div>
-                                          <div class="input-group mb-3">
+                                          <div class="mb-3">
                                             <div id="recaptcha-container"></div>
                                           </div>  
                                           <div class="row">
                                              <div class="col-5 text-left mobile" style="padding: 0px;">
                                              </div>
                                              <div class="col-12 text-center">
-                                                <button type="submit" id="btn-submit" class="btn btn-primary mt-3" >Register</button>
+                                                <button type="submit" id="btn-submit" class="btn btn-primary mt-3" style="display: none;">Register</button>
                                                 <button type="button" id="btn-get-otp" class="btn btn-primary px-4 mt-3" onclick="otpSend();">Get OTP</button>
-                                                <button type="button" id="btn-verify-otp" class="btn btn-primary px-4 mt-3" onclick="otpVerify();">Verify OTP</button>
+                                                <button type="button" id="btn-verify-otp" class="btn btn-primary px-4 mt-3" onclick="otpVerify();" style="display: none;">Verify OTP</button>
                                              </div>
                                           </div>
                                     </form>
@@ -112,8 +112,10 @@
 
         function otpSend() {
             var phoneNumber = document.getElementById('phone-number').value;
-            const appVerifier = window.recaptchaVerifier;
-            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+            if(phoneNumber!=''){
+
+              const appVerifier = window.recaptchaVerifier;
+              firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
                 .then((confirmationResult) => {
                     // SMS sent. Prompt user to type the code from the message, then sign the
                     // user in with confirmationResult.confirm(code).
@@ -135,11 +137,16 @@
                     //document.getElementById("error-message").classList.add("d-block");
                     $('#res-msg').html('<p style="color:red;">'+error.message+'</p>');
                 });
+            }else{
+              $('#spn-err-mobile').text('Mobile no is required');
+              removeMessage('spn-err-mobile');
+            }
         }
 
         function otpVerify() {
             var code = document.getElementById('otp-code').value;
-            confirmationResult.confirm(code).then(function (result) {
+            if(code!==''){
+              confirmationResult.confirm(code).then(function (result) {
                 // User signed in successfully.
                 var user = result.user;
 
@@ -174,11 +181,21 @@
                 //document.getElementById("sent-message").innerHTML = "You are succesfully logged in.";
                 //document.getElementById("sent-message").classList.add("d-block");
       
-            }).catch(function (error) {
-                $('#spn-err-otp').text(error.message);
-                //document.getElementById("error-message").innerHTML = error.message;
-                //document.getElementById("error-message").classList.add("d-block");
-            });
+              }).catch(function (error) {
+                  $('#spn-err-otp').text(error.message);
+                  //document.getElementById("error-message").innerHTML = error.message;
+                  //document.getElementById("error-message").classList.add("d-block");
+              });
+            }else{
+              $('#spn-err-otp').text('OTP code is required');
+              removeMessage('spn-err-otp');
+            }
+        }
+
+        function removeMessage(attr_id,timer=3000){
+          setTimeout(function () {
+             $('#'+attr_id).text('');
+          }, timer);
         }
     </script>
     <style type="text/css">

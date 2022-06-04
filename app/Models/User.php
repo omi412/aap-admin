@@ -48,12 +48,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+        /**
+    * @return user roles
+    */
+    public function roles(){
+        return $this->belongsToMany(Role::class);//->withPivot('company_id')
+    }
     /**
-     * @param string $role
-     * @return bool
-     */
-    public function hasRole(string $role): bool
-    {
-        return $this->getAttribute('role') === $role;
+    * @return Boolean - checking user has any role or not
+    */
+    public function hasAnyRoles($roles){
+        if($this->roles()->whereIn('name',$roles)->first()){
+            return true;
+        }
+        return false;
+    }
+    /**
+    * @return Boolean - checking user has role or not
+    */
+    public function hasRole($role){
+        if($this->roles()->where('name',$role)->first()){
+            return true;
+        }
+
+        return false;
     }
 }
