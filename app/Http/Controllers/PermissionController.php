@@ -7,6 +7,20 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function __construct()
+    {
+         // $this->middleware('permission:Permission-list', ['only' => ['index']]);
+         // $this->middleware('permission:Permission-create', ['only' => ['create','store']]);
+         // $this->middleware('permission:Permission-edit', ['only' => ['edit','update']]);
+         // $this->middleware('permission:Permission-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
         {
         $data['permissions'] = Permission::orderBy('id','desc')->paginate(5);

@@ -41,7 +41,28 @@ class PermissionSeeder extends Seeder
         		'guard_name'=>'web',
         		'created_at'=>Carbon::now(),
         		'updated_at'=>Carbon::now()
-        	],
+        	],[
+                'name'=>'Role List',
+                'guard_name'=>'web',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now()
+            ],[
+                'name'=>'Role Create',
+                'guard_name'=>'web',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now()
+            ],[
+                'name'=>'Role Edit',
+                'guard_name'=>'web',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now()
+            ],[
+                'name'=>'Role Delete',
+                'guard_name'=>'web',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now()
+            ],
+
         ];
 
         Permission::insert($insert);

@@ -5,15 +5,15 @@
         <div class="quixnav">
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
+                    @can('View Dashboard')
                     <li>
                         <a class="has-arrow1 nav-link active" href="{{ url('dashboard') }}" aria-expanded="false">
                             <i class="icon icon-single-04"></i>
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </li>
-                    <li><a class="has-arrow1 nav-link" href="{{ url('volunteer-types') }}" aria-expanded="false"><i
-                                class="icon icon-app-store"></i><span class="nav-text">Volunteer Types</span></a>
-                    </li>
+                    @endcan
+                    
                     <li><a class="has-arrow1 nav-link" href="{{ url('task-status') }}" aria-expanded="false"><i
                                 class="icon icon-chart-bar-33"></i><span class="nav-text">Task Status</span></a>
                     </li>
@@ -42,6 +42,16 @@
                     <li><a class="has-arrow1 nav-link" href="{{ url('pending-approval') }}" aria-expanded="false"><i
                                 class="icon icon-single-copy-06"></i><span class="nav-text">Pending Approval</span></a>
                     </li>
+                    @can('Permission List')
+                    <li><a class="has-arrow1 nav-link" href="{{ url('pending-approval') }}" aria-expanded="false"><i
+                                class="icon icon-single-copy-06"></i><span class="nav-text">Permission</span></a>
+                    </li>
+                    @endcan
+                    @can('Role List')
+                    <li><a class="has-arrow1 nav-link" href="{{ url('volunteer-types') }}" aria-expanded="false"><i
+                                class="icon icon-app-store"></i><span class="nav-text">Role</span></a>
+                    </li>
+                    @endcan
                 </ul>
             </div>
 

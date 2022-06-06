@@ -37,6 +37,8 @@
             <div class="input-group">
               <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
               <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
+
+              <a href="javascript:void(0)" id="btn-user-model" class="btn btn-outline-primary"><i class="fa fa-plus"></i>Add</a>
             </div>
           </div>
           <table class="table table-striped responsive all_table">
@@ -59,11 +61,11 @@
   </div><!--/.row-->
 </div>
 
-  <div class="modal fade pending_approval" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade pending_approval" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Pending Approval</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -77,43 +79,86 @@
               <label for="name">Name</label>
             </div>
             <div class="col-md-9">
-              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" readonly>
+              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp">
             <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
           </div>
           </div>
           <div class="form-group row">
             <div class="col-md-3">
-              <label for="password1">Number</label>
+              <label for="password1">Mobile No</label>
             </div>
             <div class="col-md-9">
-              <input type="number" class="form-control" name="mobileno" id="mobileno" readonly>
+              <input type="number" class="form-control" name="mobileno" id="mobileno">
             </div>
           </div>
-          <div class="form-group row">
+          <!-- <div class="form-group row">
             <div class="col-md-3">
             <label for="password1">Approval</label>
           </div>
           <div class="col-md-9">
-            <!-- <input type="text" class="form-control" id="approval" placeholder="Approval"> -->
+            <input type="text" class="form-control" id="approval" placeholder="Approval">
             <select name="approval" id="approval" class="form-control">
                   <option>Select Approval</option>
                   <option>Approved</option>
                   <option>Rejected</option>
                 </select>
           </div>
-          </div>
+          </div> -->
           <div class="form-group row">
             <div class="col-md-3">
-            <label for="password1">Designation</label>
+              <label for="password1">Designation</label>
+            </div>
+            <div class="col-md-9">
+              <select name="role" id="ddl-role" class="form-control">
+                <!-- <option value="">Select Designation</option> -->
+                @foreach(getRoles() as $role)
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-          <div class="col-md-9">
-            <select name="designation" id="designation" class="form-control">
-            <option>Ward Prabhari</option>
-            <option>Mandal Prabhari</option>
-            <option>Both Prabhari</option>
-            <option>Gali Prabhari</option>
-          </select>
+          <div class="form-group row" id="div-mandal">
+            <div class="col-md-3">
+              <label for="password1">Mandal</label>
+            </div>
+            <div class="col-md-9">
+              <select name="designation" id="ddl-mandal" class="form-control">
+                <option value="">Select Mandal</option>
+                @foreach($mandals as $mandal)
+                <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
+          <div class="form-group row" id="div-ward" style="display: none;">
+            <div class="col-md-3">
+              <label for="password1">Ward</label>
+            </div>
+            <div class="col-md-9">
+              <select name="designation" id="ddl-ward" class="form-control">
+                <option value="">Select Ward</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row" id="div-booth" style="display: none;">
+            <div class="col-md-3">
+              <label for="password1">Booth</label>
+            </div>
+            <div class="col-md-9">
+              <select name="designation" id="ddl-booth" class="form-control">
+                <option value="">Select Booth</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row" id="div-gali" style="display: none;">
+            <div class="col-md-3">
+              <label for="password1">Gali</label>
+            </div>
+            <div class="col-md-9">
+              <select name="designation" id="ddl-gali" class="form-control">
+                <option value="">Select Gali</option>
+              </select>
+            </div>
           </div>
           <div class="form-group row">
             <div class="col-md-3">
@@ -158,6 +203,51 @@
 <script>
 
   $(document).ready(function(){
+    $('#btn-user-model').click(function(){
+      $('#editModal').modal('show');
+    });
+    //$('#pending_approval').modal('show');
+    $('#ddl-role').change(function(){
+      let role = $(this).val();
+      if(role==''){
+        $('#div-ward,#div-booth,#div-gali').hide();
+      }else if(role==3){ // mandal
+        $('#div-ward,#div-booth,#div-gali').hide();
+        $('#div-mandal').show();
+      }else if(role==4){ //ward
+        $('#div-booth,#div-gali').hide();
+        $('#div-ward,#div-mandal').show();
+      }else if(role==5){ // booth
+        $('#div-gali').hide();
+        $('#div-mandal,#div-ward,#div-booth').show();
+      }else if(role==6){ // gali
+        $('#div-mandal,#div-ward,#div-booth,#div-gali').show();
+      }
+    });
+
+    $('#ddl-mandal').change(function(){
+      let mandal_id = $(this).val();
+      let ward_opt = `<option value=''>Select Ward</option>`;
+      $.ajax({
+        "url":"{{ url('get-wards') }}/"+mandal_id,
+        "type":"POST",
+        "data":{_token:token,role_id:role},
+        "success":function(response){
+          if(response.status==200){
+            let wards = response.ward;
+            for (var i = 0; i < wards.length; i++) {
+              ward_opt +=`<option value='`+wards[i].id+`'>`+wards[i].name+`</option>`;
+            }
+          }else{
+            notification('danger',response.error);
+          }
+        },error:function(error){
+          notification('danger','Oops! Something went wrong');
+        }
+
+      });
+    });
+
     fetchPendingApproval();
 
         function fetchPendingApproval() {

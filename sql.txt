@@ -1,3 +1,6 @@
+------on 6/6/2022------
+ALTER TABLE `users` DROP INDEX `users_email_unique`;
+
 ------on 31/5/2022------
 ALTER TABLE `roles` ADD `guard_name` VARCHAR(125) NOT NULL DEFAULT 'web' AFTER `name`;
 

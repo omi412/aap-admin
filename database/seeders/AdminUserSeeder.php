@@ -55,7 +55,7 @@ class AdminUserSeeder extends Seeder
           'mobileno' => '9826098260',
         ]);
     
-        $role = Role::create(['name' => 'Admin']);
+        $role = Role::where('name','Admin')->first();
      
         $permissions = Permission::pluck('id','id')->all();
    

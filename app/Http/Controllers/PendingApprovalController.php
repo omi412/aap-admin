@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\pending_approval;
+use App\Models\RoleDetail;
 use Carbon\Carbon;
-
+use Auth;
 class PendingApprovalController extends Controller
 {
     public function index(Request $request)
     {
+        //$user = getRoles();
+        //dd($user);
         // if($request->ajax()){
         //     $house_data = HouseData::all();
         //     return response()->json(['house_data'=>$house_data]);
@@ -22,8 +25,8 @@ class PendingApprovalController extends Controller
             //dd($pending_approval);
             return response()->json(['pending_approval'=>$pending_approval]);
         }
-
-        return view('pending_approval.pending_approval');
+        $mandals = RoleDetail::where('role_id',1)->select('id','name')->get();
+        return view('pending_approval.pending_approval',compact('mandals'));
         
     }
 
