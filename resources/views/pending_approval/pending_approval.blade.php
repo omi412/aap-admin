@@ -19,7 +19,7 @@
   </ol>
 </cui-breadcrumb>
 
-<div class="animated fadeIn dashboard">
+<div class="animated fadeIn dashboard task_status">
   <div class="volunter_list">
     <div class="row">
     <div class="col-lg-12">
@@ -28,6 +28,12 @@
       </div>
       <ul id="update_msgList"></ul>
       <ul id="save_msgList"></ul>
+      <div class="card">
+        <div class="search_box house_data">
+            <div class="input-group">
+               <a href="javascript:void(0)" id="btn-user-model" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 10px;"></i>Add User</a>
+            </div>
+        </div>
       <div class="card pen_appr">
         <div class="card-header">
           <i class="fa fa-align-justify"></i> Pending Approvals
@@ -37,8 +43,6 @@
             <div class="input-group">
               <input type="search" id="myInput" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
               <button type="button" class="btn btn-outline-primary"><i class="fa fa-search"></i></button>
-
-              <a href="javascript:void(0)" id="btn-user-model" class="btn btn-outline-primary"><i class="fa fa-plus"></i>Add</a>
             </div>
           </div>
           <table class="table table-striped responsive all_table">
@@ -60,8 +64,9 @@
     </div>
   </div><!--/.row-->
 </div>
+</div>
 
-<div class="modal fade pending_approval" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade pending_approval" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -91,19 +96,6 @@
               <input type="number" class="form-control" name="mobileno" id="mobileno">
             </div>
           </div>
-          <!-- <div class="form-group row">
-            <div class="col-md-3">
-            <label for="password1">Approval</label>
-          </div>
-          <div class="col-md-9">
-            <input type="text" class="form-control" id="approval" placeholder="Approval">
-            <select name="approval" id="approval" class="form-control">
-                  <option>Select Approval</option>
-                  <option>Approved</option>
-                  <option>Rejected</option>
-                </select>
-          </div>
-          </div> -->
           <div class="form-group row">
             <div class="col-md-3">
               <label for="password1">Designation</label>
@@ -122,7 +114,7 @@
               <label for="password1">Mandal</label>
             </div>
             <div class="col-md-9">
-              <select name="designation" id="ddl-mandal" class="form-control">
+              <select name="role_mandal" id="ddl-mandal" class="form-control">
                 <option value="">Select Mandal</option>
                 @foreach($mandals as $mandal)
                 <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
@@ -135,8 +127,11 @@
               <label for="password1">Ward</label>
             </div>
             <div class="col-md-9">
-              <select name="designation" id="ddl-ward" class="form-control">
+              <select name="role_ward" id="ddl-ward" class="form-control">
                 <option value="">Select Ward</option>
+                @foreach($wards as $ward)
+                <option value="{{ $ward->id }}">{{ $ward->name }}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -145,8 +140,11 @@
               <label for="password1">Booth</label>
             </div>
             <div class="col-md-9">
-              <select name="designation" id="ddl-booth" class="form-control">
+              <select name="role_booth" id="ddl-booth" class="form-control">
                 <option value="">Select Booth</option>
+                @foreach($booths as $booth)
+                <option value="{{ $booth->id }}">{{ $booth->name }}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -155,10 +153,22 @@
               <label for="password1">Gali</label>
             </div>
             <div class="col-md-9">
-              <select name="designation" id="ddl-gali" class="form-control">
-                <option value="">Select Gali</option>
+              <select name="role_gali" id="ddl-gali" class="form-control">
+                
               </select>
             </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-3">
+            <label for="password1">Approval</label>
+          </div>
+          <div class="col-md-9">
+           <!--  <input type="text" class="form-control" id="approval"> -->
+            <select name="approval" id="approval" class="form-control">
+                  <option value="0" selected>Approved</option>
+                  <option value="1">Rejected</option>
+                </select>
+          </div>
           </div>
           <div class="form-group row">
             <div class="col-md-3">
@@ -170,12 +180,153 @@
           </div>
         </div>
         <div class="modal-footer border-top-0 d-flex justify-content-center">
-          <button type="submit" class="btn btn-success update_approval">Submit</button>
+          <button type="submit" class="btn btn-success">Submit</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+{{-- Edit Modal --}}
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit & Update User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <form action="POST" id="pending-approval-form">
+        @csrf
+        <input type="hidden" name="pending_approval_id" id="pending-approval-id" value="">
+        <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-md-3">
+              <label for="name">Name</label>
+            </div>
+            <div class="col-md-9">
+              <input type="text" class="form-control" value="{{old('name')}}" id="name" name="name" aria-describedby="emailHelp">
+            <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
+          </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-3">
+              <label for="password1">Mobile No</label>
+            </div>
+            <div class="col-md-9">
+              <input type="number" class="form-control" name="mobileno" id="mobileno">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-3">
+              <label for="password1">Designation</label>
+            </div>
+            <div class="col-md-9">
+              <select name="role" id="ddl-role" class="form-control">
+                <!-- <option value="">Select Designation</option> -->
+                @foreach(getRoles() as $role)
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="form-group row" id="div-mandal">
+            <div class="col-md-3">
+              <label for="password1">Mandal</label>
+            </div>
+            <div class="col-md-9">
+              <select name="role_mandal" id="ddl-mandal" class="form-control">
+                <option value="">Select Mandal</option>
+                @foreach($mandals as $mandal)
+                <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="form-group row" id="div-ward" style="display: none;">
+            <div class="col-md-3">
+              <label for="password1">Ward</label>
+            </div>
+            <div class="col-md-9">
+              <select name="role_ward" id="ddl-ward" class="form-control">
+                
+              </select>
+            </div>
+          </div>
+          <div class="form-group row" id="div-booth" style="display: none;">
+            <div class="col-md-3">
+              <label for="password1">Booth</label>
+            </div>
+            <div class="col-md-9">
+              <select name="role_booth" id="ddl-booth" class="form-control">
+                
+              </select>
+            </div>
+          </div>
+          <div class="form-group row" id="div-gali" style="display: none;">
+            <div class="col-md-3">
+              <label for="password1">Gali</label>
+            </div>
+            <div class="col-md-9">
+              <select name="role_gali" id="ddl-gali" class="form-control">
+                
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-3">
+            <label for="password1">Approval</label>
+          </div>
+          <div class="col-md-9">
+           <!--  <input type="text" class="form-control" id="approval"> -->
+            <select name="approval" id="approval" class="form-control">
+                  <option value="0" selected>Approved</option>
+                  <option value="1">Rejected</option>
+                </select>
+          </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-3">
+            <label for="password1">Manager</label>
+          </div>
+          <div class="col-md-9">
+            <input type="text" class="form-control" name="manager" id="manager" placeholder="Manager">
+          </div>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary update_approval">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{-- Edn- Edit Modal --}}
+{{-- Delete Modal --}}
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Confirm to Delete Data ?</h4>
+                <input type="hidden" id="deleteing_id">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary delete_student">Yes Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- End - Delete Modal --}}
 
 
 
@@ -203,50 +354,6 @@
 <script>
 
   $(document).ready(function(){
-    $('#btn-user-model').click(function(){
-      $('#editModal').modal('show');
-    });
-    //$('#pending_approval').modal('show');
-    $('#ddl-role').change(function(){
-      let role = $(this).val();
-      if(role==''){
-        $('#div-ward,#div-booth,#div-gali').hide();
-      }else if(role==3){ // mandal
-        $('#div-ward,#div-booth,#div-gali').hide();
-        $('#div-mandal').show();
-      }else if(role==4){ //ward
-        $('#div-booth,#div-gali').hide();
-        $('#div-ward,#div-mandal').show();
-      }else if(role==5){ // booth
-        $('#div-gali').hide();
-        $('#div-mandal,#div-ward,#div-booth').show();
-      }else if(role==6){ // gali
-        $('#div-mandal,#div-ward,#div-booth,#div-gali').show();
-      }
-    });
-
-    $('#ddl-mandal').change(function(){
-      let mandal_id = $(this).val();
-      let ward_opt = `<option value=''>Select Ward</option>`;
-      $.ajax({
-        "url":"{{ url('get-wards') }}/"+mandal_id,
-        "type":"POST",
-        "data":{_token:token,role_id:role},
-        "success":function(response){
-          if(response.status==200){
-            let wards = response.ward;
-            for (var i = 0; i < wards.length; i++) {
-              ward_opt +=`<option value='`+wards[i].id+`'>`+wards[i].name+`</option>`;
-            }
-          }else{
-            notification('danger',response.error);
-          }
-        },error:function(error){
-          notification('danger','Oops! Something went wrong');
-        }
-
-      });
-    });
 
     fetchPendingApproval();
 
@@ -270,10 +377,84 @@
             });
         }
 
-       $('#pending-approval-form').on('submit', function(e) {
+
+    $('#btn-user-model').click(function(){
+      $('#addModal').modal('show');
+    });
+    //$('#pending_approval').modal('show');
+    $('#ddl-role').change(function(){
+      let role = $(this).val();
+      if(role==''){
+        $('#div-ward,#div-booth,#div-gali').hide();
+      }else if(role==3){ // mandal
+        $('#div-ward,#div-booth,#div-gali').hide();
+        $('#div-mandal').show();
+      }else if(role==4){ //ward
+        $('#div-booth,#div-gali').hide();
+        $('#div-ward,#div-mandal').show();
+      }else if(role==5){ // booth
+        $('#div-gali').hide();
+        $('#div-mandal,#div-ward,#div-booth').show();
+      }else if(role==6){ // gali
+        $('#div-mandal,#div-ward,#div-booth,#div-gali').show();
+      }
+    });
+
+    $('#ddl-mandal').change(function(){
+      var token = $(this).data('token');
+      let mandal_id = $(this).val();
+      alert("mandal");
+      let ward_opt = `<option value=''>Select Ward</option>`;
+      $.ajax({
+        "url":"{{ url('get-wards') }}/"+mandal_id,
+        "type":"POST",
+        "data":{ _token:token,role_id:role},
+        "success":function(response){
+          if(response.status==200){
+            let wards = response.ward;
+            for (var i = 0; i < wards.length; i++) {
+              ward_opt +=`<option value='`+wards[i].id+`'>`+wards[i].name+`</option>`;
+            }
+          }else{
+            notification('danger',response.error);
+          }
+        },error:function(error){
+          notification('danger','Oops! Something went wrong');
+        }
+
+      });
+    });
+
+    $('#ddl-ward').change(function(){
+      let ward_id = $(this).val();
+      alert('ward Id');
+      let booth_opt = `<option value=''>Select Bhoth</option>`;
+      $.ajax({
+        "url":"{{ url('get-booths') }}/"+ward_id,
+        "type":"POST",
+        "data":{ _token:token,role_id:role},
+        "success":function(response){
+          if(response.status==200){
+            let booth = response.booth;
+            for (var i = 0; i < booth.length; i++) {
+              ward_opt +=`<option value='`+booth[i].id+`'>`+booth[i].name+`</option>`;
+            }
+          }else{
+            notification('danger',response.error);
+          }
+        },error:function(error){
+          notification('danger','Oops! Something went wrong');
+        }
+
+      });
+    });
+
+
+       /*$('#pending-approval-form').on('submit', function(e) {
             e.preventDefault();
             //check form submit is store or update
             let pending_approval_id = $('#pending-approval-id').val();
+            //alert(pending_approval_id);
             let url = "{{ url('pending-approval.store') }}";
   
             if(pending_approval_id!=''){
@@ -285,8 +466,9 @@
                 data: $('#pending-approval-form').serialize(),
                 dataType: "json",
                 success: function (response) {
-                    // console.log(response);
+                     console.log(response);
                     if (response.status == 400) {
+                       console.log(response);
                         $('#save_msgList').html("");
                         $('#save_msgList').addClass('alert alert-danger');
                         $.each(response.errors, function (key, err_value) {
@@ -296,13 +478,53 @@
                         notification('success',response.message);
 
                         $('#pending-approval-form')[0].reset();
-                        $('#section_second').hide();
-                        $('#section_first').show();
-                        $('#btn-submit').text('Save');
                         $('#pending-approval-id').val('');
                         fetchPendingApproval();
                     }else{
                       notification('danger',response.error,5000);
+                      console.log(response.error);
+                    }
+                }
+            });
+
+        });*/
+
+       $('#pending-approval-form').on('submit', function(e) {
+            e.preventDefault();
+            var data = {
+                'name': $('#name').val(),
+                'mobileno': $('#mobileno').val(),
+                'approval': $('#approval').val(),
+                'role': $('#ddl-role').val(),
+                'manager': $('#manager').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/pending-approval",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#save_msgList').html("");
+                        $('#save_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#save_msgList').append('<li>' + err_value + '</li>');
+                        });
+                    } else {
+                        $('#save_msgList').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#pending-approval-form')[0].reset();
+                        $('#addModal').modal('hide');
+                        fetchPendingApproval();
                     }
                 }
             });
@@ -314,7 +536,7 @@
        $(document).on('click', '.editbtn', function (e) {
             e.preventDefault();
             var pending_approval_id = $(this).val();
-            //alert(pending_approval_id);
+            alert(pending_approval_id);
             $('#editModal').modal('show');
             $.ajax({
                 type: "GET",
@@ -348,7 +570,7 @@
                 'name': $('#name').val(),
                 'mobileno': $('#mobileno').val(),
                 'approval': $('#approval').val(),
-                'designation': $('#designation').val(),
+                'designation': $('#ddl-role').val(),
                 'manager': $('#manager').val(),
             }
 
@@ -364,7 +586,7 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    // console.log(response);
+                    console.log(response);
                     if (response.status == 400) {
                         $('#update_msgList').html("");
                         $('#update_msgList').addClass('alert alert-danger');

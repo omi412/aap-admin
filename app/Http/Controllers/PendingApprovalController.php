@@ -26,8 +26,55 @@ class PendingApprovalController extends Controller
             return response()->json(['pending_approval'=>$pending_approval]);
         }
         $mandals = RoleDetail::where('role_id',1)->select('id','name')->get();
-        return view('pending_approval.pending_approval',compact('mandals'));
+        $wards = RoleDetail::where('role_id',2)->select('id','name')->get();
+        $booths = RoleDetail::where('role_id',3)->select('id','name')->get();
+        $galis = RoleDetail::where('role_id',4)->select('id','name')->get();
+        return view('pending_approval.pending_approval',compact('mandals','wards','booths','galis'));
         
+    }
+
+    public function fetchvolunteer()
+    {
+        $pending_approval = pending_approval::all();
+        return response()->json([
+            'pending_approval'=>$pending_approval,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|max:100',
+            'mobileno'=> 'required|max:100',
+            'approval'=> 'required',
+            'designation'=> 'nullable|max:250',
+            'manager'=> 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages()
+            ]);
+        }
+        else
+        {
+            $pending_approval = new pending_approval;
+            $pending_approval->name = $request->input('name');
+            $pending_approval->mobileno = $request->input('mobileno');
+            $pending_approval->approval = $request->input('approval');
+            $pending_approval->designation = $request->input('role');
+            $pending_approval->manager = $request->input('manager');
+            //dd($pending_approval);
+            $pending_approval->save();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Pending Approval Added Successfully.'
+            ]);
+        }
+
     }
 
     public function edit($id)
@@ -76,7 +123,7 @@ class PendingApprovalController extends Controller
                         'name'=>$request->name,
                         'mobileno'=>$request->mobileno,
                         'approval'=>$request->approval,
-                        'designation'=>$request->designation,
+                        'designation'=>$request->role,
                         'manager'=>$request->manager
                     ]);
                     return response()->json([
@@ -100,6 +147,18 @@ class PendingApprovalController extends Controller
             }
 
         }
+    }
+
+    public function fetchWard(Request $request)
+    {
+        $data['wards'] = RoleDetail::where("role_id",$request->role_id)->get(["name", "id"]);
+        dd($data);
+        return response()->json($data);
+    }
+    public function fetchBooth(Request $request)
+    {
+        $data['bhooths'] = RoleDetail::where("role_id",$request->role_id)->get(["name", "id"]);
+        return response()->json($data);
     }
 
     

@@ -46,7 +46,7 @@ Auth::routes();
 
 // admin protected routes
 //Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function () {
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard')->middleware('can:View Dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
     //Route::resource('volunteer-types', VolunteerController::class);
 
@@ -88,8 +88,15 @@ Auth::routes();
     Route::delete('delete-house-data/{id}', [HouseDataController::class, 'destroy']);
 
 
+    Route::resource('users', PendingApprovalController::class);
+    Route::post('users', [PendingApprovalController::class, 'store']);
+    Route::get('edit-user/{id}', [PendingApprovalController::class, 'edit']);
+    Route::post('update-user/{id}', [PendingApprovalController::class,'update']);
+    Route::delete('delete-user/{id}', [PendingApprovalController::class, 'destroy']);
+
 
     Route::resource('pending-approval', PendingApprovalController::class);
+    Route::post('pending-approval', [PendingApprovalController::class, 'store']);
     Route::get('edit-pending-approval/{id}', [PendingApprovalController::class, 'edit']);
     Route::post('update-pending-approval/{id}', [PendingApprovalController::class,'update']);
     Route::delete('delete-pending-approval/{id}', [PendingApprovalController::class, 'destroy']);
@@ -97,6 +104,9 @@ Auth::routes();
     Route::resource('roles', RoleController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('role-details', RoleDetailController::class);
+
+    Route::post('get-wards', [RoleDetailController::class, 'fetchWard']);
+    Route::post('get-booths', [RoleDetailController::class, 'fetchbooth']);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');

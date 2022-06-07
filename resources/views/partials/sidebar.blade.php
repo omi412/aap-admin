@@ -42,6 +42,9 @@
                     <li><a class="has-arrow1 nav-link" href="{{ url('pending-approval') }}" aria-expanded="false"><i
                                 class="icon icon-single-copy-06"></i><span class="nav-text">Pending Approval</span></a>
                     </li>
+                    <li><a class="has-arrow1 nav-link" href="{{ url('users') }}" aria-expanded="false"><i
+                                class="icon icon-user"></i><span class="nav-text">Users</span></a>
+                    </li>
                     @can('Permission List')
                     <li><a class="has-arrow1 nav-link" href="{{ url('pending-approval') }}" aria-expanded="false"><i
                                 class="icon icon-single-copy-06"></i><span class="nav-text">Permission</span></a>
