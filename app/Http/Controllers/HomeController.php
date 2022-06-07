@@ -50,6 +50,7 @@ class HomeController extends Controller
         $user->save();
         $role = Role::where('name','User')->pluck('id')->toArray();
         $user->assignRole($role);
+        assignRoleToModel($role->id,$user->id);
 
         Auth::login($user);
 

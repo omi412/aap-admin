@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
@@ -51,26 +52,26 @@ class User extends Authenticatable
         /**
     * @return user roles
     */
-    public function roles(){
-        return $this->belongsToMany(Role::class);//->withPivot('company_id')
-    }
+    // public function roles(){
+    //     return $this->belongsToMany(Role::class);//->withPivot('company_id')
+    // }
     /**
     * @return Boolean - checking user has any role or not
     */
-    public function hasAnyRoles($roles){
-        if($this->roles()->whereIn('name',$roles)->first()){
-            return true;
-        }
-        return false;
-    }
+    // public function hasAnyRoles($roles){
+    //     if($this->roles()->whereIn('name',$roles)->first()){
+    //         return true;
+    //     }
+    //     return false;
+    // }
     /**
     * @return Boolean - checking user has role or not
     */
-    public function hasRole($role){
-        if($this->roles()->where('name',$role)->first()){
-            return true;
-        }
+    // public function hasRole($role){
+    //     if($this->roles()->where('name',$role)->first()){
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 }
