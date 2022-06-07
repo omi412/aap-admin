@@ -105,8 +105,9 @@ Auth::routes();
     Route::resource('permission', PermissionController::class);
     Route::resource('role-details', RoleDetailController::class);
 
-    Route::post('get-wards', [RoleDetailController::class, 'fetchWard']);
-    Route::post('get-booths', [RoleDetailController::class, 'fetchbooth']);
+    Route::get('get-wards/{mandal_id}', [PendingApprovalController::class, 'getWards']);
+    Route::get('get-booths/{ward_id}', [PendingApprovalController::class, 'getBooths']);
+    Route::get('get-galies/{booth_id}', [PendingApprovalController::class, 'getGali']);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');

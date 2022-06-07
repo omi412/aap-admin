@@ -149,16 +149,20 @@ class PendingApprovalController extends Controller
         }
     }
 
-    public function fetchWard(Request $request)
+    public function getWards($mandal_id)
     {
-        $data['wards'] = RoleDetail::where("role_id",$request->role_id)->get(["name", "id"]);
-        dd($data);
-        return response()->json($data);
+        $wards = RoleDetail::select('id','name')->where("parent_id",$mandal_id)->get();
+        return response()->json(['status'=>200,'wards'=>$wards]);
     }
-    public function fetchBooth(Request $request)
+    public function getBooths($ward_id)
     {
-        $data['bhooths'] = RoleDetail::where("role_id",$request->role_id)->get(["name", "id"]);
-        return response()->json($data);
+        $booths = RoleDetail::select('id','name')->where("parent_id",$ward_id)->get();
+        return response()->json(['status'=>200,'booths'=>$booths]);
+    }
+    public function getGali($booth_id)
+    {
+        $galies = RoleDetail::select('id','name')->where("parent_id",$booth_id)->get();
+        return response()->json(['status'=>200,'galies'=>$galies]);
     }
 
     

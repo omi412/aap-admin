@@ -84,7 +84,7 @@
               <label for="name">Name</label>
             </div>
             <div class="col-md-9">
-              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp">
+              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter name">
             <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
           </div>
           </div>
@@ -93,7 +93,7 @@
               <label for="password1">Mobile No</label>
             </div>
             <div class="col-md-9">
-              <input type="number" class="form-control" name="mobileno" id="mobileno">
+              <input type="number" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no">
             </div>
           </div>
           <div class="form-group row">
@@ -401,28 +401,30 @@
     });
 
     $('#ddl-mandal').change(function(){
-      var token = $(this).data('token');
       let mandal_id = $(this).val();
-      alert("mandal");
       let ward_opt = `<option value=''>Select Ward</option>`;
-      $.ajax({
-        "url":"{{ url('get-wards') }}/"+mandal_id,
-        "type":"POST",
-        "data":{ _token:token,role_id:role},
-        "success":function(response){
-          if(response.status==200){
-            let wards = response.ward;
-            for (var i = 0; i < wards.length; i++) {
-              ward_opt +=`<option value='`+wards[i].id+`'>`+wards[i].name+`</option>`;
+      if(mandal_id!=''){
+        $.ajax({
+          "url":"{{ url('get-wards') }}/"+mandal_id,
+          "type":"GET",
+          "success":function(response){
+            if(response.status==200){
+              let wards = response.ward;
+              for (var i = 0; i < wards.length; i++) {
+                ward_opt +=`<option value='`+wards[i].id+`'>`+wards[i].name+`</option>`;
+              }
+              $('#ddl-ward').html(ward_opt);
+            }else{
+              notification('danger',response.error);
             }
-          }else{
-            notification('danger',response.error);
+          },error:function(error){
+            notification('danger','Oops! Something went wrong');
           }
-        },error:function(error){
-          notification('danger','Oops! Something went wrong');
-        }
 
-      });
+        });
+      }else{
+        $('#ddl-ward').html(`<option value=''>Select Ward</option>`);
+      }
     });
 
     $('#ddl-ward').change(function(){
