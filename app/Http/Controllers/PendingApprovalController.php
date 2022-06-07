@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\pending_approval;
 use App\Models\RoleDetail;
+use App\Models\User;
 use Carbon\Carbon;
 use Auth;
 class PendingApprovalController extends Controller
@@ -43,12 +44,12 @@ class PendingApprovalController extends Controller
 
     public function store(Request $request)
     {
-
+        //dd($request->all());
         $validator = Validator::make($request->all(), [
             'name'=> 'required|max:100',
-            'mobileno'=> 'required|max:100',
+            'mobileno'=> 'required|max:100|unique:users',
             'approval'=> 'required',
-            'designation'=> 'nullable|max:250',
+            'role'=> 'nullable|max:250',
             'manager'=> 'required',
         ]);
 
@@ -61,18 +62,34 @@ class PendingApprovalController extends Controller
         }
         else
         {
-            $pending_approval = new pending_approval;
-            $pending_approval->name = $request->input('name');
-            $pending_approval->mobileno = $request->input('mobileno');
-            $pending_approval->approval = $request->input('approval');
-            $pending_approval->designation = $request->input('role');
-            $pending_approval->manager = $request->input('manager');
-            //dd($pending_approval);
-            $pending_approval->save();
-            return response()->json([
-                'status'=>200,
-                'message'=>'Pending Approval Added Successfully.'
-            ]);
+            try{
+                $user = new user;
+                $user->name = $request->input('name');
+                $user->mobileno = $request->input('mobileno');
+                $user->approval = $request->input('approval');
+                //$user->designation = $request->input('role');
+                $user->manager = $request->input('manager');
+                $user->designation = '';
+                //dd($pending_approval);
+                $user->created_at = Carbon::now();
+                $user->updated_at = Carbon::now();
+                $user->save();
+
+                $user->assignRole([$request->role]);
+
+                //assignRoleToModel($request->role,$user->id);
+
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'User created successfully.'
+                ]);
+            }catch(Exception $e){
+                return response()->json([
+                    'status'=>500,
+                    'error'=>$e->getMessage()
+                ]);
+            }
+            
         }
 
     }

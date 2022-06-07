@@ -84,7 +84,7 @@
               <label for="name">Name</label>
             </div>
             <div class="col-md-9">
-              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter name">
+              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter name" required >
             <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
           </div>
           </div>
@@ -93,7 +93,7 @@
               <label for="password1">Mobile No</label>
             </div>
             <div class="col-md-9">
-              <input type="number" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no">
+              <input type="number" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no" required >
             </div>
           </div>
           <div class="form-group row">
@@ -101,7 +101,7 @@
               <label for="password1">Designation</label>
             </div>
             <div class="col-md-9">
-              <select name="role" id="ddl-role" class="form-control">
+              <select name="role" id="ddl-role" class="form-control" required >
                 <!-- <option value="">Select Designation</option> -->
                 @foreach(getRoles() as $role)
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
@@ -114,7 +114,7 @@
               <label for="password1">Mandal</label>
             </div>
             <div class="col-md-9">
-              <select name="role_mandal" id="ddl-mandal" class="form-control">
+              <select name="role_mandal" id="ddl-mandal" class="form-control" required >
                 <option value="">Select Mandal</option>
                 @foreach($mandals as $mandal)
                 <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
@@ -127,11 +127,11 @@
               <label for="password1">Ward</label>
             </div>
             <div class="col-md-9">
-              <select name="role_ward" id="ddl-ward" class="form-control">
+              <select name="ward_id" id="ddl-ward" class="form-control">
                 <option value="">Select Ward</option>
-                @foreach($wards as $ward)
+                <!-- @foreach($wards as $ward)
                 <option value="{{ $ward->id }}">{{ $ward->name }}</option>
-                @endforeach
+                @endforeach -->
               </select>
             </div>
           </div>
@@ -140,11 +140,11 @@
               <label for="password1">Booth</label>
             </div>
             <div class="col-md-9">
-              <select name="role_booth" id="ddl-booth" class="form-control">
+              <select name="booth_id" id="ddl-booth" class="form-control">
                 <option value="">Select Booth</option>
-                @foreach($booths as $booth)
+                <!-- @foreach($booths as $booth)
                 <option value="{{ $booth->id }}">{{ $booth->name }}</option>
-                @endforeach
+                @endforeach -->
               </select>
             </div>
           </div>
@@ -153,8 +153,8 @@
               <label for="password1">Gali</label>
             </div>
             <div class="col-md-9">
-              <select name="role_gali" id="ddl-gali" class="form-control">
-                
+              <select name="gali_id" id="ddl-gali" class="form-control">
+                <option value="">Select Gali</option>
               </select>
             </div>
           </div>
@@ -189,7 +189,7 @@
 
 {{-- Edit Modal --}}
 
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -209,7 +209,7 @@
             </div>
             <div class="col-md-9">
               <input type="text" class="form-control" value="{{old('name')}}" id="name" name="name" aria-describedby="emailHelp">
-            <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
+            
           </div>
           </div>
           <div class="form-group row">
@@ -226,7 +226,7 @@
             </div>
             <div class="col-md-9">
               <select name="role" id="ddl-role" class="form-control">
-                <!-- <option value="">Select Designation</option> -->
+                
                 @foreach(getRoles() as $role)
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach
@@ -281,7 +281,6 @@
             <label for="password1">Approval</label>
           </div>
           <div class="col-md-9">
-           <!--  <input type="text" class="form-control" id="approval"> -->
             <select name="approval" id="approval" class="form-control">
                   <option value="0" selected>Approved</option>
                   <option value="1">Rejected</option>
@@ -304,7 +303,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 {{-- Edn- Edit Modal --}}
 {{-- Delete Modal --}}
 <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -392,11 +391,14 @@
       }else if(role==4){ //ward
         $('#div-booth,#div-gali').hide();
         $('#div-ward,#div-mandal').show();
+        $('#ddl-ward').attr('required',true);
       }else if(role==5){ // booth
         $('#div-gali').hide();
         $('#div-mandal,#div-ward,#div-booth').show();
+        $('#ddl-ward,#ddl-booth').attr('required',true);
       }else if(role==6){ // gali
         $('#div-mandal,#div-ward,#div-booth,#div-gali').show();
+        $('#ddl-ward,#ddl-booth,#ddl-gali').attr('required',true);
       }
     });
 
@@ -409,7 +411,7 @@
           "type":"GET",
           "success":function(response){
             if(response.status==200){
-              let wards = response.ward;
+              let wards = response.wards;
               for (var i = 0; i < wards.length; i++) {
                 ward_opt +=`<option value='`+wards[i].id+`'>`+wards[i].name+`</option>`;
               }
@@ -429,26 +431,58 @@
 
     $('#ddl-ward').change(function(){
       let ward_id = $(this).val();
-      alert('ward Id');
       let booth_opt = `<option value=''>Select Bhoth</option>`;
-      $.ajax({
-        "url":"{{ url('get-booths') }}/"+ward_id,
-        "type":"POST",
-        "data":{ _token:token,role_id:role},
-        "success":function(response){
-          if(response.status==200){
-            let booth = response.booth;
-            for (var i = 0; i < booth.length; i++) {
-              ward_opt +=`<option value='`+booth[i].id+`'>`+booth[i].name+`</option>`;
+      //alert(ward_id);
+      if(ward_id!=''){
+        $.ajax({
+          "url":"{{ url('get-booths') }}/"+ward_id,
+          "type":"GET",
+          "success":function(response){
+            if(response.status==200){
+              let booth = response.booths;
+              for (var i = 0; i < booth.length; i++) {
+                booth_opt +=`<option value='`+booth[i].id+`'>`+booth[i].name+`</option>`;
+              }
+              $('#ddl-booth').html(booth_opt);
+            }else{
+              notification('danger',response.error);
             }
-          }else{
-            notification('danger',response.error);
+          },error:function(error){
+            notification('danger','Oops! Something went wrong');
           }
-        },error:function(error){
-          notification('danger','Oops! Something went wrong');
-        }
 
-      });
+        });
+      }else{
+        $('#ddl-booth').html(`<option value=''>Select Booth</option>`);
+      }
+    });
+
+    $('#ddl-booth').change(function(){
+      let booth_id = $(this).val();
+      let gali_opt = `<option value=''>Select Gali</option>`;
+      //alert(booth_id);
+      if(booth_id!=''){
+        $.ajax({
+          "url":"{{ url('get-galies') }}/"+booth_id,
+          "type":"GET",
+          "success":function(response){
+            if(response.status==200){
+              let gali = response.galies;
+              for (var i = 0; i < gali.length; i++) {
+                gali_opt +=`<option value='`+gali[i].id+`'>`+gali[i].name+`</option>`;
+              }
+              $('#ddl-gali').html(gali_opt);
+            }else{
+              notification('danger',response.error);
+            }
+          },error:function(error){
+            notification('danger','Oops! Something went wrong');
+          }
+
+        });
+      }else{
+        $('#ddl-gali').html(`<option value=''>Select Gali</option>`);
+      }
     });
 
 
@@ -493,13 +527,6 @@
 
        $('#pending-approval-form').on('submit', function(e) {
             e.preventDefault();
-            var data = {
-                'name': $('#name').val(),
-                'mobileno': $('#mobileno').val(),
-                'approval': $('#approval').val(),
-                'role': $('#ddl-role').val(),
-                'manager': $('#manager').val(),
-            }
 
             $.ajaxSetup({
                 headers: {
@@ -509,8 +536,8 @@
 
             $.ajax({
                 type: "POST",
-                url: "/pending-approval",
-                data: data,
+                url: "{{ url('pending-approval') }}",
+                data: $('#pending-approval-form').serialize(),
                 dataType: "json",
                 success: function (response) {
                     // console.log(response);
@@ -520,13 +547,16 @@
                         $.each(response.errors, function (key, err_value) {
                             $('#save_msgList').append('<li>' + err_value + '</li>');
                         });
-                    } else {
+                    } else if(response.status == 200) {
                         $('#save_msgList').html("");
                         $('#success_message').addClass('alert alert-success');
                         $('#success_message').text(response.message);
                         $('#pending-approval-form')[0].reset();
                         $('#addModal').modal('hide');
+                        notification('success',response.message,3000);
                         fetchPendingApproval();
+                    }else{
+                      notification('danger',response.error,10000);
                     }
                 }
             });
