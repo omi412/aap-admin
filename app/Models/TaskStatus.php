@@ -13,7 +13,7 @@ class TaskStatus extends Model
         'task_title',
         'assign_to',
         'task_description',
-        'volunteer_name',
+        'volunteer',
         'address',
         'status',
         'remarks'

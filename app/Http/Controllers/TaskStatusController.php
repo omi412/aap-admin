@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\RoleDetail;
 use Carbon\Carbon;
 use Auth;
+use Spatie\Permission\Models\Role;
 
 class TaskStatusController extends Controller
 {
@@ -20,7 +21,15 @@ class TaskStatusController extends Controller
             //dd($users);
             return response()->json(['user'=>$users]);
         }
-        return view('task_status.task_status');
+        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+        
+            
+        $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
+        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
+        $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name')->get();
+        $galies = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name')->get();
+        
+        return view('task_status.task_status',compact('mandals','wards','booths','galies'));
     }
 
     public function fetchtaskstatus()
@@ -37,7 +46,6 @@ class TaskStatusController extends Controller
              'task_title'=> 'required|max:100',
              'assign_to'=> 'required|max:100',
              'task_description'=> 'required|max:200',
-             'volunteer'=>'required|max:150',
              'address'=>'required|max:200'
         ]);
 
@@ -51,15 +59,28 @@ class TaskStatusController extends Controller
         else
         {
             try{
+                $role = Role::find($request->assign_to);
+                
+                $role_details_id = 0;
+                
+                if($role->name=='Mandal Prabhari'){
+                    $role_details_id = $request->mandal_id;
+                }
+                if($role->name=='Ward Prabhari'){
+                    $role_details_id = $request->ward_id;
+                }
+                if($role->name=='Booth Prabhari'){
+                    $role_details_id = $request->booth_id;
+                }
+                if($role->name=='Gali Prabhari'){
+                    $role_details_id = $request->gali_id;
+                }
                 TaskStatus::create([
                     "task_title"=>$request->task_title,
                     "assign_to"=>$request->assign_to,
                     "task_description"=>$request->task_description,
-                    "volunteer_name"=>$request->volunteer,
+                    "volunteer"=>$role_details_id,
                     "address"=>$request->address,
-                    "status"=>'',
-                    "remarks"=>'',
-
                 ]);
                 return response()->json([
                     'status'=>200,

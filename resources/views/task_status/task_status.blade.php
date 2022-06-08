@@ -103,25 +103,66 @@
                 </select> -->
                   <select name="assign_to" id="ddl-role" class="form-control assign_to role" required >
                     <!-- <option value="">Select Designation</option> -->
-                    @foreach(getRoleDetails() as $role)
+                    @foreach(getRoles() as $role)
                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
                 </select>
               </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" id="div-mandal">
                 <div class="col-md-3">
-                  <label for="name">Volunteer</label>
+                  <label for="name">Mandal</label>
                 </div>
                 <div class="col-md-9">
-                  <!-- <input type="text" id="volunteer" class="form-control" name="volunteer" aria-describedby="volunteer" value="{{ old('volunteer') }}" placeholder="Volunteer Name" required > -->
 
-                    <select name="volunteer" id="ddl-volunteer" class="form-control volunteer_id" required>
-                      <option value="">Select Volunteer</option>
-                     
+                    <select name="mandal_id" id="ddl-mandal" class="form-control" required>
+                      <option value="">Select Mandal</option>
+                      @foreach($mandals as $mandal)
+                      <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
+                      @endforeach
                     </select>
+                </div>
+              </div>
+              <div class="form-group row" id="div-ward" style="display: none;">
+                <div class="col-md-3">
+                  <label for="name">Ward</label>
+                </div>
+                <div class="col-md-9">
 
-                  <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
+                    <select name="ward_id" id="ddl-ward" class="form-control">
+                      <option value="">Select Ward</option>
+                      @foreach($wards as $ward)
+                      <option value="{{ $ward->id }}">{{ $ward->name }}</option>
+                      @endforeach
+                    </select>
+                </div>
+              </div>
+              <div class="form-group row" id="div-booth" style="display: none;">
+                <div class="col-md-3">
+                  <label for="name">Booth</label>
+                </div>
+                <div class="col-md-9">
+
+                    <select name="booth_id" id="ddl-booth" class="form-control">
+                      <option value="">Select Booth</option>
+                      @foreach($booths as $booth)
+                      <option value="{{ $booth->id }}">{{ $booth->name }}</option>
+                      @endforeach
+                    </select>
+                </div>
+              </div>
+              <div class="form-group row" id="div-gali" style="display: none;">
+                <div class="col-md-3">
+                  <label for="name">Gali</label>
+                </div>
+                <div class="col-md-9">
+
+                    <select name="gali_id" id="ddl-gali" class="form-control">
+                      <option value="">Select Gali</option>
+                      @foreach($galies as $gali)
+                      <option value="{{ $gali->id }}">{{ $gali->name }}</option>
+                      @endforeach
+                    </select>
                 </div>
               </div>
               <div class="form-group row">
@@ -202,6 +243,34 @@
 
   $(document).ready(function () {
 
+        $('#ddl-role').change(function(){
+      let role = $(this).val();
+      if(role==''){
+        $('#div-ward,#div-booth,#div-gali').hide();
+        $('#ddl-mandal,#ddl-ward,#ddl-booth,#ddl-gali').attr('required',false);
+      }else if(role==3){ // mandal
+        $('#div-ward,#div-booth,#div-gali').hide();
+        $('#div-mandal').show();
+        $('#ddl-mandal').attr('required',true);
+        $('#ddl-ward,#ddl-booth,#ddl-gali').attr('required',false);
+      }else if(role==4){ //ward
+        $('#div-mandal,#div-booth,#div-gali').hide();
+        $('#div-ward').show();
+        $('#ddl-ward').attr('required',true);
+        $('#ddl-mandal,#ddl-booth,#ddl-gali').attr('required',false);
+      }else if(role==5){ // booth
+        $('#div-booth').show();
+        $('#div-mandal,#div-ward,#div-gali').hide();
+        $('#ddl-booth').attr('required',true);
+        $('#ddl-mandal,#ddl-ward,#ddl-gali').attr('required',false);
+      }else if(role==6){ // gali
+        $('#div-mandal,#div-ward,#div-booth').hide();
+        $('#div-gali').show();
+        $('#ddl-gali').attr('required',true);
+        $('#ddl-mandal,#ddl-ward,#ddl-booth').attr('required',false);
+      }
+    });
+
         fetchtaskstatus();
 
         function fetchtaskstatus() {
@@ -232,35 +301,7 @@
 
         /* find role user name  */
 
-      $('#ddl-role').change(function(){
-      let role_id = $(this).val();
-      let booth_opt = `<option value=''>Select Volunteer</option>`;
-      alert(role_id);
-      if(role_id!=''){
-        $.ajax({
-          "url":"{{ url('get-wards') }}/"+role_id,
-          "type":"GET",
-          "success":function(response){
-            //alert(response);
-            if(response.status==200){
-              let ward = response.wards;
-              for (var i = 0; i < ward.length; i++) {
-                booth_opt +=`<option value='`+ward[i].id+`'>`+ward[i].name+`</option>`;
-              }
-              $('#ddl-volunteer').html(booth_opt);
-            }else{
-              notification('danger',response.error);
-            }
-          },error:function(error){
-            notification('danger','Oops! Something went wrong');
-            console.log(error);
-          }
 
-        });
-      }else{
-        $('#ddl-volunteer').html(`<option value=''>Select Volunteer</option>`);
-      }
-    });
 
         /* find role user name  */
 
@@ -285,8 +326,7 @@
                         notification('success',response.message);
 
                         $('#task_status')[0].reset();
-                        $('#section_second').hide();
-                        $('#section_first').show();
+                        notification('success',response.message)
                         fetchtaskstatus();
                     }else{
                       notification('danger',response.error,5000);

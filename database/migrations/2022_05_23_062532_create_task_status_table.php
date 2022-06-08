@@ -15,9 +15,14 @@ class CreateTaskStatusTable extends Migration
     {
         Schema::create('task_status', function (Blueprint $table) {
             $table->id();
-            $table->string('task_title',100);
-            $table->string('assign_to',100);
-            $table->string('task_description',200);
+            $table->string('task_title',250)->nullable();
+            $table->unsignedBigInteger('assign_to')->comment('pk role table');
+            $table->text('task_description')->nullable();
+            $table->unsignedBigInteger('volunteer')->comment('pk users table');
+            $table->tinyInteger('status')->default(0);
+            $table->string('image')->default('default.jpg');
+            $table->text('remarks')->nullable();
+            $table->string('address',250)->nullable();
             $table->timestamps();
         });
     }
