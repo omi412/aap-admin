@@ -8,6 +8,11 @@ use Carbon\Carbon;
 use Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\pending_approval;
+use App\Models\RoleDetail;
+use App\Models\TaskStatus;
+
+
 class HomeController extends Controller
 {
     /**
@@ -27,7 +32,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard/dashboard');
+        $mandals = RoleDetail::where('role_id',1)->select('id','name')->get();
+        $wards =   RoleDetail::where('role_id',2)->select('id','name')->get();
+        $booths =  RoleDetail::where('role_id',3)->select('id','name')->get();
+        $galies =  RoleDetail::where('role_id',4)->select('id','name')->get();
+        $taskStatus =  TaskStatus::get();
+        return view('dashboard/dashboard',compact('mandals','wards','booths','galies','taskStatus'));
     }
 
     public function checkMobileNo(Request $request){

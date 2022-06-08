@@ -47,11 +47,11 @@
             <tbody id="myTable">
                @foreach ( $taskStatus as $data)
               <tr>
-                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">1</a></td>
-                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">Add new ward prabhari</a></td>
-                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092</a></td>
-                <td><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">Ramesh Sharma</a></td>
-                <td style="text-align: right;"><a href="{{ url('/add-assign/'.$data->id.'/edit') }}">
+                <td><a href="{{ url('edit-update-task-status',$data->id) }}">1</a></td>
+                <td><a href="{{ url('edit-update-task-status',$data->id) }}">Add new ward prabhari</a></td>
+                <td><a href="{{ url('edit-update-task-status',$data->id) }}">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092</a></td>
+                <td><a href="{{ url('edit-update-task-status',$data->id) }}">Ramesh Sharma</a></td>
+                <td style="text-align: right;"><a href="{{ url('edit-update-task-status',$data->id) }}">
                   <span class="badge badge-success">In Progress</span></a>
                 </td>
               </tr>

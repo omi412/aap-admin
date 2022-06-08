@@ -95,11 +95,17 @@
                 <label for="password1">Assign to</label>
               </div>
               <div class="col-md-9">
-                <select class="form-control assign_to" name="assign_to" id="assign_to" required >
-                    <option value="Ward Prabhari">Ward Prabhari</option>
+                <!-- <select class="form-control assign_to" name="assign_to" id="assign_to" required >
                     <option value="Mandal Prabhari">Mandal Prabhari</option>
+                    <option value="Ward Prabhari">Ward Prabhari</option>
                     <option value="Booth Prabhari">Booth Prabhari</option>
                     <option value="Gali Prabhari">Gali Prabhari</option>
+                </select> -->
+                  <select name="assign_to" id="ddl-role" class="form-control assign_to role" required >
+                    <!-- <option value="">Select Designation</option> -->
+                    @foreach(getRoleDetails() as $role)
+                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @endforeach
                 </select>
               </div>
               </div>
@@ -108,7 +114,13 @@
                   <label for="name">Volunteer</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" id="volunteer" class="form-control" name="volunteer" aria-describedby="volunteer" value="{{ old('volunteer') }}" placeholder="Volunteer Name" required >
+                  <!-- <input type="text" id="volunteer" class="form-control" name="volunteer" aria-describedby="volunteer" value="{{ old('volunteer') }}" placeholder="Volunteer Name" required > -->
+
+                    <select name="volunteer" id="ddl-volunteer" class="form-control volunteer_id" required>
+                      <option value="">Select Volunteer</option>
+                     
+                    </select>
+
                   <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
                 </div>
               </div>
@@ -216,6 +228,42 @@
                 }
             });
         }
+
+
+        /* find role user name  */
+
+      $('#ddl-role').change(function(){
+      let role_id = $(this).val();
+      let booth_opt = `<option value=''>Select Volunteer</option>`;
+      alert(role_id);
+      if(role_id!=''){
+        $.ajax({
+          "url":"{{ url('get-wards') }}/"+role_id,
+          "type":"GET",
+          "success":function(response){
+            //alert(response);
+            if(response.status==200){
+              let ward = response.wards;
+              for (var i = 0; i < ward.length; i++) {
+                booth_opt +=`<option value='`+ward[i].id+`'>`+ward[i].name+`</option>`;
+              }
+              $('#ddl-volunteer').html(booth_opt);
+            }else{
+              notification('danger',response.error);
+            }
+          },error:function(error){
+            notification('danger','Oops! Something went wrong');
+            console.log(error);
+          }
+
+        });
+      }else{
+        $('#ddl-volunteer').html(`<option value=''>Select Volunteer</option>`);
+      }
+    });
+
+        /* find role user name  */
+
 
        $('#task_status').on('submit', function(e) {
             e.preventDefault();

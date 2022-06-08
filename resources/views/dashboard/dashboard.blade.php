@@ -37,19 +37,7 @@
               
               <div class="brand-card-body">
                 <div>
-                  <div class="text-value">10</div>
-                  <div class="text-uppercase text-muted small">Ward Prabhari</div>
-                </div>
-                
-              </div>
-            </div>
-          </div><!--/.col-->
-          <div class="col-sm-6 col-lg-6" style="padding: 6px;">
-            <div class="brand-card">
-              
-              <div class="brand-card-body">
-                <div>
-                  <div class="text-value">25</div>
+                  <div class="text-value">{{ $mandals->count() }}</div>
                   <div class="text-uppercase text-muted small">Mandal Prabhari</div>
                 </div>
                 
@@ -61,7 +49,19 @@
               
               <div class="brand-card-body">
                 <div>
-                  <div class="text-value">75</div>
+                  <div class="text-value">{{ $wards->count() }}</div>
+                  <div class="text-uppercase text-muted small">Ward Prabhari</div>
+                </div>
+                
+              </div>
+            </div>
+          </div><!--/.col-->
+          <div class="col-sm-6 col-lg-6" style="padding: 6px;">
+            <div class="brand-card">
+              
+              <div class="brand-card-body">
+                <div>
+                  <div class="text-value">{{ $booths->count() }}</div>
                   <div class="text-uppercase text-muted small">Booth Prabhari</div>
                 </div>
                 
@@ -72,7 +72,7 @@
             <div class="brand-card">
               <div class="brand-card-body">
                 <div>
-                  <div class="text-value">200</div>
+                  <div class="text-value">{{ $galies->count() }}</div>
                   <div class="text-uppercase text-muted small">Gali Prabhari</div>
                 </div>
               </div>
@@ -95,7 +95,7 @@
                   <!-- <div class="h1 text-muted text-right mb-4">
                     <i class="icon-people"></i>
                   </div> -->
-                  <div class="h4 mb-0">120</div>
+                  <div class="h4 mb-0">{{ $taskStatus->count() }}</div>
                   <small class="text-muted text-uppercase font-weight-bold">Total</small>
                   <div class="progress progress-xs mt-3 mb-0">
                     <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -107,7 +107,9 @@
                  <!--  <div class="h1 text-muted text-right mb-4">
                     <i class="icon-user-follow"></i>
                   </div> -->
-                  <div class="h4 mb-0">75</div>
+                
+                  <div class="h4 mb-0">{{ $taskStatus->count() }}</div>
+                 
                   <small class="text-muted text-uppercase font-weight-bold">Complete</small>
                   <div class="progress progress-xs mt-3 mb-0">
                     <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -119,7 +121,7 @@
                   <!-- <div class="h1 text-muted text-right mb-4">
                     <i class="icon-basket-loaded"></i>
                   </div> -->
-                  <div class="h4 mb-0">45</div>
+                  <div class="h4 mb-0">{{ $taskStatus->count() }}</div>
                   <small class="text-muted text-uppercase font-weight-bold">Pending</small>
                   <div class="progress progress-xs mt-3 mb-0">
                     <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

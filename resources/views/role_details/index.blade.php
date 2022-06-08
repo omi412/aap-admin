@@ -64,10 +64,10 @@
                     <td>{{ $roleDetail->name }}</td>
                     <td>{{ $roleDetail->status }}</td>
                     <td style="text-align:right;">
-                    <form action="{{ url('roleDetail.destroy',$roleDetail->id) }}" method="Post">
+                    <form action="{{ url('role-details/destroy',$roleDetail->id) }}" method="Post">
                     @csrf
                     @method('DELETE')
-                    <a class="btn btn-primary edit_btn" href="{{ url('roleDetail.edit',$roleDetail->id) }}" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a class="btn btn-primary edit_btn" href="{{ url('role-details/edit',$roleDetail->id) }}" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     <button type="submit" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></button>                    
                     </form>
                     

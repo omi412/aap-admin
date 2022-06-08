@@ -46,12 +46,12 @@
                                 class="icon icon-user"></i><span class="nav-text">Users</span></a>
                     </li>
                     @can('Permission List')
-                    <li><a class="has-arrow1 nav-link" href="{{ url('pending-approval') }}" aria-expanded="false"><i
+                    <li><a class="has-arrow1 nav-link" href="{{ url('permission') }}" aria-expanded="false"><i
                                 class="icon icon-single-copy-06"></i><span class="nav-text">Permission</span></a>
                     </li>
                     @endcan
                     @can('Role List')
-                    <li><a class="has-arrow1 nav-link" href="{{ url('volunteer-types') }}" aria-expanded="false"><i
+                    <li><a class="has-arrow1 nav-link" href="{{ url('roles') }}" aria-expanded="false"><i
                                 class="icon icon-app-store"></i><span class="nav-text">Role</span></a>
                     </li>
                     @endcan

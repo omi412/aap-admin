@@ -22,9 +22,9 @@ class PendingApprovalController extends Controller
         //     return view('house_data.house_data');
         // }
         if($request->ajax()) {
-            $pending_approval = pending_approval::get();
-            //dd($pending_approval);
-            return response()->json(['pending_approval'=>$pending_approval]);
+            $users = User::where('approval','1')->get();
+            //dd($users);
+            return response()->json(['user'=>$users]);
         }
         $mandals = RoleDetail::where('role_id',1)->select('id','name')->get();
         $wards = RoleDetail::where('role_id',2)->select('id','name')->get();
@@ -34,11 +34,12 @@ class PendingApprovalController extends Controller
         
     }
 
-    public function fetchvolunteer()
+    public function fetchPendingApproval()
     {
-        $pending_approval = pending_approval::all();
+        $users = User::all();
+        //dd($users);
         return response()->json([
-            'pending_approval'=>$pending_approval,
+            'users'=>$users,
         ]);
     }
 
@@ -67,9 +68,13 @@ class PendingApprovalController extends Controller
                 $user->name = $request->input('name');
                 $user->mobileno = $request->input('mobileno');
                 $user->approval = $request->input('approval');
-                //$user->designation = $request->input('role');
+                $user->designation = $request->input('role');
                 $user->manager = $request->input('manager');
-                $user->designation = '';
+                $user->role_mandal = $request->input('role_mandal');
+                $user->ward_id = $request->input('ward_id');
+                $user->booth_id = $request->input('booth_id');
+                $user->gali_id = $request->input('gali_id');
+                //$user->designation = '';
                 //dd($pending_approval);
                 $user->created_at = Carbon::now();
                 $user->updated_at = Carbon::now();
@@ -96,12 +101,12 @@ class PendingApprovalController extends Controller
 
     public function edit($id)
     {
-        $pending_approval = pending_approval::find($id);
-        if($pending_approval)
+        $user = User::find($id);
+        if($user)
         {
             return response()->json([
                 'status'=>200,
-                'pending_approval'=> $pending_approval,
+                'user'=> $user,
             ]);
         }
         else
@@ -132,11 +137,11 @@ class PendingApprovalController extends Controller
         }
         else
         {
-            $pending_approval = pending_approval::find($id);
-            if($pending_approval)
+            $user = User::find($id);
+            if($user)
             {
                 try{
-                    $pending_approval->update([
+                    $user->update([
                         'name'=>$request->name,
                         'mobileno'=>$request->mobileno,
                         'approval'=>$request->approval,

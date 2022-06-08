@@ -27,7 +27,7 @@
         <div id="success_message" style="margin: 20px 0px;"></div>
       </div>
       <ul id="update_msgList"></ul>
-      <ul id="save_msgList"></ul>
+      <!-- <ul id="save_msgList"></ul> -->
       <div class="card">
         <div class="search_box house_data">
             <div class="input-group">
@@ -54,9 +54,12 @@
                 <th style="text-align: right;">Action</th>
               </tr>
             </thead>
-            <tbody id="myTable">
+        
+              <tbody id="myTable">
               
-            </tbody>
+              </tbody>
+      
+            
           </table>
           </div>
         </div>
@@ -75,6 +78,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+       <ul id="save_msgList"></ul>
       <form action="POST" id="pending-approval-form">
         @csrf
         <input type="hidden" name="pending_approval_id" id="pending-approval-id" value="">
@@ -101,7 +105,7 @@
               <label for="password1">Designation</label>
             </div>
             <div class="col-md-9">
-              <select name="role" id="ddl-role" class="form-control" required >
+              <select name="role" id="ddl-role" class="form-control role" required >
                 <!-- <option value="">Select Designation</option> -->
                 @foreach(getRoles() as $role)
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
@@ -114,7 +118,7 @@
               <label for="password1">Mandal</label>
             </div>
             <div class="col-md-9">
-              <select name="role_mandal" id="ddl-mandal" class="form-control" required >
+              <select name="role_mandal" id="ddl-mandal" class="form-control role_mandal" required >
                 <option value="">Select Mandal</option>
                 @foreach($mandals as $mandal)
                 <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
@@ -127,11 +131,9 @@
               <label for="password1">Ward</label>
             </div>
             <div class="col-md-9">
-              <select name="ward_id" id="ddl-ward" class="form-control">
+              <select name="ward_id" id="ddl-ward" class="form-control ward_id">
                 <option value="">Select Ward</option>
-                <!-- @foreach($wards as $ward)
-                <option value="{{ $ward->id }}">{{ $ward->name }}</option>
-                @endforeach -->
+               
               </select>
             </div>
           </div>
@@ -140,11 +142,9 @@
               <label for="password1">Booth</label>
             </div>
             <div class="col-md-9">
-              <select name="booth_id" id="ddl-booth" class="form-control">
+              <select name="booth_id" id="ddl-booth" class="form-control booth_id">
                 <option value="">Select Booth</option>
-                <!-- @foreach($booths as $booth)
-                <option value="{{ $booth->id }}">{{ $booth->name }}</option>
-                @endforeach -->
+                <
               </select>
             </div>
           </div>
@@ -153,7 +153,7 @@
               <label for="password1">Gali</label>
             </div>
             <div class="col-md-9">
-              <select name="gali_id" id="ddl-gali" class="form-control">
+              <select name="gali_id" id="ddl-gali" class="form-control gali_id">
                 <option value="">Select Gali</option>
               </select>
             </div>
@@ -164,7 +164,7 @@
           </div>
           <div class="col-md-9">
            <!--  <input type="text" class="form-control" id="approval"> -->
-            <select name="approval" id="approval" class="form-control">
+            <select name="approval" id="edit_approval" class="form-control">
                   <option value="0" selected>Approved</option>
                   <option value="1">Rejected</option>
                 </select>
@@ -175,7 +175,7 @@
             <label for="password1">Manager</label>
           </div>
           <div class="col-md-9">
-            <input type="text" class="form-control" name="manager" id="manager" placeholder="Manager">
+            <input type="text" class="form-control" name="manager" id="edit_manager" placeholder="Manager">
           </div>
           </div>
         </div>
@@ -187,9 +187,10 @@
   </div>
 </div>
 
+
 {{-- Edit Modal --}}
 
-<!-- <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -201,14 +202,14 @@
       <div class="modal-body">
        <form action="POST" id="pending-approval-form">
         @csrf
-        <input type="hidden" name="pending_approval_id" id="pending-approval-id" value="">
+        <input type="hidden" name="user_id" id="user-id" value="">
         <div class="modal-body">
           <div class="form-group row">
             <div class="col-md-3">
               <label for="name">Name</label>
             </div>
             <div class="col-md-9">
-              <input type="text" class="form-control" value="{{old('name')}}" id="name" name="name" aria-describedby="emailHelp">
+              <input type="text" class="form-control" id="edit_name" name="name" aria-describedby="emailHelp" readonly>
             
           </div>
           </div>
@@ -217,7 +218,7 @@
               <label for="password1">Mobile No</label>
             </div>
             <div class="col-md-9">
-              <input type="number" class="form-control" name="mobileno" id="mobileno">
+              <input type="number" class="form-control" name="mobileno" id="edit_mobileno" readonly>
             </div>
           </div>
           <div class="form-group row">
@@ -303,8 +304,9 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>
 {{-- Edn- Edit Modal --}}
+
 {{-- Delete Modal --}}
 <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -354,8 +356,8 @@
 
   $(document).ready(function(){
 
-    fetchPendingApproval();
 
+      fetchPendingApproval();
         function fetchPendingApproval() {
           //alert("working");
             $.ajax({
@@ -364,7 +366,7 @@
                 dataType: "json",
                 success: function (response) {
                     $('tbody').html("");
-                    $.each(response.pending_approval, function (key, item) {
+                    $.each(response.user, function (key, item) {
                         $('tbody').append(`<tr>
                             <td>` + item.id + `</td>
                             <td>` + item.name + `</td>
@@ -567,23 +569,28 @@
 
        $(document).on('click', '.editbtn', function (e) {
             e.preventDefault();
-            var pending_approval_id = $(this).val();
-            alert(pending_approval_id);
+            var user_id = $(this).val();
+            alert('working');
             $('#editModal').modal('show');
             $.ajax({
                 type: "GET",
-                url: "/edit-pending-approval/" + pending_approval_id,
+                url: "/edit-pending-approval/" + user_id,
                 success: function (response) {
                     if (response.status == 404) {
                         $('#success_message').addClass('alert alert-success');
                         $('#success_message').text(response.message);
                         $('#editModal').modal('hide');
                     } else {
-                        // console.log(response.pending_approval.name);
-                        // console.log(response.pending_approval.mobileno);
-                        $('#name').val(response.pending_approval.name);
-                        $('#mobileno').val(response.pending_approval.mobileno);
-                        $('#pending-approval-id').val(pending_approval_id);
+                        console.log(response.user.name);
+                        console.log(response.user.mobileno);
+                        $('#edit_name').val(response.user.name);
+                        $('#edit_mobileno').val(response.user.mobileno);
+                        $('.role').val(response.user.designation);
+                        $('.role_mandal').val(response.user.role_mandal);
+                        $('.ward_id').val(response.user.ward_id);
+                        $('.booth_id').val(response.user.booth_id);
+                        $('.gali_id').val(response.user.gali_id);
+                        $('#user-id').val(user_id);
                     }
                 }
             });

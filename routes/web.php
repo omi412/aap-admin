@@ -76,7 +76,7 @@ Auth::routes();
     Route::get('add-assign', [addAssignController::class, 'index']);
     Route::post('add-assign', [addAssignController::class, 'store']);
     Route::get('fetch-add-assign', [addAssignController::class, 'fetchtaskstatus']);
-    Route::get('edit-add-assign/{id}', [addAssignController::class, 'edit']);
+    Route::get('edit-assign/{id}', [addAssignController::class, 'edit']);
     Route::put('update-add-assign/{id}', [addAssignController::class, 'update']);
     Route::delete('delete-add-assign/{id}', [addAssignController::class, 'destroy']);
 
@@ -108,6 +108,9 @@ Auth::routes();
     Route::get('get-wards/{mandal_id}', [PendingApprovalController::class, 'getWards']);
     Route::get('get-booths/{ward_id}', [PendingApprovalController::class, 'getBooths']);
     Route::get('get-galies/{booth_id}', [PendingApprovalController::class, 'getGali']);
+
+    //Route::get('get-volunteers/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
+    Route::get('get-wards/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
 
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');

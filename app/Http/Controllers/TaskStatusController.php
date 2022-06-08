@@ -6,11 +6,20 @@ use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Exception;
+use App\Models\User;
+use App\Models\RoleDetail;
+use Carbon\Carbon;
+use Auth;
 
 class TaskStatusController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()) {
+            $users = User::get();
+            //dd($users);
+            return response()->json(['user'=>$users]);
+        }
         return view('task_status.task_status');
     }
 
@@ -157,4 +166,27 @@ class TaskStatusController extends Controller
             ]);
         }
     }
+
+
+    /*public function getVolunteers($volunteer_id)
+    {
+        $volunteers = RoleDetail::select('id','name')->where("parent_id",$volunteer_id)->get();
+        dd($volunteers);
+        return response()->json(['status'=>200,'volunteers'=>$volunteers]);
+    }*/
+
+   /* public function getVolunteers($volunteer_id)
+    {
+        $wards = RoleDetail::where('role_id',$volunteer_id)->select('id','name')->get();
+        //$volunteers = RoleDetail::select('id','name')->where("parent_id",$volunteer_id)->get();
+        return response()->json(['status'=>200,'wards'=>$wards]);
+    }*/
+
+    public function getVolunteers($volunteer_id)
+    {
+        //$wards = RoleDetail::select('id','name')->where("parent_id",$mandal_id)->get();
+        $wards = RoleDetail::where('parent_id',$volunteer_id)->select('id','name')->get();
+        return response()->json(['status'=>200,'wards'=>$wards]);
+    }
+
 }

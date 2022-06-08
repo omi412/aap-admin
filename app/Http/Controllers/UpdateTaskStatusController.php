@@ -57,7 +57,7 @@ class UpdateTaskStatusController extends Controller
         $taskStatus = UpdateTaskStatus::find($id);
         if($taskStatus)
         {
-            return view('add_assign.add_assign', compact('banner'));
+            return view('update_task_status.edit_update_task_status', compact('taskStatus'));
         }
         else
         {
