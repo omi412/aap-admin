@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('manager',250)->nullable();
+            $table->tinyInteger('status')->default(0)->comment('0=pending 1=approved 2=rejected');
             $table->rememberToken()->nullable();
             $table->timestamps();
         });

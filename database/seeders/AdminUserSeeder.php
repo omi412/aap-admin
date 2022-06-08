@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB;
+
 class AdminUserSeeder extends Seeder
 {
     /**
@@ -64,7 +64,7 @@ class AdminUserSeeder extends Seeder
      
         $user->assignRole([$role->id]);
 
-        assignRoleToModel($role->id,$user->id);
+        //assignRoleToModel($role->id,$user->id);
         //$user->roles()->attach($role->id);
 
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePendingApprovalsTable extends Migration
+class CreateRoleDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreatePendingApprovalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pending_approvals', function (Blueprint $table) {
+        Schema::create('role_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name',150);
-            $table->string('mobileno',150);
-            $table->string('approval');
-            $table->string('designation');
-            $table->string('manager');
+            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('parent_id')->nullable()->comment('pk of this tbl');
+            $table->string('name',250);
+            $table->tinyInteger('status')->default(1)->comment('1=Active 2=Inactive');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreatePendingApprovalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pending_approvals');
+        Schema::dropIfExists('role_details');
     }
 }
