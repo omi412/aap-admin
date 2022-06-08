@@ -9,6 +9,8 @@ use App\Models\RoleDetail;
 use App\Models\User;
 use Carbon\Carbon;
 use Auth;
+use DB;
+use Spatie\Permission\Models\Role;
 class PendingApprovalController extends Controller
 {
     public function index(Request $request)
@@ -22,7 +24,7 @@ class PendingApprovalController extends Controller
         //     return view('house_data.house_data');
         // }
         if($request->ajax()) {
-            $users = User::where('approval','1')->get();
+            $users = User::where('status',1)->get();
             //dd($users);
             return response()->json(['user'=>$users]);
         }
@@ -64,16 +66,17 @@ class PendingApprovalController extends Controller
         else
         {
             try{
+                DB::beginTransaction();
+
                 $user = new user;
                 $user->name = $request->input('name');
                 $user->mobileno = $request->input('mobileno');
-                $user->approval = $request->input('approval');
-                $user->designation = $request->input('role');
+                $user->status = $request->input('approval');
                 $user->manager = $request->input('manager');
-                $user->role_mandal = $request->input('role_mandal');
-                $user->ward_id = $request->input('ward_id');
-                $user->booth_id = $request->input('booth_id');
-                $user->gali_id = $request->input('gali_id');
+                //$user->role_mandal = $request->input('role_mandal');
+                //$user->ward_id = $request->input('ward_id');
+                //$user->booth_id = $request->input('booth_id');
+                //$user->gali_id = $request->input('gali_id');
                 //$user->designation = '';
                 //dd($pending_approval);
                 $user->created_at = Carbon::now();
@@ -81,14 +84,38 @@ class PendingApprovalController extends Controller
                 $user->save();
 
                 $user->assignRole([$request->role]);
-
+                $role = Role::find($request->role);
+                
+                $role_details_id = 0;
+                
+                if($role->name=='Mandal Prabhari'){
+                    $role_details_id = $request->mandal_id;
+                }
+                if($role->name=='Ward Prabhari'){
+                    $role_details_id = $request->ward_id;
+                }
+                if($role->name=='Booth Prabhari'){
+                    $role_details_id = $request->booth_id;
+                }
+                if($role->name=='Gali Prabhari'){
+                    $role_details_id = $request->gali_id;
+                }
+                DB::table('role_user')->insert([
+                    'role_id'=>$request->role,
+                    'user_id'=>$user->id,
+                    'role_details_id'=>$role_details_id,
+                    'created_at'=>Carbon::now(),
+                    'updated_at'=>Carbon::now(),
+                ]);
                 //assignRoleToModel($request->role,$user->id);
+                DB::commit();
 
                 return response()->json([
                     'status'=>200,
                     'message'=>'User created successfully.'
                 ]);
             }catch(Exception $e){
+                DB::rollback();
                 return response()->json([
                     'status'=>500,
                     'error'=>$e->getMessage()

@@ -97,7 +97,7 @@
               <label for="password1">Mobile No</label>
             </div>
             <div class="col-md-9">
-              <input type="number" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no" required >
+              <input type="text" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no" minlength="13" maxlength="13" required >
             </div>
           </div>
           <div class="form-group row">
@@ -118,7 +118,7 @@
               <label for="password1">Mandal</label>
             </div>
             <div class="col-md-9">
-              <select name="role_mandal" id="ddl-mandal" class="form-control role_mandal" required >
+              <select name="mandal_id" id="ddl-mandal" class="form-control role_mandal" required >
                 <option value="">Select Mandal</option>
                 @foreach($mandals as $mandal)
                 <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
@@ -165,8 +165,8 @@
           <div class="col-md-9">
            <!--  <input type="text" class="form-control" id="approval"> -->
             <select name="approval" id="edit_approval" class="form-control">
-                  <option value="0" selected>Approved</option>
-                  <option value="1">Rejected</option>
+                  <option value="1" selected>Approved</option>
+                  <option value="2">Rejected</option>
                 </select>
           </div>
           </div>
