@@ -30,9 +30,11 @@
       <ul id="save_msgList"></ul>
       <div class="card">
         <div class="search_box house_data">
+          @can('Task Create')
             <div class="input-group">
               <a href="javascript:void(0)" id="show_second" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Task</a>
             </div>
+          @endcan  
         </div>
         <div class="card-header">
           <i class="fa fa-align-justify"></i> Tasks

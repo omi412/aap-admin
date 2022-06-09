@@ -28,10 +28,10 @@ class PendingApprovalController extends Controller
             //dd($users);
             return response()->json(['user'=>$users]);
         }
-        $mandals = RoleDetail::where('role_id',1)->select('id','name')->get();
-        $wards = RoleDetail::where('role_id',2)->select('id','name')->get();
-        $booths = RoleDetail::where('role_id',3)->select('id','name')->get();
-        $galis = RoleDetail::where('role_id',4)->select('id','name')->get();
+        $mandals = RoleDetail::where('role_id',3)->select('id','name')->get();
+        $wards = RoleDetail::where('role_id',4)->select('id','name')->get();
+        $booths = RoleDetail::where('role_id',5)->select('id','name')->get();
+        $galis = RoleDetail::where('role_id',6)->select('id','name')->get();
         return view('pending_approval.pending_approval',compact('mandals','wards','booths','galis'));
         
     }
