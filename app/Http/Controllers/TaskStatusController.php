@@ -11,9 +11,12 @@ use App\Models\RoleDetail;
 use Carbon\Carbon;
 use Auth;
 use Spatie\Permission\Models\Role;
+use App\Traits\FileUploadTrait;
 
 class TaskStatusController extends Controller
 {
+    use FileUploadTrait;
+
     public function index(Request $request)
     {
         if($request->ajax()) {
@@ -34,7 +37,8 @@ class TaskStatusController extends Controller
 
     public function fetchtaskstatus()
     {
-        $taskStatus = TaskStatus::all();
+        $taskStatus = TaskStatus::with(['role','roleDetail'])->get();
+        
         return response()->json([
             'taskStatus'=>$taskStatus,
         ]);
@@ -98,7 +102,7 @@ class TaskStatusController extends Controller
 
     public function edit($id)
     {
-        $taskStatus = TaskStatus::find($id);
+        $taskStatus = TaskStatus::with('role')->find($id);
         if($taskStatus)
         {
             return response()->json([
@@ -118,6 +122,7 @@ class TaskStatusController extends Controller
 
     public function update(Request $request, $id)
     {
+        dd($request->all());
         $validator = Validator::make($request->all(), [
              'task_title'=> 'required|max:100',
              'assign_to'=> 'required|max:100',
@@ -138,13 +143,41 @@ class TaskStatusController extends Controller
             if($taskStatus)
             {
                 try{
+                    $role = Role::find($request->assign_to);
+                
+                    $role_details_id = 0;
+                    
+                    if($role->name=='Mandal Prabhari'){
+                        $role_details_id = $request->mandal_id;
+                    }
+                    if($role->name=='Ward Prabhari'){
+                        $role_details_id = $request->ward_id;
+                    }
+                    if($role->name=='Booth Prabhari'){
+                        $role_details_id = $request->booth_id;
+                    }
+                    if($role->name=='Gali Prabhari'){
+                        $role_details_id = $request->gali_id;
+                    }
+                    $file_name = "";
+                    if($request->hasFile('image')){
+          
+                        $file_name = $this->fileUpload($request,'image','public/task-documents');
+                    }
 
                     $taskStatus->task_title = $request->input('task_title');
                     $taskStatus->assign_to = $request->input('assign_to');
                     $taskStatus->task_description = $request->input('task_description');
-                    $taskStatus->volunteer_name = $request->input('volunteer');
+                    $taskStatus->volunteer = $role_details_id;
                     $taskStatus->address = $request->input('address');
+                    if($file_name!=''){
+                        $taskStatus->image = $file_name;
+                    }
+                    $taskStatus->remarks = $request->remark;
+                    $taskStatus->status = $request->status;
+
                     $taskStatus->update();
+                    
                     return response()->json([
                         'status'=>200,
                         'message'=>'Task Status Updated Successfully.'

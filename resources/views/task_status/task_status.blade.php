@@ -51,7 +51,7 @@
                 <th>Task Title</th>
                 <th>Task Description</th>
                 <th>Assign To</th>
-                <th>Mandal</th>
+                <th>Volunteer</th>
                 <!-- <th>Date</th> -->
                 <th>Status</th>
                 <th style="text-align: right;">Action</th>
@@ -65,7 +65,7 @@
       </div>
     </div>
 
-     <div class="row"  id="section_second" style="display:none;">
+  <div class="row"  id="section_second" style="display:none;">
     <div class="col-lg-12">
       <div class="card">
         <div class="search_box house_data">
@@ -74,15 +74,15 @@
             </div>
           </div>
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Add Task
+          <i class="fa fa-align-justify"></i><span id="spn-title">Add Task</span>
         </div>
         <div class="card-body pending_approval">
-          <form id="task_status" name="postForm" method="POST">
+          <form id="task_status" name="postForm" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
               <div class="form-group row">
                 <div class="col-md-3">
-                   <input type="hidden" id="task_id" />
+                   <input type="hidden" id="edit-task-id" value="" />
                   <label for="name">Task Title</label>
                 </div>
                 <div class="col-md-9">
@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-md-9">
 
-                    <select name="mandal_id" id="ddl-mandal" class="form-control volunteer" required>
+                    <select name="mandal_id" id="ddl-mandal" class="form-control volunteer">
                       <option value="">Select Mandal</option>
                       @foreach($mandals as $mandal)
                       <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
@@ -181,10 +181,40 @@
                   <textarea name="task_description" id="task_description" class="form-control task_description" placeholder="Task Description" required ></textarea>
                 </div>
               </div>
+              <div class="form-group row" id="div-status" style="display: none;">
+                <div class="col-md-3">
+                  <label for="name">Status</label>
+                </div>
+                <div class="col-md-9">
+                    <select name="status" id="ddl-status" class="form-control">
+                      <option value="">Select Status</option>
+                      
+                      <option value="0">Pending</option>
+                      <option value="1">Complete</option>
+                    </select>
+                </div>
+              </div>
+              <div class="form-group row" id="div-image" style="display: none;">
+                <div class="col-md-3">
+                  <label for="name">Upload Image</label>
+                </div>
+                <div class="col-md-9">
+                    <!-- <input type="file" name="image" id="image" style="display: block;" placeholder="form-control"> -->
+                    <input type="file" name="image" id="file-upload">
+                    <label class="label_file" for="file-upload">Upload Image</label>
+                </div>
+              </div>
+              <div class="form-group row" id="div-remark" style="display: none;">
+                <div class="col-md-3">
+                  <label for="password1">Remark</label>
+                </div>
+                <div class="col-md-9">
+                  <textarea name="remark" id="remark" class="form-control task_description" placeholder="Remark"></textarea>
+                </div>
+              </div>
             </div>
             <div class="modal-footer border-top-0 d-flex justify-content-center">
-              <button type="submit" class="btn btn-success sub_task">Submit</button>
-              <button type="submit" class="btn btn-success update_task">Update</button>
+              <button type="submit" class="btn btn-success sub_task" id="btn-submit">Submit</button>
             </div>
           </form>
           </div>
@@ -228,8 +258,11 @@
     $("#section_first").hide();
     $("#section_second").show();
     $('#task_status')[0].reset();
-    $('.update_task').hide();
-    $('.sub_task').show();
+    $('#btn-submit').text('Submit');
+    $('#spn-title').text('Add Task');
+    $('#edit-task-id').val('');
+    $('#div-remark,#div-image,#div-status').hide();
+    $('#ddl-status,#remark,#image').attr('required',false);
 
   });
 
@@ -275,6 +308,7 @@
 
         function fetchtaskstatus() {
           //alert("working");
+          let status=['Pending','Completed'];
             $.ajax({
                 type: "GET",
                 url: "/fetch-task-status",
@@ -287,34 +321,41 @@
                             <td>` + item.id + `</td>
                             <td>` + item.task_title + `</td>
                             <td>` + item.task_description + `</td>
-                            <td>` + item.assign_to + `</td>
-                            <td>` + item.volunteer + `</td>
-                            <td>N/A</td>
+                            <td>` + item.role.name + `</td>
+                            <td>` + item.role_detail.name + `</td>
+                            <td>`+status[item.status]+`</td>
                             
                             <td><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
                             <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>
+          }
           </tr>`);
                     });
                 }
             });
         }
 
-
-        /* find role user name  */
-
-
-
-        /* find role user name  */
-
-
-       $('#task_status').on('submit', function(e) {
+        $('#task_status').on('submit', function(e) {
             e.preventDefault();
-            
+            let url = "{{ url('task-status') }}";
+            let method = "POST";
+            if($('#edit-task-id').val()!=''){ // update case
+              url = "{{ url('update-task-status') }}/"+$('#edit-task-id').val();
+              method = "PUT";
+            }
+            var formData = new FormData(this);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                type: "POST",
-                url: "{{ url('task-status') }}",
-                data: $('#task_status').serialize(),
+                type: method,
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
                 dataType: "json",
+
                 success: function (response) {
                     // console.log(response);
                     if (response.status == 400) {
@@ -348,71 +389,52 @@
             //alert(volunteer_id);
             $('#section_second').show();
             $('#section_first').hide();
-            $('.sub_task').hide();
-            $('.update_task').show();
+            $('#btn-submit').text('Update');
+            $('#spn-title').text('Edit Task');
+            $('#div-remark,#div-image,#div-status').show();
             $.ajax({
                 type: "GET",
-                url: "/edit-task-status/" + task_id,
+                url: "{{ url('edit-task-status') }}/" + task_id,
                 success: function (response) {
                     if (response.status == 404) {
                         $('#success_message').addClass('alert alert-success');
                         $('#success_message').text(response.message);
                         $('#editModal').modal('hide');
                     } else {
-                         console.log(response.taskStatus.assign_to);
-                         console.log(response.taskStatus.volunteer);
-                        $('#task_title').val(response.taskStatus.task_title);
-                        $('.assign_to').val(response.taskStatus.assign_to);
-                        $('#task_description').val(response.taskStatus.task_description);
-                        $('#address').val(response.taskStatus.address);
-                        $('.volunteer').val(response.taskStatus.volunteer);
-                        $('#task_id').val(task_id);
+                        var taskData = response.taskStatus;
+                        
+                        $('#task_title').val(taskData.task_title);
+                        $('#ddl-role').val(taskData.assign_to);
+                        $('#task_description').val(taskData.task_description);
+                        $('#address').val(taskData.address);
+                        
+                        if(taskData.role.name=='Mandal Prabhari'){
+                          
+                          $('#div-ward,#div-booth,#div-gali').hide();
+                          $('#div-mandal').show();
+                          $('#ddl-mandal').val(taskData.volunteer);
+                        
+                        }else if(taskData.role.name=='Ward Prabhari'){
+                          $('#div-mandal,#div-booth,#div-gali').hide();
+                          $('#div-ward').show();
+
+                          $('#ddl-ward').val(taskData.volunteer);
+                        }else if(taskData.role.name=='Booth Prabhari'){
+                          
+                          $('#div-mandal,#div-ward,#div-gali').hide();
+                          $('#div-booth').show();
+                          $('#ddl-booth').val(taskData.volunteer);
+                        
+                        }else if(taskData.role.name=='Gali Prabhari'){
+                          $('#div-mandal,#div-ward,#div-booth').hide();
+                          $('#div-gali').show();
+                          $('#ddl-gali').val(taskData.volunteer);
+                        }
+                        $('#edit-task-id').val(task_id);
                     }
                 }
             });
             $('.btn-close').find('input').val('');
-
-        });
-
-        $(document).on('click', '.update_task', function (e) {
-            e.preventDefault();
-
-            $(this).text('Updating..');
-            var id = $('#task_id').val();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: "PUT",
-                url: "/update-task-status/" + id,
-                data: $('#task_status').serialize(),
-                dataType: "json",
-                success: function (response) {
-                     console.log(response);
-                    if (response.status == 400) {
-                        $('#update_msgList').html("");
-                        $('#update_msgList').addClass('alert alert-danger');
-                        $.each(response.errors, function (key, err_value) {
-                            $('#update_msgList').append('<li>' + err_value +
-                                '</li>');
-                        });
-                        $('.update_volunteer').text('Update');
-                    } else if(response.status == 200) {
-                        $('#update_msgList').html("");
-
-                        notification('success',response.message);
-                        $('.update_task').text('Update');
-                        $('#section_second').hide();
-                        $('#section_first').show();
-                        fetchtaskstatus();
-                    }else{
-                      notification('danger',response.error,5000);
-                    }
-                }
-            });
 
         });
 
