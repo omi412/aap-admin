@@ -14,11 +14,9 @@
                     </li>
                     @endcan
                     
-                    @can('Task List')
                     <li><a class="has-arrow1 nav-link" href="{{ url('task-status') }}" aria-expanded="false"><i
                                 class="icon icon-chart-bar-33"></i><span class="nav-text">Task Status</span></a>
                     </li>
-                    @endcan
                     <li><a class="has-arrow1 nav-link" href="{{ url('update-task-status') }}" aria-expanded="false"><i
                                 class="icon icon-world-2"></i><span class="nav-text">Update Task Status</span></a>
                     </li>

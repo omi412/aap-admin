@@ -122,7 +122,6 @@ class TaskStatusController extends Controller
              'task_title'=> 'required|max:100',
              'assign_to'=> 'required|max:100',
              'task_description'=> 'required|max:200',
-             'volunteer'=>'required|max:150',
              'address'=>'required|max:200'
         ]);
 
@@ -139,6 +138,7 @@ class TaskStatusController extends Controller
             if($taskStatus)
             {
                 try{
+
                     $taskStatus->task_title = $request->input('task_title');
                     $taskStatus->assign_to = $request->input('assign_to');
                     $taskStatus->task_description = $request->input('task_description');

@@ -31,7 +31,7 @@
       <div class="card">
         <div class="search_box house_data">
             <div class="input-group">
-              <a href="{{ url('permission/create') }}" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Role Detail</a>
+              <a href="{{ url('role-details/create') }}" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Role Detail</a>
             </div>
           </div>
         <div class="card-header">

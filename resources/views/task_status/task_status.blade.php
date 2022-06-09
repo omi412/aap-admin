@@ -30,11 +30,9 @@
       <ul id="save_msgList"></ul>
       <div class="card">
         <div class="search_box house_data">
-          @can('Task Create')
             <div class="input-group">
               <a href="javascript:void(0)" id="show_second" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Task</a>
             </div>
-          @endcan  
         </div>
         <div class="card-header">
           <i class="fa fa-align-justify"></i> Tasks
@@ -53,8 +51,8 @@
                 <th>Task Title</th>
                 <th>Task Description</th>
                 <th>Assign To</th>
-                <!-- <th>Address</th>
-                <th>Date</th> -->
+                <th>Mandal</th>
+                <!-- <th>Date</th> -->
                 <th>Status</th>
                 <th style="text-align: right;">Action</th>
               </tr>
@@ -117,7 +115,7 @@
                 </div>
                 <div class="col-md-9">
 
-                    <select name="mandal_id" id="ddl-mandal" class="form-control" required>
+                    <select name="mandal_id" id="ddl-mandal" class="form-control volunteer" required>
                       <option value="">Select Mandal</option>
                       @foreach($mandals as $mandal)
                       <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
@@ -131,7 +129,7 @@
                 </div>
                 <div class="col-md-9">
 
-                    <select name="ward_id" id="ddl-ward" class="form-control">
+                    <select name="ward_id" id="ddl-ward" class="form-control volunteer">
                       <option value="">Select Ward</option>
                       @foreach($wards as $ward)
                       <option value="{{ $ward->id }}">{{ $ward->name }}</option>
@@ -145,7 +143,7 @@
                 </div>
                 <div class="col-md-9">
 
-                    <select name="booth_id" id="ddl-booth" class="form-control">
+                    <select name="booth_id" id="ddl-booth" class="form-control volunteer">
                       <option value="">Select Booth</option>
                       @foreach($booths as $booth)
                       <option value="{{ $booth->id }}">{{ $booth->name }}</option>
@@ -159,7 +157,7 @@
                 </div>
                 <div class="col-md-9">
 
-                    <select name="gali_id" id="ddl-gali" class="form-control">
+                    <select name="gali_id" id="ddl-gali" class="form-control volunteer">
                       <option value="">Select Gali</option>
                       @foreach($galies as $gali)
                       <option value="{{ $gali->id }}">{{ $gali->name }}</option>
@@ -290,6 +288,7 @@
                             <td>` + item.task_title + `</td>
                             <td>` + item.task_description + `</td>
                             <td>` + item.assign_to + `</td>
+                            <td>` + item.volunteer + `</td>
                             <td>N/A</td>
                             
                             <td><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
@@ -328,8 +327,11 @@
                         notification('success',response.message);
 
                         $('#task_status')[0].reset();
-                        notification('success',response.message)
+                        notification('success',response.message);
+                        $('#section_second').hide();
+                        $('#section_first').show();
                         fetchtaskstatus();
+
                     }else{
                       notification('danger',response.error,5000);
                     }
@@ -357,12 +359,13 @@
                         $('#success_message').text(response.message);
                         $('#editModal').modal('hide');
                     } else {
-                         //console.log(response.taskStatus.task_title);
+                         console.log(response.taskStatus.assign_to);
+                         console.log(response.taskStatus.volunteer);
                         $('#task_title').val(response.taskStatus.task_title);
-                        $('#assign_to').val(response.taskStatus.assign_to);
+                        $('.assign_to').val(response.taskStatus.assign_to);
                         $('#task_description').val(response.taskStatus.task_description);
                         $('#address').val(response.taskStatus.address);
-                        $('#volunteer').val(response.taskStatus.volunteer_name);
+                        $('.volunteer').val(response.taskStatus.volunteer);
                         $('#task_id').val(task_id);
                     }
                 }
@@ -388,7 +391,7 @@
                 data: $('#task_status').serialize(),
                 dataType: "json",
                 success: function (response) {
-                    // console.log(response);
+                     console.log(response);
                     if (response.status == 400) {
                         $('#update_msgList').html("");
                         $('#update_msgList').addClass('alert alert-danger');
