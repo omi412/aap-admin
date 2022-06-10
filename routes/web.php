@@ -14,6 +14,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleDetailController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ContactController;
  
 
 /*
@@ -113,6 +114,15 @@ Auth::routes();
     //Route::get('get-volunteers/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
     Route::get('get-wards/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
 
+
+     Route::get('contacts', [ContactController::class, 'index']);
+    Route::post('contacts', [ContactController::class, 'store']);
+    Route::get('fetch-contacts', [ContactController::class, 'fetchContact']);
+    Route::get('edit-contact/{id}', [ContactController::class, 'edit']);
+    Route::put('update-contact/{id}', [ContactController::class, 'update']);
+    Route::delete('delete-contact/{id}', [ContactController::class, 'destroy']);
+
+
     /*Route::get('/volunteer-types', function () {
         return view('volunteer_types/volunteer_types');
     });*/
@@ -135,9 +145,9 @@ Auth::routes();
     //     return view('house_data/house_data');
     // });
 
-    Route::get('/contacts', function () {
+   /* Route::get('/contacts', function () {
         return view('contacts/contact');
-    });
+    });*/
 
     Route::get('/hierarchy', function () {
         return view('hierarchy/hierarchy');

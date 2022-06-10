@@ -3,21 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Contact;
+use Illuminate\Support\Facades\Validator;
+use Exception;
+use App\Models\HouseData;
+use Carbon\Carbon;
+use Auth;
 
 class ContactController extends Controller
 {
     public function index(Request $request)
     {
-        if($request->ajax()) {
+        /*if($request->ajax()) {
             $contacts = Contact::get();
             //dd($users);
             return response()->json(['contacts'=>$contacts]);
-        }
-        
-        return view('contact.contact',compact());
+        }*/
+
+         $house_datas = HouseData::all('id','address_line_1');
+        //dd($house_data);
+        return view('contacts.contact',compact('house_datas'));
     }
 
-    public function fetchtaskstatus()
+    public function fetchContact()
     {
         $contacts = Contact::get();
         
@@ -29,10 +37,12 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-             'task_title'=> 'required|max:100',
-             'assign_to'=> 'required|max:100',
-             'task_description'=> 'required|max:200',
-             'address'=>'required|max:200'
+             'house_id'=> 'required|max:100',
+             'first_name'=> 'required|max:100',
+             'last_name'=> 'required|max:200',
+             'gender'=>'required|max:200',
+             'age'=>'required|max:200',
+             'user_type'=>'required|max:200'
         ]);
 
         if($validator->fails())
@@ -46,16 +56,17 @@ class ContactController extends Controller
         {
             try{
                 Contact::create([
-                    "task_title"=>$request->task_title,
-                    "assign_to"=>$request->assign_to,
-                    "task_description"=>$request->task_description,
-                    "volunteer"=>$role_details_id,
-                    "address"=>$request->address,
+                    "house_id"=>$request->house_id,
+                    "first_name"=>$request->first_name,
+                    "last_name"=>$request->last_name,
+                    "gender"=>$request->gender,
+                    "age"=>$request->age,
+                    "user_type"=>$request->user_type,
                 ]);
 
                 return response()->json([
                     'status'=>200,
-                    'message'=>'Task Status Added Successfully.'
+                    'message'=>'Contact Added Successfully.'
                 ]);
             }catch(Exception $e){
                 return response()->json([
@@ -69,19 +80,19 @@ class ContactController extends Controller
 
     public function edit($id)
     {
-        $contacts = Contact::with('role')->find($id);
-        if($contacts)
+        $contact = Contact::find($id);
+        if($contact)
         {
             return response()->json([
                 'status'=>200,
-                'contacts'=> $contacts,
+                'contact'=> $contact,
             ]);
         }
         else
         {
             return response()->json([
                 'status'=>404,
-                'message'=>'No Volunteer Found.'
+                'message'=>'No Contact Found.'
             ]);
         }
 
@@ -91,10 +102,12 @@ class ContactController extends Controller
     {
         //dd($request->all());
         $validator = Validator::make($request->all(), [
-             'task_title'=> 'required|max:100',
-             'assign_to'=> 'required|max:100',
-             'task_description'=> 'required|max:200',
-             'address'=>'required|max:200'
+             'house_id'=> 'required|max:100',
+             'first_name'=> 'required|max:100',
+             'last_name'=> 'required|max:200',
+             'gender'=>'required|max:200',
+             'age'=>'required|max:200',
+             'user_type'=>'required|max:200'
         ]);
 
         if($validator->fails())
@@ -106,48 +119,23 @@ class ContactController extends Controller
         }
         else
         {
-            $taskStatus = TaskStatus::find($id);
-            if($taskStatus)
+            $contact = Contact::find($id);
+            if($contact)
             {
                 try{
-                    $role = Role::find($request->assign_to);
-                
-                    $role_details_id = 0;
-                    
-                    if($role->name=='Mandal Prabhari'){
-                        $role_details_id = $request->mandal_id;
-                    }
-                    if($role->name=='Ward Prabhari'){
-                        $role_details_id = $request->ward_id;
-                    }
-                    if($role->name=='Booth Prabhari'){
-                        $role_details_id = $request->booth_id;
-                    }
-                    if($role->name=='Gali Prabhari'){
-                        $role_details_id = $request->gali_id;
-                    }
-                    $file_name = "";
-                    if($request->hasFile('image')){
-          
-                        $file_name = $this->fileUpload($request,'image','public/task-documents');
-                    }
 
-                    $taskStatus->task_title = $request->input('task_title');
-                    $taskStatus->assign_to = $request->input('assign_to');
-                    $taskStatus->task_description = $request->input('task_description');
-                    $taskStatus->volunteer = $role_details_id;
-                    $taskStatus->address = $request->input('address');
-                    if($file_name!=''){
-                        $taskStatus->image = $file_name;
-                    }
-                    $taskStatus->remarks = $request->remark;
-                    $taskStatus->status = $request->status;
+                    $contact->house_id = $request->input('house_id');
+                    $contact->first_name = $request->input('first_name');
+                    $contact->last_name = $request->input('last_name');
+                    $contact->gender = $request->input('gender');
+                    $contact->age = $request->input('age');
+                    $contact->user_type = $request->user_type;
 
-                    $taskStatus->update();
+                    $contact->update();
                     
                     return response()->json([
                         'status'=>200,
-                        'message'=>'Task Status Updated Successfully.'
+                        'message'=>'Contact Updated Successfully.'
                     ]);
                 }catch(Exception $e){
                     return response()->json([
@@ -161,7 +149,7 @@ class ContactController extends Controller
             {
                 return response()->json([
                     'status'=>404,
-                    'message'=>'No Task Status Found.'
+                    'message'=>'No Contact Found.'
                 ]);
             }
 
@@ -170,20 +158,20 @@ class ContactController extends Controller
 
     public function destroy($id)
     {
-        $taskStatus = TaskStatus::find($id);
-        if($taskStatus)
+        $contact = Contact::find($id);
+        if($contact)
         {
-            $taskStatus->delete();
+            $contact->delete();
             return response()->json([
                 'status'=>200,
-                'message'=>'Task Status Deleted Successfully.'
+                'message'=>'Contact Deleted Successfully.'
             ]);
         }
         else
         {
             return response()->json([
                 'status'=>404,
-                'message'=>'No Task Status Found.'
+                'message'=>'No Contact Found.'
             ]);
         }
     }

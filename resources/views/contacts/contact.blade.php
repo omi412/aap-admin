@@ -43,27 +43,14 @@
             <thead>
               <tr>
                 <th style="width: 70px;">S No.</th>
-                <th style="width: 110px;">User Type</th>
+                <th style="width: 110px;">Address</th>
                 <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-                <th>Address</th>
-                <!-- <th style="text-align: right;">Action</th> -->
+                <th>User Type</th>
+                <th style="text-align: right;">Action</th>
               </tr>
             </thead>
             <tbody id="myTable">
-              <tr>
-                <td><a href="">1</a></td>
-                <td><a href="">Public</a></td>
-                <td><a href="">Vishal Saxena</a></td>
-                <td><a href="">28</a></td>
-                <td><a href="">Male</a></td>
-                <td><a href="">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092 </a></td>
-
-               <!--  <td style="text-align: right;"><a href="/#/edit-contact">
-                  <i class="fa fa-edit" style="color:#0072b0"></i></a>
-                </td> -->
-              </tr>
+            
             </tbody>
           </table>
           </div>
@@ -79,7 +66,7 @@
             </div>
           </div>
         <div class="card-header">
-          <i class="fa fa-align-justify"></i>Add Contact
+          <i class="fa fa-align-justify"></i><span id="spn-title">Add Contact</span>
         </div>
         <div class="card-body pending_approval">
           <form id="contact" name="postForm" method="POST" enctype="multipart/form-data">
@@ -88,10 +75,24 @@
             <div class="modal-body">
               <div class="form-group row">
                 <div class="col-md-3">
+                <label for="password1">House</label>
+              </div>
+              <div class="col-md-9">
+                <input type="hidden" id="edit-contact-id" value="" />
+                <select class="form-control" name="house_id" id="select-state1" placeholder="Pick a House...">
+                  <option value>Select House</option>
+                  @foreach($house_datas as $house_data)
+                    <option value="{{$house_data->id}}">{{ $house_data->address_line_1 }}</option>
+                  @endforeach
+                </select>
+              </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-3">
                   <label for="name">First Name</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="First Name">
+                  <input type="text" class="form-control" id="firstname" name="first_name" aria-describedby="firstname" placeholder="First Name">
                 <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
               </div>
               </div>
@@ -100,7 +101,7 @@
                   <label for="password1">Last Name</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" id="lastname" placeholder="Last Name">
+                  <input type="text" class="form-control" name="last_name" id="lastname" placeholder="Last Name">
                 </div>
               </div>
               <div class="form-group row">
@@ -108,7 +109,7 @@
                 <label for="password1">Gender</label>
               </div>
               <div class="col-md-9">
-                <select class="form-control">
+                <select class="form-control" name="gender" id="gender">
                     <option>Select Gender</option>
                     <option>Male</option>
                     <option>Female</option>
@@ -121,7 +122,7 @@
                 <label for="password1">Age</label>
               </div>
               <div class="col-md-9">
-                <input type="text" class="form-control" id="age" placeholder="Enter Age">
+                <input type="text" class="form-control" name="age" id="age" placeholder="Enter Age">
               </div>
               </div>
               <div class="form-group row">
@@ -129,28 +130,15 @@
                 <label for="password1">User Type</label>
               </div>
               <div class="col-md-9">
-                <select class="form-control">
+                <select class="form-control" name="user_type" id="user-type">
                     <option value="0" selected>Public</option>
                     <option value="1">Volunteer</option>
                 </select>
               </div>
               </div>
-              <div class="form-group row">
-                <div class="col-md-3">
-                <label for="password1">House</label>
-              </div>
-              <div class="col-md-9">
-                <select class="form-control">
-                    <option value="0">Select House</option>
-                    <option value="1">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092</option>
-                    <option value="2">133, South Avenue, New Delhi, Delhi-110001</option>
-                    <option value="3">9, Pandit Pant Marg, New Delhi - 110001 </option>
-                </select>
-              </div>
-              </div>
             </div>
             <div class="modal-footer border-top-0 d-flex justify-content-center">
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" id="btn-submit" class="btn btn-success">Submit</button>
             </div>
           </form>
           </div>
@@ -160,16 +148,48 @@
   </div><!--/.row-->
 </div>
 
+  {{-- Delete Modal --}}
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Contact </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Confirm to Delete Data ?</h4>
+                <input type="hidden" id="deleteing_id">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary delete_student">Yes Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- End - Delete Modal --}}
+
 
 @endsection
 
 @section('script')
 
 <script>
+
+  $(document).ready(function () {
+      $('#select-state').selectize({
+          sortField: 'text'
+      });
+  });
   
   $("#show_second").click(function(){
     $("#section_first").hide();
     $("#section_second").show();
+    $('#btn-submit').text('Submit');
+    $('#spn-title').text('Add Task');
+    $('#edit-contact-id').val('');
+    $('#edit-form-method').val('');
   });
 
   $("#show_first").click(function(){
@@ -184,31 +204,25 @@
 
   $(document).ready(function () {
 
-      fetchtaskstatus();
+      fetchContact();
 
-        function fetchtaskstatus() {
+        function fetchContact() {
           //alert("working");
-          let status=['Pending','Completed'];
             $.ajax({
                 type: "GET",
-                url: "/fetch-task-status",
+                url: "/fetch-contacts",
                 dataType: "json",
                 success: function (response) {
                      console.log(response);
                     $('tbody').html("");
-                    $.each(response.taskStatus, function (key, item) {
+                    $.each(response.contacts, function (key, item) {
                         $('tbody').append(`<tr>
                             <td>` + item.id + `</td>
-                            <td>` + item.task_title + `</td>
-                            <td>` + item.task_description + `</td>
-                            <td>` + item.role.name + `</td>
-                            <td>` + item.role_detail.name + `</td>
-                            <td>`+status[item.status]+`</td>
-                            
-                            <td><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
-                            <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>
-          }
-          </tr>`);
+                            <td>` + item.house_id + `</td>
+                            <td>` + item.first_name + ` ` + item.last_name + `</td>
+                            <td>` + item.user_type + `</td>
+                            <td style='text-align:right'><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
+                            <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td></tr>`);
                     });
                 }
             });
@@ -216,10 +230,10 @@
 
         $('#contact').on('submit', function(e) {
             e.preventDefault();
-            let url = "{{ url('task-status') }}";
+            let url = "{{ url('contacts') }}";
             let method = "POST";
-            if($('#edit-task-id').val()!=''){ // update case
-              url = "{{ url('update-task-status') }}/"+$('#edit-task-id').val();
+            if($('#edit-contact-id').val()!=''){ // update case
+              url = "{{ url('update-contact') }}/"+$('#edit-contact-id').val();
             }
             $.ajax({
                 method:"POST",
@@ -240,11 +254,11 @@
                     } else if(response.status == 200) {
                         notification('success',response.message);
 
-                        $('#task_status')[0].reset();
+                        $('#contact')[0].reset();
                         notification('success',response.message);
                         $('#section_second').hide();
                         $('#section_first').show();
-                        fetchtaskstatus();
+                        fetchContact();
 
                     }else{
                       notification('danger',response.error,5000);
@@ -258,53 +272,31 @@
 
        $(document).on('click', '.editbtn', function (e) {
             e.preventDefault();
-            var task_id = $(this).val();
+            var contact_id = $(this).val();
             //alert(volunteer_id);
             $('#section_second').show();
             $('#section_first').hide();
             $('#btn-submit').text('Update');
             $('#spn-title').text('Edit Task');
-            $('#div-remark,#div-image,#div-status').show();
             $('#edit-form-method').val('PUT');
             $.ajax({
                 type: "GET",
-                url: "{{ url('edit-task-status') }}/" + task_id,
+                url: "{{ url('edit-contact') }}/" + contact_id,
                 success: function (response) {
                     if (response.status == 404) {
                         $('#success_message').addClass('alert alert-success');
                         $('#success_message').text(response.message);
                         $('#editModal').modal('hide');
                     } else {
-                        var taskData = response.taskStatus;
+                        var contactData = response.contact;
                         
-                        $('#task_title').val(taskData.task_title);
-                        $('#ddl-role').val(taskData.assign_to);
-                        $('#task_description').val(taskData.task_description);
-                        $('#address').val(taskData.address);
-                        
-                        if(taskData.role.name=='Mandal Prabhari'){
-                          
-                          $('#div-ward,#div-booth,#div-gali').hide();
-                          $('#div-mandal').show();
-                          $('#ddl-mandal').val(taskData.volunteer);
-                        
-                        }else if(taskData.role.name=='Ward Prabhari'){
-                          $('#div-mandal,#div-booth,#div-gali').hide();
-                          $('#div-ward').show();
-
-                          $('#ddl-ward').val(taskData.volunteer);
-                        }else if(taskData.role.name=='Booth Prabhari'){
-                          
-                          $('#div-mandal,#div-ward,#div-gali').hide();
-                          $('#div-booth').show();
-                          $('#ddl-booth').val(taskData.volunteer);
-                        
-                        }else if(taskData.role.name=='Gali Prabhari'){
-                          $('#div-mandal,#div-ward,#div-booth').hide();
-                          $('#div-gali').show();
-                          $('#ddl-gali').val(taskData.volunteer);
-                        }
-                        $('#edit-task-id').val(task_id);
+                        $('#select-state1').val(contactData.house_id);
+                        $('#firstname').val(contactData.first_name);
+                        $('#lastname').val(contactData.last_name);
+                        $('#gender').val(contactData.gender);
+                        $('#age').val(contactData.age);
+                        $('#user_type').val(contactData.user_type);
+                        $('#edit-contact-id').val(contact_id);
                     }
                 }
             });
@@ -317,16 +309,16 @@
        /* delete volunteer */
 
         $(document).on('click', '.deletebtn', function () {
-            var task_id = $(this).val();
+            var contact_id = $(this).val();
             $('#DeleteModal').modal('show');
-            $('#deleteing_id').val(task_id);
+            $('#deleteing_id').val(contact_id);
         });
 
         $(document).on('click', '.delete_student', function (e) {
             e.preventDefault();
 
             $(this).text('Deleting..');
-            var task_id = $('#deleteing_id').val();
+            var contact_id = $('#deleteing_id').val();
             //alert(task_id);
             $.ajaxSetup({
                 headers: {
@@ -336,7 +328,7 @@
 
             $.ajax({
                 type: "DELETE",
-                url: "/delete-task-status/" + task_id,
+                url: "/delete-contact/" + contact_id,
                 dataType: "json",
                 success: function (response) {
                     // console.log(response);
@@ -350,11 +342,12 @@
                         $('#success_message').text(response.message);
                         $('.delete_student').text('Yes Delete');
                         $('#DeleteModal').modal('hide');
-                        fetchtaskstatus();
+                        fetchContact();
                     }
                 }
             });
         });
+      });
 
 
 </script>

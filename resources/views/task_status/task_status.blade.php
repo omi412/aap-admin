@@ -76,11 +76,11 @@
         <div class="card-header">
           <i class="fa fa-align-justify"></i><span id="spn-title">Add Task</span>
         </div>
-        <div class="card-body pending_approval">
+        <div class="card-body pending_approval ">
           <form id="task_status" name="postForm" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="_method" value="" id="edit-form-method">
-            <div class="modal-body">
+            <div class="modal-body assign">
               <div class="form-group row">
                 <div class="col-md-3">
                    <input type="hidden" id="edit-task-id" value="" />

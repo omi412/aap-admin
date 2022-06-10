@@ -15,6 +15,7 @@
     <link href="{{ asset ('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{ asset ('assets/css/custom.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
     <script src="https://www.gstatic.com/firebasejs/9.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.8.2/firebase-analytics.js"></script>
 
@@ -107,6 +108,7 @@
     <script src="{{ asset ('assets/vendor/jqvmap/js/jquery.vmap.usa.js')}}"></script>
     <script src="{{ asset ('assets/vendor/jquery.counterup/jquery.counterup.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
 
    <!--  <script src="{{ asset ('assets/js/dashboard/dashboard-1.js')}}"></script> -->
    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
