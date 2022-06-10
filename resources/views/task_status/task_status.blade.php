@@ -79,6 +79,7 @@
         <div class="card-body pending_approval">
           <form id="task_status" name="postForm" method="POST" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="_method" value="" id="edit-form-method">
             <div class="modal-body">
               <div class="form-group row">
                 <div class="col-md-3">
@@ -263,6 +264,7 @@
     $('#edit-task-id').val('');
     $('#div-remark,#div-image,#div-status').hide();
     $('#ddl-status,#remark,#image').attr('required',false);
+    $('#edit-form-method').val('');
 
   });
 
@@ -340,21 +342,14 @@
             let method = "POST";
             if($('#edit-task-id').val()!=''){ // update case
               url = "{{ url('update-task-status') }}/"+$('#edit-task-id').val();
-              method = "PUT";
             }
-            var formData = new FormData(this);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.ajax({
-                type: method,
+                method:"POST",
                 url: url,
-                data: formData,
+                data: new FormData(this),
                 processData: false,
                 contentType: false,
-                dataType: "json",
+                dataType: "JSON",
 
                 success: function (response) {
                     // console.log(response);
@@ -392,6 +387,7 @@
             $('#btn-submit').text('Update');
             $('#spn-title').text('Edit Task');
             $('#div-remark,#div-image,#div-status').show();
+            $('#edit-form-method').val('PUT');
             $.ajax({
                 type: "GET",
                 url: "{{ url('edit-task-status') }}/" + task_id,

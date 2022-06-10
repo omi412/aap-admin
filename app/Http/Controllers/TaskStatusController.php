@@ -122,7 +122,7 @@ class TaskStatusController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        //dd($request->all());
         $validator = Validator::make($request->all(), [
              'task_title'=> 'required|max:100',
              'assign_to'=> 'required|max:100',
