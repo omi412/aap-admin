@@ -53,24 +53,12 @@
             </thead>
             <tbody id="myTable">
               <tr>
-                <td><a href="/#/edit-contact">1</a></td>
-                <td><a href="/#/edit-contact">Public</a></td>
-                <td><a href="/#/edit-contact">Vishal Saxena</a></td>
-                <td><a href="/#/edit-contact">28</a></td>
-                <td><a href="/#/edit-contact">Male</a></td>
-                <td><a href="/#/edit-contact">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092 </a></td>
-
-               <!--  <td style="text-align: right;"><a href="/#/edit-contact">
-                  <i class="fa fa-edit" style="color:#0072b0"></i></a>
-                </td> -->
-              </tr>
-              <tr>
-                <td><a href="/#/edit-contact">2</a></td>
-                <td><a href="/#/edit-contact">Volunteer</a></td>
-                <td><a href="/#/edit-contact">Amit Sharma</a></td>
-                <td><a href="/#/edit-contact">35</a></td>
-                <td><a href="/#/edit-contact">Male</a></td>
-                <td><a href="/#/edit-contact">133, South Avenue, New Delhi, Delhi-110001 </a></td>
+                <td><a href="">1</a></td>
+                <td><a href="">Public</a></td>
+                <td><a href="">Vishal Saxena</a></td>
+                <td><a href="">28</a></td>
+                <td><a href="">Male</a></td>
+                <td><a href="">Narwana Rd, I.P.Extension, West Vinod Nagar, New Delhi, Delhi 110092 </a></td>
 
                <!--  <td style="text-align: right;"><a href="/#/edit-contact">
                   <i class="fa fa-edit" style="color:#0072b0"></i></a>
@@ -94,7 +82,9 @@
           <i class="fa fa-align-justify"></i>Add Contact
         </div>
         <div class="card-body pending_approval">
-          <form>
+          <form id="contact" name="postForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="_method" value="" id="edit-form-method">
             <div class="modal-body">
               <div class="form-group row">
                 <div class="col-md-3">
@@ -188,6 +178,188 @@
   });
 
 </script>
+
+
+<script type="text/javascript">
+
+  $(document).ready(function () {
+
+      fetchtaskstatus();
+
+        function fetchtaskstatus() {
+          //alert("working");
+          let status=['Pending','Completed'];
+            $.ajax({
+                type: "GET",
+                url: "/fetch-task-status",
+                dataType: "json",
+                success: function (response) {
+                     console.log(response);
+                    $('tbody').html("");
+                    $.each(response.taskStatus, function (key, item) {
+                        $('tbody').append(`<tr>
+                            <td>` + item.id + `</td>
+                            <td>` + item.task_title + `</td>
+                            <td>` + item.task_description + `</td>
+                            <td>` + item.role.name + `</td>
+                            <td>` + item.role_detail.name + `</td>
+                            <td>`+status[item.status]+`</td>
+                            
+                            <td><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
+                            <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>
+          }
+          </tr>`);
+                    });
+                }
+            });
+        }
+
+        $('#contact').on('submit', function(e) {
+            e.preventDefault();
+            let url = "{{ url('task-status') }}";
+            let method = "POST";
+            if($('#edit-task-id').val()!=''){ // update case
+              url = "{{ url('update-task-status') }}/"+$('#edit-task-id').val();
+            }
+            $.ajax({
+                method:"POST",
+                url: url,
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                dataType: "JSON",
+
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#save_msgList').html("");
+                        $('#save_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#save_msgList').append('<li>' + err_value + '</li>');
+                        });
+                    } else if(response.status == 200) {
+                        notification('success',response.message);
+
+                        $('#task_status')[0].reset();
+                        notification('success',response.message);
+                        $('#section_second').hide();
+                        $('#section_first').show();
+                        fetchtaskstatus();
+
+                    }else{
+                      notification('danger',response.error,5000);
+                    }
+                }
+            });
+
+        });
+
+       /* edit ajax*/
+
+       $(document).on('click', '.editbtn', function (e) {
+            e.preventDefault();
+            var task_id = $(this).val();
+            //alert(volunteer_id);
+            $('#section_second').show();
+            $('#section_first').hide();
+            $('#btn-submit').text('Update');
+            $('#spn-title').text('Edit Task');
+            $('#div-remark,#div-image,#div-status').show();
+            $('#edit-form-method').val('PUT');
+            $.ajax({
+                type: "GET",
+                url: "{{ url('edit-task-status') }}/" + task_id,
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').modal('hide');
+                    } else {
+                        var taskData = response.taskStatus;
+                        
+                        $('#task_title').val(taskData.task_title);
+                        $('#ddl-role').val(taskData.assign_to);
+                        $('#task_description').val(taskData.task_description);
+                        $('#address').val(taskData.address);
+                        
+                        if(taskData.role.name=='Mandal Prabhari'){
+                          
+                          $('#div-ward,#div-booth,#div-gali').hide();
+                          $('#div-mandal').show();
+                          $('#ddl-mandal').val(taskData.volunteer);
+                        
+                        }else if(taskData.role.name=='Ward Prabhari'){
+                          $('#div-mandal,#div-booth,#div-gali').hide();
+                          $('#div-ward').show();
+
+                          $('#ddl-ward').val(taskData.volunteer);
+                        }else if(taskData.role.name=='Booth Prabhari'){
+                          
+                          $('#div-mandal,#div-ward,#div-gali').hide();
+                          $('#div-booth').show();
+                          $('#ddl-booth').val(taskData.volunteer);
+                        
+                        }else if(taskData.role.name=='Gali Prabhari'){
+                          $('#div-mandal,#div-ward,#div-booth').hide();
+                          $('#div-gali').show();
+                          $('#ddl-gali').val(taskData.volunteer);
+                        }
+                        $('#edit-task-id').val(task_id);
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
+
+        });
+
+       /* edit ajax*/
+
+       /* delete volunteer */
+
+        $(document).on('click', '.deletebtn', function () {
+            var task_id = $(this).val();
+            $('#DeleteModal').modal('show');
+            $('#deleteing_id').val(task_id);
+        });
+
+        $(document).on('click', '.delete_student', function (e) {
+            e.preventDefault();
+
+            $(this).text('Deleting..');
+            var task_id = $('#deleteing_id').val();
+            //alert(task_id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-task-status/" + task_id,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                    } else {
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                        $('#DeleteModal').modal('hide');
+                        fetchtaskstatus();
+                    }
+                }
+            });
+        });
+
+
+</script>
+
+
 
 <!-- /* search function */ -->
 <script>

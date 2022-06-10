@@ -570,7 +570,7 @@
        $(document).on('click', '.editbtn', function (e) {
             e.preventDefault();
             var user_id = $(this).val();
-            alert('working');
+            //alert('working');
             $('#editModal').modal('show');
             $.ajax({
                 type: "GET",

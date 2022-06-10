@@ -36,7 +36,8 @@ class HomeController extends Controller
         $wards =   RoleDetail::where('role_id',2)->select('id','name')->get();
         $booths =  RoleDetail::where('role_id',3)->select('id','name')->get();
         $galies =  RoleDetail::where('role_id',4)->select('id','name')->get();
-        $taskStatus =  TaskStatus::get();
+        $taskStatus =  TaskStatus::all();
+        //dd($taskStatus);
         return view('dashboard/dashboard',compact('mandals','wards','booths','galies','taskStatus'));
     }
 

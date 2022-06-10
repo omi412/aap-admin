@@ -49,36 +49,74 @@
                       <label for="password1">Send to</label>
                     </div>
                     <div class="col-md-9">
-                      <!-- <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label" for="inlineCheckbox1">Ward Prabhari</label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                        <label class="form-check-label" for="inlineCheckbox2">Mandal Prabhari</label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                        <label class="form-check-label" for="inlineCheckbox3">Booth Prabhari</label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
-                        <label class="form-check-label" for="inlineCheckbox4">Gali Prabhari</label>
-                      </div> -->
-                      <!-- <select class="selectpicker" multiple data-live-search="true">
-                        <option>Ward Prabhari</option>
-                        <option>Mandal Prabhari</option>
-                        <option>Booth Prabhari</option>
-                        <option>Gali Prabhari</option>
+                      <!-- <select class="selectpicker send_to" required id="ddl-send" name="send_to[]" multiple data-live-search="true">
+                          @foreach(getRoles() as $role)
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                          @endforeach
                       </select> -->
-                      <select class="selectpicker send_to" required id="send_to" name="send_to[]" multiple data-live-search="true">
-                          <option value="Ward Prabhari">Ward Prabhari</option>
-                          <option value="Mandal Prabhari">Mandal Prabhari</option>
-                          <option value="Booth Prabhari">Booth Prabhari</option>
-                          <option value="Gali Prabhari">Gali Prabhari</option>
+                      <select class="send_to" id="ddl-role" name="send_to" required>
+                          @foreach(getRoles() as $role)
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                          @endforeach
                       </select>
                     </div>
                 </div>
+                <div class="form-group row" id="div-mandal">
+                  <div class="col-md-3">
+                    <label for="name">Mandal</label>
+                  </div>
+                  <div class="col-md-9">
+
+                      <select name="mandal_id" id="ddl-mandal" class="volunteer">
+                        <option value="">Select Mandal</option>
+                        @foreach($mandals as $mandal)
+                          <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
+                        @endforeach
+                      </select>
+                  </div>
+                </div>
+                <div class="form-group row" id="div-ward" style="display: none;">
+                  <div class="col-md-3">
+                    <label for="name">Ward</label>
+                  </div>
+                  <div class="col-md-9">
+
+                      <select name="ward_id" id="ddl-ward" class="volunteer">
+                        <option value="">Select Ward</option>
+                        @foreach($wards as $ward)
+                          <option value="{{ $ward->id }}">{{ $ward->name }}</option>
+                        @endforeach
+                      </select>
+                  </div>
+                </div>
+                <div class="form-group row" id="div-booth" style="display: none;">
+                  <div class="col-md-3">
+                    <label for="name">Booth</label>
+                  </div>
+                  <div class="col-md-9">
+
+                      <select name="booth_id" id="ddl-booth" class="volunteer">
+                        <option value="">Select Booth</option>
+                        @foreach($booths as $booth)
+                          <option value="{{ $booth->id }}">{{ $booth->name }}</option>
+                        @endforeach
+                      </select>
+                  </div>
+                </div>
+                <div class="form-group row" id="div-gali" style="display: none;">
+                <div class="col-md-3">
+                  <label for="name">Gali</label>
+                </div>
+                <div class="col-md-9">
+
+                    <select name="gali_id" id="ddl-gali" class="volunteer">
+                      <option value="">Select Gali</option>
+                      @foreach($galies as $gali)
+                      <option value="{{ $gali->id }}">{{ $gali->name }}</option>
+                      @endforeach
+                    </select>
+                </div>
+              </div>
                 <!-- <div class="send_label">
                     <label>Send to</label>
                   </div> -->
@@ -113,17 +151,11 @@
                 <th>S.No</th>
                 <th>Message</th>
                 <th>Date</th>
-                <th style="text-align: right;">Sent to</th>
+                <th>Sent to</th>
               </tr>
             </thead>
             <tbody id="message-tbody">
-              <tr>
-                <td><a href="#" data-toggle="modal" data-target="#form" style="color: #000;">Can i join to Both Prabhari in Uttar vindhan sabha</a></td>
-                <td>04/02/2022</td>
-                <td style="text-align: right;">
-                  Booth Prabhari
-                </td>
-              </tr>
+              
             </tbody>
           </table>
           </div>
@@ -132,7 +164,7 @@
     </div>
   </div><!--/.row-->
   </div>
-  <div class="modal fade pending_approval" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade pending_approval" id="form_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -141,15 +173,17 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form>
         <div class="modal-body">
+          <form action="POST" id="pending-approval-form">
+            @csrf
+           <input type="hidden" name="message_id" id="message-id" value="">
           <div class="form-group row">
           <div class="col-md-12">
-            <textarea class="form-control" readonly cols="12" rows="4">Can i join to Ward Prabhari in South Madhay vindhan sabha Bhopal Madhya pradesh 46003 </textarea>
+            <textarea class="form-control" readonly cols="12" rows="4" id="message_div"></textarea>
           </div>
           </div>
+          </form>
         </div>
-      </form>
     </div>
   </div>
 </div>
@@ -159,34 +193,69 @@
 @endsection
 
 @section('script')
-<script>
+<!-- <script>
 $('select').selectpicker();
-</script>
+</script> -->
+
+
 <script type="text/javascript">
+
+$(document).ready(function () {
+//alert('working');
+        $('#ddl-role').change(function(){
+          let role = $(this).val();
+          
+          if(role==''){
+            $('#div-ward,#div-booth,#div-gali').hide();
+            $('#ddl-mandal,#ddl-ward,#ddl-booth,#ddl-gali').attr('required',false);
+          }else if(role==3){ // mandal
+            $('#div-ward,#div-booth,#div-gali').hide();
+            $('#div-mandal').show();
+            $('#ddl-mandal').attr('required',true);
+            $('#ddl-ward,#ddl-booth,#ddl-gali').attr('required',false);
+          }else if(role==4){ //ward
+            $('#div-mandal,#div-booth,#div-gali').hide();
+            $('#div-ward').show();
+            $('#ddl-ward').attr('required',true);
+            $('#ddl-mandal,#ddl-booth,#ddl-gali').attr('required',false);
+          }else if(role==5){ // booth
+            $('#div-booth').show();
+            $('#div-mandal,#div-ward,#div-gali').hide();
+            $('#ddl-booth').attr('required',true);
+            $('#ddl-mandal,#ddl-ward,#ddl-gali').attr('required',false);
+          }else if(role==6){ // gali
+            $('#div-mandal,#div-ward,#div-booth').hide();
+            $('#div-gali').show();
+            $('#ddl-gali').attr('required',true);
+            $('#ddl-mandal,#ddl-ward,#ddl-booth').attr('required',false);
+          }
+        });
+
+    fetchMessaging();     
+
   function fetchMessaging() {
+    //alert('working');
       $.ajax({
           type: "GET",
           url: "{{ url('fetch-messaging') }}",
           dataType: "json",
           success: function (response) {
-              
+              //console.log(response);
               $('#message-tbody').html("");
               var counter = 1;
               $.each(response.messages, function (key, item) {
                   $('#message-tbody').append(`<tr>
                     <td>` + counter + `</td>
-                    <td><a href="#" data-toggle="modal" data-target="#form" style="color: #000;">`+item.message+`</a></td>
+                    <td><a href="#" id="editbtn" style="color: #000;" data-id="`+item.id+`">`+item.message+`</a></td>
                     <td>` + item.send_date + `</td>
-                    <td>` + item.send_to + `</td>
+                    <td>` + item.role.name + `</td>
                   </tr>`);
                   counter++;
               });
           }
       });
   }
-  $(document).ready(function () {
-
-    fetchMessaging();    
+   
     $('#messaging-form').on('submit', function(e) {
           e.preventDefault();
 
@@ -204,9 +273,9 @@ $('select').selectpicker();
                       });
   
                   } else if(response.status==200) {
-                    fetchMessaging();
                     notification('success',response.message);
-                    $('#messaging-form')[0].reset()
+                     $('#messaging-form')[0].reset();
+                     fetchMessaging();
                   }else{
                     notification('danger',response.error,5000);
                   }
@@ -214,6 +283,34 @@ $('select').selectpicker();
           });
 
     });
+
+
+    $(document).on('click', '#editbtn', function (e) {
+            e.preventDefault();
+            var message_id = $(this).data('id');
+            $('#form_modal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/edit-messaging/" + message_id,
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#form_modal').modal('hide');
+                    } else {
+                        //console.log(response.user.name);
+                        console.log(response.all_message.id);
+                        $('#message_div').val(response.all_message.message);
+                        $('#message-id').val(message_id);
+                    }
+                }
+            });
+            $('.btn-close').find('input').val('');
+
+        });
+
+       /* edit ajax*/
 
   });
 

@@ -108,7 +108,9 @@
                     <i class="icon-user-follow"></i>
                   </div> -->
                 
-                  <div class="h4 mb-0">{{ $taskStatus->count() }}</div>
+                  <div class="h4 mb-0">
+
+                    {{ $taskStatus->count() }}</div>
                  
                   <small class="text-muted text-uppercase font-weight-bold">Complete</small>
                   <div class="progress progress-xs mt-3 mb-0">

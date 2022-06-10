@@ -82,6 +82,7 @@ Auth::routes();
 
     Route::resource('messaging', MessagingController::class);
     Route::get('fetch-messaging', [MessagingController::class, 'fetchMessages']);
+    Route::get('edit-messaging/{id}', [MessagingController::class, 'edit']);
 
     Route::resource('house-data', HouseDataController::class);
     Route::post('update-house-data/{id}', [HouseDataController::class,'update']);
