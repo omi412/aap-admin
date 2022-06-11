@@ -27,6 +27,9 @@
                          <div class="container">
                             <!-- <div class="alert alert-danger hide" id="error-message" style="display:none;"></div>
                             <div class="alert alert-success hide" id="sent-message" style="display:none;"></div> -->
+                            @if (Session::has('error'))
+                                <div class="alert alert-danger">{{ Session::get('error') }}</div>
+                            @endif
                             <div class="card">
                                <div class="card-body">
                                 <div id="res-msg"></div>
@@ -35,8 +38,12 @@
                                        
                                           <div class="mb-3">
                                              <!-- <label for="phone-number" class="form-label">Phone Number:</label> -->
-                                             <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="(+91) Enter your mobile no" minlength="13" maxlength="13">
-                                             <span id="spn-err-mobile" class="err-msg"></span>
+                                             <input type="text" name="mobileno" id="phone-number" class="form-control" placeholder="Enter your mobile no" minlength="10" maxlength="10">
+                                             <span id="spn-err-mobile" class="err-msg">
+                                              @if ($errors->has('mobileno'))
+                                                {{ $errors->first('mobileno') }}
+                                              @endif
+                                             </span>
                                           </div>
                                           
                                           
@@ -47,7 +54,11 @@
                                           </div>
                                           <div class="mb-3" id="div-name" style="display: none;">
                                              <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name">
-                                            <span id="spn-err-name" class="err-msg"></span>
+                                            <span id="spn-err-name" class="err-msg">
+                                              @if ($errors->has('name'))
+                                                {{ $errors->first('name') }}
+                                              @endif
+                                            </span>
                                           </div>
                                           <div class="mb-3">
                                             <div id="recaptcha-container"></div>
@@ -111,8 +122,10 @@
         });
 
         function otpSend() {
+
             var phoneNumber = document.getElementById('phone-number').value;
             if(phoneNumber!=''){
+              phoneNumber = "+91"+phoneNumber;
 
               const appVerifier = window.recaptchaVerifier;
               firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
@@ -171,6 +184,7 @@
                             $('#div-otp-code,#btn-verify-otp,#btn-get-otp').hide();
                             $('#div-name,#btn-submit').show();
                             $('#name').attr('required',true);
+                            $('#res-msg').html('');
                         }
                     },error:function(error){
 

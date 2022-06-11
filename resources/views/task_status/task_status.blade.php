@@ -31,7 +31,9 @@
       <div class="card">
         <div class="search_box house_data">
             <div class="input-group">
+              @can('Task Create')
               <a href="javascript:void(0)" id="show_second" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Task</a>
+              @endcan
             </div>
         </div>
         <div class="card-header">
@@ -275,6 +277,14 @@
 
 </script>
 <script type="text/javascript">
+  var can_edit = false;
+  var can_delete = false;
+  @can('Task Edit')
+    can_edit = true;
+  @endcan  
+  @can('Task Delete')
+    can_delete = true;
+  @endcan
 
   $(document).ready(function () {
 
@@ -316,10 +326,10 @@
                 url: "/fetch-task-status",
                 dataType: "json",
                 success: function (response) {
-                     console.log(response);
+                     //console.log(response);
                     $('tbody').html("");
                     $.each(response.taskStatus, function (key, item) {
-                        $('tbody').append(`<tr>
+                        let tr_html = `<tr>
                             <td>` + item.id + `</td>
                             <td>` + item.task_title + `</td>
                             <td>` + item.task_description + `</td>
@@ -327,10 +337,17 @@
                             <td>` + item.role_detail.name + `</td>
                             <td>`+status[item.status]+`</td>
                             
-                            <td><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
-                            <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>
-          }
-          </tr>`);
+                            <td>`;
+                            if(can_edit){
+                              tr_html+=`<button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>`;
+                            }
+                            if(can_edit){
+                              tr_html+=`<button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button>`;
+                            }
+                            
+                            tr_html+= `</td>
+                          </tr>`;
+                        $('tbody').append(tr_html);
                     });
                 }
             });

@@ -20,6 +20,6 @@ class Contact extends Model
 
     public function houseData()
     {
-        return $this->belongsTo(houseData::class,'house_id')->select('id','address_line_1');
+        return $this->belongsTo(HouseData::class,'house_id');
     }
 }

@@ -30,9 +30,11 @@
       <!-- <ul id="save_msgList"></ul> -->
       <div class="card">
         <div class="search_box house_data">
+          @can('User Create')
             <div class="input-group">
                <a href="javascript:void(0)" id="btn-user-model" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 10px;"></i>Add User</a>
             </div>
+          @endcan  
         </div>
       <div class="card pen_appr">
         <div class="card-header">
@@ -338,7 +340,14 @@
 @section('script')
 
 <script>
-  
+  var can_edit = false;
+  var can_delete = false;
+  @can('User Edit')
+    can_edit = true;
+  @endcan
+  @can('User Delete')
+    can_delete = true;
+  @endcan
   $("#show_second").click(function(){
     $("#section_first").hide();
     $("#section_second").show();
@@ -367,12 +376,16 @@
                 success: function (response) {
                     $('tbody').html("");
                     $.each(response.user, function (key, item) {
-                        $('tbody').append(`<tr>
+                        let tr_html=`<tr>
                             <td>` + item.id + `</td>
                             <td>` + item.name + `</td>
                             <td>` + item.mobileno + `</td>
-                            <td style="text-align: right;"><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
-                          </tr>`);
+                            <td style="text-align: right;">`;
+                            if(can_edit){
+                              tr_html+=`<button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>`;
+                            }
+                            tr_html+=`</tr>`;
+                        $('tbody').append(tr_html);
                     });
                 }
             });

@@ -25,10 +25,12 @@
     <div class="col-lg-12">
       <div class="card">
          <div class="search_box house_data">
+          @can('House Data Create')
             <div class="input-group">
               <a href="javascript:void(0)" id="show_second" class="btn btn-outline-primary show_second"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add House Data</a>
               <a href="javascript:void(0)" id="show_third" class="btn btn-outline-info show_third"><i class="fa fa-download" style="margin-right: 6px;"></i> House Data Import</a>
             </div>
+          @endcan  
           </div>
         <div class="card-header">
           <i class="fa fa-align-justify"></i> House Data 
@@ -190,6 +192,15 @@
 @section('script')
 
 <script>
+  var can_edit = false;
+  var can_delete = false;
+  @can('House Data Edit')
+    can_edit = true;
+  @endcan
+
+  @can('House Data Edit')
+    can_delete = true;
+  @endcan
   
   $(".show_second").click(function(){
     $("#section_first").hide();
@@ -221,15 +232,23 @@
                 success: function (response) {
                     $('tbody').html("");
                     $.each(response.house_data, function (key, item) {
-                        $('tbody').append(`<tr>
+                      let tr_html = `<tr>
                             <td>` + item.id + `</td>
                             <td>` + item.owner + `</td>
                             <td>` + item.house_no + `</td>
                             <td>` + item.address_line_1 +` `+item.address_line_2+ `</td>
                             <td>` + item.ward + `</td>
-                            <td><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
-                            <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td>
-                          </tr>`);
+                            <td>`;
+                            if(can_edit){
+                              tr_html+= `<button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>`;
+                            }
+                            if(can_delete){
+                              tr_html+= `<button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button>`;
+                            }
+                            
+                            tr_html+= `</td>
+                          </tr>`;  
+                        $('tbody').append(tr_html);
                     });
                 }
             });

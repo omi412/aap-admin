@@ -20,6 +20,7 @@
 </cui-breadcrumb>
 
 <div class="animated fadeIn dashboard">
+  @can('Messaging Send')
   <div class="row" *ngIf="(activeUser=='admin')">
     <div class="col-md-12">
       <div class="volunter msg">
@@ -131,6 +132,7 @@
       </div>
     </div><!--/.col-->
   </div>
+  @endcan
   <div class="volunter_list">
     <div class="row">
     <div class="col-lg-12">
@@ -179,7 +181,7 @@
            <input type="hidden" name="message_id" id="message-id" value="">
           <div class="form-group row">
           <div class="col-md-12">
-            <textarea class="form-control" readonly cols="12" rows="4" id="message_div"></textarea>
+            <textarea class="form-control" readonly cols="12" rows="4" id="txt-message"></textarea>
           </div>
           </div>
           </form>
@@ -240,18 +242,24 @@ $(document).ready(function () {
           url: "{{ url('fetch-messaging') }}",
           dataType: "json",
           success: function (response) {
-              //console.log(response);
+            let messages = response.messages;
+              console.log(response);
               $('#message-tbody').html("");
               var counter = 1;
-              $.each(response.messages, function (key, item) {
-                  $('#message-tbody').append(`<tr>
-                    <td>` + counter + `</td>
-                    <td><a href="#" id="editbtn" style="color: #000;" data-id="`+item.id+`">`+item.message+`</a></td>
-                    <td>` + item.send_date + `</td>
-                    <td>` + item.role.name + `</td>
-                  </tr>`);
-                  counter++;
-              });
+              let table_html = ``;
+  
+              for (var i = 0; i < messages.length; i++) {
+                table_html+=`<tr>
+                  <td>`+counter+`</td>
+                  <td><a href="#" class="show-message" style="color: #000;"  data-message="`+messages[i].message+`">`+messages[i].message+`</a></td>
+                  <td>`+messages[i].send_date+`</td>
+                  <td>`+messages[i].role.name+`</td>
+                  </tr>`;
+
+                counter++;
+              }
+              console.log(messages);
+              $('#message-tbody').html(table_html);
           }
       });
   }
@@ -285,28 +293,30 @@ $(document).ready(function () {
     });
 
 
-    $(document).on('click', '#editbtn', function (e) {
-            e.preventDefault();
-            var message_id = $(this).data('id');
-            $('#form_modal').modal('show');
-            $.ajax({
-                type: "GET",
-                url: "/edit-messaging/" + message_id,
-                dataType: "json",
-                success: function (response) {
-                    if (response.status == 404) {
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#form_modal').modal('hide');
-                    } else {
-                        //console.log(response.user.name);
-                        console.log(response.all_message.id);
-                        $('#message_div').val(response.all_message.message);
-                        $('#message-id').val(message_id);
-                    }
-                }
-            });
-            $('.btn-close').find('input').val('');
+    $(document).on('click', '.show-message', function (e) {
+      e.preventDefault();
+      $('#txt-message').text($(this).attr('data-message'));
+      $('#form_modal').modal('show');
+            // var message_id = $(this).data('id');
+            // $('#form_modal').modal('show');
+            // $.ajax({
+            //     type: "GET",
+            //     url: "/edit-messaging/" + message_id,
+            //     dataType: "json",
+            //     success: function (response) {
+            //         if (response.status == 404) {
+            //             $('#success_message').addClass('alert alert-success');
+            //             $('#success_message').text(response.message);
+            //             $('#form_modal').modal('hide');
+            //         } else {
+            //             //console.log(response.user.name);
+            //             console.log(response.all_message.id);
+            //             $('#message_div').val(response.all_message.message);
+            //             $('#message-id').val(message_id);
+            //         }
+            //     }
+            // });
+            // $('.btn-close').find('input').val('');
 
         });
 

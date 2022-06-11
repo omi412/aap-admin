@@ -11,7 +11,7 @@ use Spatie\Permission\Models\Permission;
 use App\Models\pending_approval;
 use App\Models\RoleDetail;
 use App\Models\TaskStatus;
-
+use Exception;
 
 class HomeController extends Controller
 {
@@ -51,21 +51,29 @@ class HomeController extends Controller
         }
     }
     public function signup(Request $request){
-        $user = new User;
-        $user->name = $request->name;
-        $user->mobileno = $request->mobileno;
-        $user->email = "";
-        $user->password = "";
-        $user->created_at = Carbon::now();
-        $user->updated_at = Carbon::now();
-        $user->save();
-        $role = Role::where('name','User')->pluck('id')->toArray();
-        $user->assignRole($role);
-        //assignRoleToModel($role->id,$user->id);
+        
+        $validated = $request->validate([
+            'name'=> 'required|max:250',
+            'mobileno'=> 'required',
+        ]);
+        try{
+            $user = new User;
+            $user->name = $request->name;
+            $user->mobileno = $request->mobileno;
+            $user->email = "";
+            $user->password = "";
+            $user->created_at = Carbon::now();
+            $user->updated_at = Carbon::now();
+            $user->save();
+            $role = Role::where('name','User')->pluck('id')->toArray();
+            $user->assignRole($role);
 
-        Auth::login($user);
+            Auth::login($user);
 
-        return redirect()->route('dashboard');
+            return redirect()->route('dashboard');
+        }catch(Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+        }    
     }
 }
 

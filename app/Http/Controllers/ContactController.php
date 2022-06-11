@@ -20,14 +20,14 @@ class ContactController extends Controller
             return response()->json(['contacts'=>$contacts]);
         }*/
 
-         $house_datas = HouseData::all('id','address_line_1');
-        //dd($house_data);
-        return view('contacts.contact',compact('house_datas'));
+        $house_data = HouseData::get();
+        ///dd($house_data);
+        return view('contacts.contact',compact('house_data'));
     }
 
     public function fetchContact()
     {
-        $contacts = Contact::get();
+        $contacts = Contact::with('houseData')->get();
         
         return response()->json([
             'contacts'=>$contacts,

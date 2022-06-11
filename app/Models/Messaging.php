@@ -17,7 +17,7 @@ class Messaging extends Model
         'send_to',
         'volunteer'
     ];
-
+    public $appends = ['send_date'];
     public function getSendDateAttribute($value)
     {
         return Carbon::parse($this->created_at)->format('d/m/Y g:i A');

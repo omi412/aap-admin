@@ -25,9 +25,11 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="search_box house_data">
+          @can('Contact Create')
             <div class="input-group">
               <a href="javascript:void(0)" id="show_second" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 6px;"></i> Add Contact</a>
             </div>
+          @endcan  
           </div>
         <div class="card-header">
           <i class="fa fa-align-justify"></i>Contact List
@@ -43,8 +45,9 @@
             <thead>
               <tr>
                 <th style="width: 70px;">S No.</th>
-                <th style="width: 110px;">Address</th>
                 <th>Name</th>
+                <th>Address</th>
+                
                 <th>User Type</th>
                 <th style="text-align: right;">Action</th>
               </tr>
@@ -79,10 +82,10 @@
               </div>
               <div class="col-md-9">
                 <input type="hidden" id="edit-contact-id" value="" />
-                <select class="form-control" name="house_id" id="select-state1" placeholder="Pick a House...">
+                <select class="form-control" name="house_id" id="select-state1" placeholder="Pick a House..." required >
                   <option value>Select House</option>
-                  @foreach($house_datas as $house_data)
-                    <option value="{{$house_data->id}}">{{ $house_data->address_line_1 }}</option>
+                  @foreach($house_data as $key)
+                    <option value="{{$key->id}}">{{ $key->owner }} - {{ $key->address_line_1 }} (ward-{{ $key->ward }})</option>
                   @endforeach
                 </select>
               </div>
@@ -92,7 +95,7 @@
                   <label for="name">First Name</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" id="firstname" name="first_name" aria-describedby="firstname" placeholder="First Name">
+                  <input type="text" class="form-control" id="firstname" name="first_name" aria-describedby="firstname" placeholder="First Name" required >
                 <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
               </div>
               </div>
@@ -109,11 +112,11 @@
                 <label for="password1">Gender</label>
               </div>
               <div class="col-md-9">
-                <select class="form-control" name="gender" id="gender">
-                    <option>Select Gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Other</option>
+                <select class="form-control" name="gender" id="gender" required >
+                    <option value >Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                 </select>
               </div>
               </div>
@@ -122,7 +125,7 @@
                 <label for="password1">Age</label>
               </div>
               <div class="col-md-9">
-                <input type="text" class="form-control" name="age" id="age" placeholder="Enter Age">
+                <input type="text" class="form-control" name="age" id="age" placeholder="Enter Age" required >
               </div>
               </div>
               <div class="form-group row">
@@ -130,7 +133,7 @@
                 <label for="password1">User Type</label>
               </div>
               <div class="col-md-9">
-                <select class="form-control" name="user_type" id="user-type">
+                <select class="form-control" name="user_type" id="user-type" required >
                     <option value="0" selected>Public</option>
                     <option value="1">Volunteer</option>
                 </select>
@@ -176,6 +179,14 @@
 @section('script')
 
 <script>
+  var can_edit = false;
+  var can_delete = false;
+  @can('Contact Edit')
+    can_edit = true;
+  @endcan
+  @can('Contact Delete')
+    can_delete = true;
+  @endcan
 
   $(document).ready(function () {
       $('#select-state').selectize({
@@ -187,7 +198,7 @@
     $("#section_first").hide();
     $("#section_second").show();
     $('#btn-submit').text('Submit');
-    $('#spn-title').text('Add Task');
+    $('#spn-title').text('Add Contact');
     $('#edit-contact-id').val('');
     $('#edit-form-method').val('');
   });
@@ -207,6 +218,7 @@
       fetchContact();
 
         function fetchContact() {
+          let usetType = ['Public','Volunteer'];
           //alert("working");
             $.ajax({
                 type: "GET",
@@ -215,14 +227,25 @@
                 success: function (response) {
                      console.log(response);
                     $('tbody').html("");
+                    let counter = 1;
                     $.each(response.contacts, function (key, item) {
-                        $('tbody').append(`<tr>
-                            <td>` + item.id + `</td>
-                            <td>` + item.house_id + `</td>
+                        let tr_html = `<tr>
+                            <td>` + counter + `</td>
                             <td>` + item.first_name + ` ` + item.last_name + `</td>
-                            <td>` + item.user_type + `</td>
-                            <td style='text-align:right'><button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
-                            <button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button></td></tr>`);
+                            <td>` + item.house_data.house_no+' '+item.house_data.address_line_1+' ward - '+item.house_data.ward+ `</td>
+                            <td>` + usetType[item.user_type] + `</td>
+                            <td style='text-align:right'>`;
+                            if(can_edit){
+                              tr_html+=`<button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>`;
+                            }
+                            if(can_delete){
+                              tr_html+=`<button type="button" value="` + item.id + `" class="btn btn-danger deletebtn btn-sm" title="Delete"><i class="fa fa-trash"></i></button>`;
+                            }
+                            
+                            tr_html+=`</td></tr>`;
+                            
+                        $('tbody').append(tr_html);
+                        counter++;
                     });
                 }
             });
