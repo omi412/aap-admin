@@ -234,7 +234,7 @@
                             <td>` + item.first_name + ` ` + item.last_name + `</td>
                             <td>` + item.house_data.house_no+' '+item.house_data.address_line_1+' ward - '+item.house_data.ward+ `</td>
                             <td>` + usetType[item.user_type] + `</td>
-                            <td style='text-align:right'>`;
+                            <td style='display:flex;text-align:right'>`;
                             if(can_edit){
                               tr_html+=`<button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>`;
                             }

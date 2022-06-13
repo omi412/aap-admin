@@ -483,6 +483,13 @@ margin: 40px auto;
   padding: 6px 0px;
   margin-left: 20px;
 }
+.nav_div .flex.justify-between a, .nav_div .flex.justify-between .leading-5{
+  display: none;
+}
+.nav_div .flex.justify-between a.-ml-px{
+  display: inherit;
+}
+
 
 @media (max-width:640px){
   .logo {

@@ -57,7 +57,7 @@
                 <tr>
                     <td>{{$loop->iteration}}</td>
                     <td>{{ $permission->name }}</td>
-                    <td style="text-align:right;">
+                    <td style="text-align:right;display: flex;">
                     <form action="{{ route('permission.destroy',$permission->id) }}" method="Post">
                     @csrf
                     @method('DELETE')
@@ -71,7 +71,9 @@
 
             </tbody>
           </table>
+          <div class="nav_div">
           {!! $permissions->links() !!}
+        </div>
           </div>
         </div>
       </div>

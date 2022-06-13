@@ -68,7 +68,7 @@
                       @else
                       @endif
                    </td>
-                    <td style="text-align:right;">
+                    <td style="float: right;display: flex;">
                       <a class="btn btn-primary edit_btn" href="{{ route('roles.edit',$role->id) }}" title="Edit"><i class="fa fa-pencil fa-lg"></i></a>
                     <form action="{{ route('roles.destroy',$role->id) }}" onsubmit="return confirm('Are you sure ?')" method="Post">
                     @csrf
@@ -83,7 +83,9 @@
 
             </tbody>
           </table>
-          {!! $roles->links() !!}
+          <div class="nav_div">
+            {!! $roles->links() !!}
+          </div>
           </div>
         </div>
       </div>
