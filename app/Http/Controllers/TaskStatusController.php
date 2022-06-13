@@ -24,13 +24,10 @@ class TaskStatusController extends Controller
             //dd($users);
             return response()->json(['user'=>$users]);
         }
-        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
-        
-            
-        $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
-        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
-        $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name')->get();
-        $galies = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name')->get();
+        $mandals = RoleDetail::where('role_id',3)->select('id','name')->get();
+        $wards = RoleDetail::where('role_id',4)->select('id','name')->get();
+        $booths = RoleDetail::where('role_id',5)->select('id','name')->get();
+        $galies = RoleDetail::where('role_id',6)->select('id','name')->get();
         
         return view('task_status.task_status',compact('mandals','wards','booths','galies'));
     }
