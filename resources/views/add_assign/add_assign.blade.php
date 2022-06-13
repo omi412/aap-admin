@@ -11,7 +11,7 @@
 <cui-breadcrumb>
   <ol class="breadcrumb">
     <li class="breadcrumb-item" ng-reflect-ng-class="[object Object]">
-      <a ng-reflect-router-link="/" href="#/">Home</a>
+      <a ng-reflect-router-link="/" href="{{ url('dashboard') }}">Home</a>
     </li>
     <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
       <span tabindex="0" ng-reflect-router-link="//dashboard/">Update Task Status</span>
@@ -91,4 +91,18 @@
 @endsection
 
 @section('script')
+
+<script>
+$(document).ready(function () {
+    $('#file-upload').on('change',function(){
+       alert('working');
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next('.label_file').html(fileName);
+    });
+  });
+
+</script>
+
 @endsection

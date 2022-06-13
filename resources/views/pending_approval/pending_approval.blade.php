@@ -11,7 +11,7 @@
 <cui-breadcrumb>
   <ol class="breadcrumb">
     <li class="breadcrumb-item" ng-reflect-ng-class="[object Object]">
-      <a ng-reflect-router-link="/" href="#/">Home</a>
+      <a ng-reflect-router-link="/" href="{{ url('dashboard') }}">Home</a>
     </li>
     <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
       <span tabindex="0" ng-reflect-router-link="//dashboard/">Pending Approval</span>
@@ -32,7 +32,7 @@
         <div class="search_box house_data">
           @can('User Create')
             <div class="input-group">
-               <a href="javascript:void(0)" id="btn-user-model" class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 10px;"></i>Add User</a>
+               <a href="javascript:void(0)"  class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 10px;"></i><span id="btn-user-model">Add User</span></a>
             </div>
           @endcan  
         </div>
@@ -99,7 +99,7 @@
               <label for="password1">Mobile No</label>
             </div>
             <div class="col-md-9">
-              <input type="text" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no" minlength="13" maxlength="13" required >
+              <input type="text" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no" minlength="10" maxlength="10" required >
             </div>
           </div>
           <div class="form-group row">
@@ -375,9 +375,10 @@
                 dataType: "json",
                 success: function (response) {
                     $('tbody').html("");
+                    var counter = 1;
                     $.each(response.user, function (key, item) {
                         let tr_html=`<tr>
-                            <td>` + item.id + `</td>
+                            <td>` +counter+ `</td>
                             <td>` + item.name + `</td>
                             <td>` + item.mobileno + `</td>
                             <td style="text-align: right;">`;
@@ -386,6 +387,7 @@
                             }
                             tr_html+=`</tr>`;
                         $('tbody').append(tr_html);
+                         counter++;
                     });
                 }
             });
@@ -722,4 +724,7 @@ $(document).ready(function(){
 });
 </script>
  <!-- /* search function */ -->
+
+<!--  -->
 @endsection
+

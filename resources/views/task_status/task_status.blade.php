@@ -11,7 +11,7 @@
 <cui-breadcrumb>
   <ol class="breadcrumb">
     <li class="breadcrumb-item" ng-reflect-ng-class="[object Object]">
-      <a ng-reflect-router-link="/" href="#/">Home</a>
+      <a ng-reflect-router-link="/" href="{{ url('dashboard') }}">Home</a>
     </li>
     <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
       <span tabindex="0" >Task Status</span>
@@ -204,7 +204,8 @@
                 <div class="col-md-9">
                     <!-- <input type="file" name="image" id="image" style="display: block;" placeholder="form-control"> -->
                     <input type="file" name="image" id="file-upload">
-                    <label class="label_file" for="file-upload">Upload Image</label>
+                    <label class="label_file" for="file-upload">Upload Image</label>   
+                    <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail">
                 </div>
               </div>
               <div class="form-group row" id="div-remark" style="display: none;">
@@ -328,16 +329,17 @@
                 success: function (response) {
                      //console.log(response);
                     $('tbody').html("");
+                    var counter = 1;
                     $.each(response.taskStatus, function (key, item) {
                         let tr_html = `<tr>
-                            <td>` + item.id + `</td>
+                            <td>` +counter+ `</td>
                             <td>` + item.task_title + `</td>
                             <td>` + item.task_description + `</td>
                             <td>` + item.role.name + `</td>
                             <td>` + item.role_detail.name + `</td>
                             <td>`+status[item.status]+`</td>
                             
-                            <td>`;
+                            <td style='display:flex;text-align:right'>`;
                             if(can_edit){
                               tr_html+=`<button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>`;
                             }
@@ -347,6 +349,7 @@
                             
                             tr_html+= `</td>
                           </tr>`;
+                           counter++;
                         $('tbody').append(tr_html);
                     });
                 }
@@ -420,7 +423,7 @@
                         $('#ddl-role').val(taskData.assign_to);
                         $('#task_description').val(taskData.task_description);
                         $('#address').val(taskData.address);
-                        
+                        //console.log(taskData.image);
                         if(taskData.role.name=='Mandal Prabhari'){
                           
                           $('#div-ward,#div-booth,#div-gali').hide();
@@ -443,6 +446,9 @@
                           $('#div-gali').show();
                           $('#ddl-gali').val(taskData.volunteer);
                         }
+                        $("#ddl-status").val(taskData.status);
+                        $("#remark").val(taskData.remarks);
+                        $("#preview").attr('src','assets/task-documents/'+taskData.image);
                         $('#edit-task-id').val(task_id);
                     }
                 }
@@ -507,6 +513,22 @@
 
 </script>
  <!-- /* search function */ -->
+
+<script>
+$('input[type="file"]').change(function(e) {
+  var fileName = e.target.files[0].name;
+  $("#file").val(fileName);
+ 
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    // get loaded data and render thumbnail.
+    document.getElementById("preview").src = e.target.result;
+  };
+  // read the image file as a data URL.
+  reader.readAsDataURL(this.files[0]);
+});
+</script>
+
 <script>
 $(document).ready(function(){
   $("#myInput").on("keyup", function() {

@@ -11,7 +11,7 @@
 <cui-breadcrumb>
   <ol class="breadcrumb">
     <li class="breadcrumb-item" ng-reflect-ng-class="[object Object]">
-      <a ng-reflect-router-link="/" href="#/">Home</a>
+      <a ng-reflect-router-link="/" href="{{ url('dashboard') }}">Home</a>
     </li>
     <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
       <span tabindex="0" ng-reflect-router-link="//dashboard/">House Data</span>
@@ -49,7 +49,7 @@
                 <th>Owner </th>
                 <th>House No.</th>
                 <th>Address</th>
-                <th>Ward</th>
+                <!-- <th>Ward</th> -->
                 <th>Action</th>
               </tr>
             </thead>
@@ -116,7 +116,13 @@
                 <label for="password1">Ward</label>
               </div>
               <div class="col-md-9">
-                <input type="text" class="form-control" id="ward" name="ward" placeholder="Ward" required >
+                <!-- <input type="text" class="form-control" id="ward" name="ward" placeholder="Ward" required > -->
+                <select id="ward" name="ward" placeholder="Ward" class="form-control" required>
+                  <option value="">Select Ward</option>
+                  @foreach($wards as $ward)
+                  <option value="{{ $ward->id }}">{{ $ward->name }}</option>
+                  @endforeach
+                </select>
               </div>
               </div>
               <div class="form-group row">
@@ -231,14 +237,15 @@
                 dataType: "json",
                 success: function (response) {
                     $('tbody').html("");
+                    var counter = 1;
                     $.each(response.house_data, function (key, item) {
                       let tr_html = `<tr>
-                            <td>` + item.id + `</td>
+                            <td>`  +counter+ `</td>
                             <td>` + item.owner + `</td>
                             <td>` + item.house_no + `</td>
                             <td>` + item.address_line_1 +` `+item.address_line_2+ `</td>
-                            <td>` + item.ward + `</td>
-                            <td>`;
+                            
+                            <td style='display:flex;'>`;
                             if(can_edit){
                               tr_html+= `<button type="button" value="` + item.id + `" class="btn btn-info editbtn btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>`;
                             }
@@ -248,6 +255,7 @@
                             
                             tr_html+= `</td>
                           </tr>`;  
+                           counter++;
                         $('tbody').append(tr_html);
                     });
                 }
@@ -312,7 +320,7 @@
                     $('#success_message').text(response.message);
                     $('#editModal').modal('hide');
                 } else {
-                     //console.log(response.taskStatus.task_title);
+                     console.log(response.house_data.ward);
                     $('#owner').val(response.house_data.owner);
                     $('#house_no').val(response.house_data.house_no);
                     $('#address_line_1').val(response.house_data.address_line_1);

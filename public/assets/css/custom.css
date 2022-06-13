@@ -476,7 +476,13 @@ margin: 40px auto;
  font-size: 16px;
  color: #20a8d8;
 }
-
+.volunter_list .btn-info {
+  padding: 6px 0px;
+}
+.volunter_list .btn-danger {
+  padding: 6px 0px;
+  margin-left: 20px;
+}
 
 @media (max-width:640px){
   .logo {

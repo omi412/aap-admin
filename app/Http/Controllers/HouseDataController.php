@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\HouseData;
 use Carbon\Carbon;
+use App\Models\RoleDetail;
+use Auth;
+use Spatie\Permission\Models\Role;
+
 
 class HouseDataController extends Controller
 {
@@ -21,10 +25,21 @@ class HouseDataController extends Controller
             $house_data = HouseData::get();
             return response()->json(['house_data'=>$house_data]);
         }
-
-        return view('house_data.house_data');
+        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
+        return view('house_data.house_data',compact('wards'));
         
     }
+
+     public function fetchHouseData()
+    {
+        $house_data = HouseData::with(['role','roleDetail'])->get();
+        
+        return response()->json([
+            'house_data'=>$house_data,
+        ]);
+    }
+
 
     public function store(Request $request)
     {   
@@ -52,7 +67,6 @@ class HouseDataController extends Controller
                     'ward'=>$request->ward,
                     'remarks'=>$request->remarks
                 ]);
-            
                 return response()->json(['status'=>200,'message'=>'House Data Added Successfully.']);
             }catch(Exception $e){
                 return response()->json(['status'=>500,'message'=>$e->getMessage()]);

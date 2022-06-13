@@ -17,4 +17,16 @@ class HouseData extends Model
         'ward',
         'remarks'
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class,'assign_to')->select('id','name');
+    }
+    /**
+     * Get the comments for the blog post.
+     */
+    public function roleDetail()
+    {
+        return $this->belongsTo(RoleDetail::class,'volunteer')->select('id','name','role_id','parent_id');
+    }
 }

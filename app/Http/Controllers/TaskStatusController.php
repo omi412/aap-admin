@@ -49,7 +49,7 @@ class TaskStatusController extends Controller
         $validator = Validator::make($request->all(), [
              'task_title'=> 'required|max:100',
              'assign_to'=> 'required|max:100',
-             'task_description'=> 'required|max:200',
+             'task_description'=> 'required|max:550',
              'address'=>'required|max:200'
         ]);
 
@@ -127,7 +127,7 @@ class TaskStatusController extends Controller
         $validator = Validator::make($request->all(), [
              'task_title'=> 'required|max:100',
              'assign_to'=> 'required|max:100',
-             'task_description'=> 'required|max:200',
+             'task_description'=> 'required|max:550',
              'address'=>'required|max:200'
         ]);
 
@@ -163,14 +163,30 @@ class TaskStatusController extends Controller
                     $file_name = "";
                     if($request->hasFile('image')){
           
-                        $file_name = $this->fileUpload($request,'image','public/task-documents');
+                        /*$file_name = $this->fileUpload($request,'image','public/task-documents');*/
+                         $file = $request->file('image');
+                         $filename = $file->getClientOriginalName(); 
+                         $file->move('public/assets/task-documents', $filename);
+                         $taskStatus->image = $filename;
                     }
+
+                   /* if($request->file('image')){
+                        $file= $request->file('image');
+                        $filename= $file->getClientOriginalName();
+                        $file-> move(public_path('assets/task-documents'), $filename);
+                        $data['image']= $filename;
+                    }*/
+
+                   
+
+                    
 
                     $taskStatus->task_title = $request->input('task_title');
                     $taskStatus->assign_to = $request->input('assign_to');
                     $taskStatus->task_description = $request->input('task_description');
                     $taskStatus->volunteer = $role_details_id;
                     $taskStatus->address = $request->input('address');
+                    $taskStatus->remarks = $request->input('remark');
                     if($file_name!=''){
                         $taskStatus->image = $file_name;
                     }
