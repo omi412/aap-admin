@@ -51,6 +51,7 @@
               <tr>
                 <th style="width: 70px;">S No.</th>
                 <th>Task Title</th>
+                <th>Task Img</th>
                 <th>Task Description</th>
                 <th>Assign To</th>
                 <th>Volunteer</th>
@@ -333,8 +334,13 @@
                     $.each(response.taskStatus, function (key, item) {
                         let tr_html = `<tr>
                             <td>` +counter+ `</td>
-                            <td>` + item.task_title + `</td>
-                            <td>` + item.task_description + `</td>
+                            <td>` + item.task_title + `</td>`;
+                            if(item.image!='default.jpg'){
+                              tr_html +=`<td><a href="`+item.task_img+`" target="_blank"><img src="`+item.task_img+`" width="50" height="50"></a></td>`;
+                            }else{
+                              tr_html +=`<td>N/A</td>`;
+                            }
+                            tr_html +=`<td>` + item.task_description + `</td>
                             <td>` + item.role.name + `</td>
                             <td>` + item.role_detail.name + `</td>
                             <td>`+status[item.status]+`</td>
@@ -448,7 +454,7 @@
                         }
                         $("#ddl-status").val(taskData.status);
                         $("#remark").val(taskData.remarks);
-                        $("#preview").attr('src','assets/task-documents/'+taskData.image);
+                        $("#preview").attr('src',taskData.task_img);
                         $('#edit-task-id').val(task_id);
                     }
                 }

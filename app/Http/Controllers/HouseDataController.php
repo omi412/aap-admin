@@ -22,7 +22,7 @@ class HouseDataController extends Controller
         //     return view('house_data.house_data');
         // }
         if($request->ajax()) {
-            $house_data = HouseData::get();
+            $house_data = HouseData::with('roleDetail')->get();
             return response()->json(['house_data'=>$house_data]);
         }
         $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
@@ -48,7 +48,7 @@ class HouseDataController extends Controller
              'house_no'=> 'required|max:100',
              'address_line_1'=> 'required',
              'address_line_2'=> 'nullable|max:250',
-             'ward'=> 'required',
+             'role_detail_id'=> 'required',
              'remarks'=> 'nullable',
         ]);
 
@@ -64,7 +64,7 @@ class HouseDataController extends Controller
                     'house_no'=>$request->house_no,
                     'address_line_1'=>$request->address_line_1,
                     'address_line_2'=>$request->address_line_2,
-                    'ward'=>$request->ward,
+                    'role_detail_id'=>$request->role_detail_id,
                     'remarks'=>$request->remarks
                 ]);
                 return response()->json(['status'=>200,'message'=>'House Data Added Successfully.']);
@@ -101,7 +101,7 @@ class HouseDataController extends Controller
              'house_no'=> 'required|max:100',
              'address_line_1'=> 'required',
              'address_line_2'=> 'nullable|max:250',
-             'ward'=> 'required',
+             'role_detail_id'=> 'required',
              'remarks'=> 'nullable',
         ]);
 
@@ -123,7 +123,7 @@ class HouseDataController extends Controller
                         'house_no'=>$request->house_no,
                         'address_line_1'=>$request->address_line_1,
                         'address_line_2'=>$request->address_line_2,
-                        'ward'=>$request->ward,
+                        'role_detail_id'=>$request->role_detail_id,
                         'remarks'=>$request->remarks
                     ]);
                     return response()->json([

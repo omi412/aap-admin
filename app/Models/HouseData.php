@@ -27,6 +27,6 @@ class HouseData extends Model
      */
     public function roleDetail()
     {
-        return $this->belongsTo(RoleDetail::class,'volunteer')->select('id','name','role_id','parent_id');
+        return $this->belongsTo(RoleDetail::class,'role_detail_id');
     }
 }

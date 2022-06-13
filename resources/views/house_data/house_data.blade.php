@@ -49,7 +49,7 @@
                 <th>Owner </th>
                 <th>House No.</th>
                 <th>Address</th>
-                <!-- <th>Ward</th> -->
+                <th>Ward</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -117,7 +117,7 @@
               </div>
               <div class="col-md-9">
                 <!-- <input type="text" class="form-control" id="ward" name="ward" placeholder="Ward" required > -->
-                <select id="ward" name="ward" placeholder="Ward" class="form-control" required>
+                <select id="ward" name="role_detail_id" placeholder="Ward" class="form-control" required>
                   <option value="">Select Ward</option>
                   @foreach($wards as $ward)
                   <option value="{{ $ward->id }}">{{ $ward->name }}</option>
@@ -244,6 +244,7 @@
                             <td>` + item.owner + `</td>
                             <td>` + item.house_no + `</td>
                             <td>` + item.address_line_1 +` `+item.address_line_2+ `</td>
+                            <td>` + item.role_detail.name + `</td>
                             
                             <td style='display:flex;'>`;
                             if(can_edit){
@@ -325,7 +326,7 @@
                     $('#house_no').val(response.house_data.house_no);
                     $('#address_line_1').val(response.house_data.address_line_1);
                     $('#address_line_2').val(response.house_data.address_line_2);
-                    $('#ward').val(response.house_data.ward);
+                    $('#role_detail_id').val(response.house_data.ward);
                     $('#remarks').val(response.house_data.remarks);
                     $('#house-data-id').val(response.house_data.id);
                     $('#btn-submit').text('Update');

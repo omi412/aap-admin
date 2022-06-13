@@ -20,6 +20,13 @@ class TaskStatus extends Model
         'remarks'
     ];
 
+    public $appends = ['task_img'];
+
+    public function getTaskImgAttribute()
+    {
+        return $this->image ? asset('storage/task-documents/' . $this->image) : null;
+    }
+
     /**
      * Get the comments for the blog post.
      */

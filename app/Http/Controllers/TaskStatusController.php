@@ -160,23 +160,9 @@ class TaskStatusController extends Controller
                     $file_name = "";
                     if($request->hasFile('image')){
           
-                        /*$file_name = $this->fileUpload($request,'image','public/task-documents');*/
-                         $file = $request->file('image');
-                         $filename = $file->getClientOriginalName(); 
-                         $file->move('public/assets/task-documents', $filename);
-                         $taskStatus->image = $filename;
+                        $file_name = $this->fileUpload($request,'image','public/task-documents');
                     }
 
-                   /* if($request->file('image')){
-                        $file= $request->file('image');
-                        $filename= $file->getClientOriginalName();
-                        $file-> move(public_path('assets/task-documents'), $filename);
-                        $data['image']= $filename;
-                    }*/
-
-                   
-
-                    
 
                     $taskStatus->task_title = $request->input('task_title');
                     $taskStatus->assign_to = $request->input('assign_to');

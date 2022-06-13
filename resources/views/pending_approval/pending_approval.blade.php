@@ -14,7 +14,7 @@
       <a ng-reflect-router-link="/" href="{{ url('dashboard') }}">Home</a>
     </li>
     <li class="breadcrumb-item active" ng-reflect-ng-class="[object Object]">
-      <span tabindex="0" ng-reflect-router-link="//dashboard/">Pending Approval</span>
+      <span tabindex="0" ng-reflect-router-link="//dashboard/">{{ request()->segment(1) == 'users' ? 'Users' : 'Pending Approval'}}</span>
     </li>
   </ol>
 </cui-breadcrumb>
@@ -32,13 +32,15 @@
         <div class="search_box house_data">
           @can('User Create')
             <div class="input-group">
+              @if(request()->segment(1) == 'users')
                <a href="javascript:void(0)"  class="btn btn-outline-primary"><i class="fa fa-plus" style="margin-right: 10px;"></i><span id="btn-user-model">Add User</span></a>
+              @endif 
             </div>
           @endcan  
         </div>
       <div class="card pen_appr">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Pending Approvals
+          <i class="fa fa-align-justify"></i>{{ request()->segment(1) == 'users' ? 'Users' : 'Pending Approval'}}
         </div>
         <div class="card-body">
           <div class="search_box">
@@ -75,7 +77,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{ request()->segment(1) == 'users' ? 'Add User' : 'Pending Approval'}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
