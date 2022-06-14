@@ -133,11 +133,13 @@ Auth::routes();
     Route::get('mandals', [MandalController::class, 'index']);
     Route::post('add-update-mandal', [MandalController::class, 'store']);
     Route::post('edit-mandal', [MandalController::class, 'edit']);
+    Route::post('update-mandal/{id}', [MandalController::class,'update']);
     Route::post('delete-mandal', [MandalController::class, 'destroy']);
 
     Route::get('wards', [WardController::class, 'index']);
     Route::post('add-update-ward', [WardController::class, 'store']);
     Route::post('edit-ward', [WardController::class, 'edit']);
+    Route::post('update-ward/{id}', [WardController::class,'update']);
     Route::post('delete-ward', [WardController::class, 'destroy']);
 
     Route::get('booths', [BoothController::class, 'index']);

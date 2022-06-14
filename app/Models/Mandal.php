@@ -11,4 +11,9 @@ class Mandal extends Model
     protected $fillable = [
         'title'
     ];
+
+     public function role()
+    {
+        return $this->hasMany('role');
+    }
 }

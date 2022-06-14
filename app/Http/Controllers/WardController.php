@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Ward;
+use App\Models\RoleDetail;
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 
 class WardController extends Controller
 {
     public function index()
     {
-        $data['wards'] = Ward::orderBy('id','desc')->paginate(5);
+        $mandals = RoleDetail::where('role_id',3)->select('id','name')->get();
+        $wards  = RoleDetail::where('role_id',4)->select('id','name')->get();
    
-        return view('master.ward.ward',$data);
+        return view('master.ward.ward',compact('mandals', 'wards'));
     }
     
    
@@ -24,14 +27,14 @@ class WardController extends Controller
      */
     public function store(Request $request)
     {
-        $ward   =   Ward::updateOrCreate(
-
-        	        [
-                        'id' => $request->id
-                    ],
-                    [
-                        'title' => $request->title, 
-                    ]);
+        $mandals = RoleDetail::where('role_id',3)->select('id','name')->get();
+        $role = Role::where('name','Ward Prabhari')->first();
+        //dd($role);
+        $roleDetail = new RoleDetail;
+        $roleDetail->role_id = $role->id;
+        $roleDetail->parent_id = $request->parent_id;
+        $roleDetail->name = $request->name;
+        $roleDetail->save();
     
         return response()->json(['success' => true]);
     }
@@ -46,9 +49,56 @@ class WardController extends Controller
     public function edit(Request $request)
     {   
         $where = array('id' => $request->id);
-        $ward  = Ward::where($where)->first();
+        $ward  = RoleDetail::where($where)->first();
  
         return response()->json($ward);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+             'name'=> 'required|max:100',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages()
+            ]);
+        }
+        else
+        {
+            $roleDetail = RoleDetail::find($id);
+            if($roleDetail)
+            {
+                try{
+                    $roleDetail->update([
+                        'name'=>$request->name,
+                        'parent_id'=>$request->parent_id
+
+                    ]);
+                    return response()->json([
+                        'status'=>200,
+                        'message'=>'Ward Updated Successfully.'
+                    ]);
+                }catch(Exception $e){
+                    return response()->json([
+                        'status'=>500,
+                        'message'=>$e->getMessage()
+                    ]);
+                }
+                
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Ward Not Found'
+                ]);
+            }
+
+        }
     }
  
    
@@ -60,7 +110,7 @@ class WardController extends Controller
      */
     public function destroy(Request $request)
     {
-        $ward = Ward::where('id',$request->id)->delete();
+        $ward = RoleDetail::where('id',$request->id)->delete();
    
         return response()->json(['success' => true]);
     }
