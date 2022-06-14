@@ -11,42 +11,25 @@ use Carbon\Carbon;
 use Auth;
 use DB;
 use Spatie\Permission\Models\Role;
-class PendingApprovalController extends Controller
+class UserController extends Controller
 {
     public function index(Request $request)
     {
-        //$user = getRoles();
-        //dd($user);
-        // if($request->ajax()){
-        //     $house_data = HouseData::all();
-        //     return response()->json(['house_data'=>$house_data]);
-        // }else{
-        //     return view('house_data.house_data');
-        // }
+        //dd(Auth::user()->roles);
         if($request->ajax()) {
-            $users = User::where('status',1)->get();
-            //dd($users);
-            return response()->json(['user'=>$users]);
-        }
+            $users = User::where('status',1)->with('roles')->get();
+            return response()->json(['users'=>$users]);
+        }else{
 
-        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
-        
+            $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
             
-        $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
-        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
-        $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name')->get();
-        $galis = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name')->get();
-        return view('pending_approval.pending_approval',compact('mandals','wards','booths','galis'));
-        
-    }
-
-    public function fetchPendingApproval()
-    {
-        $users = User::all();
-        //dd($users);
-        return response()->json([
-            'users'=>$users,
-        ]);
+                
+            $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
+            $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
+            $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name')->get();
+            $galis = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name')->get();
+            return view('users.index',compact('mandals','wards','booths','galis'));
+        }    
     }
 
     public function store(Request $request)
@@ -218,5 +201,23 @@ class PendingApprovalController extends Controller
         return response()->json(['status'=>200,'galies'=>$galies]);
     }
 
+    public function pendingApproval(Request $request)
+    {
+        //dd(Auth::user()->roles);
+        if($request->ajax()) {
+            $users = User::where('status',0)->with('roles')->get();
+            return response()->json(['users'=>$users]);
+        }else{
+
+            $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+            
+                
+            $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
+            $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
+            $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name')->get();
+            $galis = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name')->get();
+            return view('users.pending-approval',compact('mandals','wards','booths','galis'));
+        }    
+    }
     
 }

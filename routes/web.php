@@ -8,7 +8,7 @@ use App\Http\Controllers\addAssignController;
 use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\HouseDataController;
-use App\Http\Controllers\PendingApprovalController;
+use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
@@ -95,26 +95,26 @@ Auth::routes();
     Route::delete('delete-house-data/{id}', [HouseDataController::class, 'destroy']);
 
 
-    Route::resource('users', PendingApprovalController::class);
-    Route::post('users', [PendingApprovalController::class, 'store']);
-    Route::get('edit-user/{id}', [PendingApprovalController::class, 'edit']);
-    Route::post('update-user/{id}', [PendingApprovalController::class,'update']);
-    Route::delete('delete-user/{id}', [PendingApprovalController::class, 'destroy']);
+    Route::resource('users', UserController::class);
+    Route::post('users', [UserController::class, 'store']);
+    Route::get('edit-user/{id}', [UserController::class, 'edit']);
+    Route::post('update-user/{id}', [UserController::class,'update']);
+    Route::delete('delete-user/{id}', [UserController::class, 'destroy']);
 
 
-    Route::resource('pending-approval', PendingApprovalController::class);
-    Route::post('pending-approval', [PendingApprovalController::class, 'store']);
-    Route::get('edit-pending-approval/{id}', [PendingApprovalController::class, 'edit']);
-    Route::post('update-pending-approval/{id}', [PendingApprovalController::class,'update']);
-    Route::delete('delete-pending-approval/{id}', [PendingApprovalController::class, 'destroy']);
+    Route::resource('users', UserController::class);
+    Route::get('edit-pending-approval/{id}', [UserController::class, 'edit']);
+    Route::post('update-pending-approval/{id}', [UserController::class,'update']);
+    Route::delete('delete-pending-approval/{id}', [UserController::class, 'destroy']);
+    Route::any('pending-approval', [UserController::class, 'pendingApproval']);
 
     Route::resource('roles', RoleController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('role-details', RoleDetailController::class);
 
-    Route::get('get-wards/{mandal_id}', [PendingApprovalController::class, 'getWards']);
-    Route::get('get-booths/{ward_id}', [PendingApprovalController::class, 'getBooths']);
-    Route::get('get-galies/{booth_id}', [PendingApprovalController::class, 'getGali']);
+    Route::get('get-wards/{mandal_id}', [UserController::class, 'getWards']);
+    Route::get('get-booths/{ward_id}', [UserController::class, 'getBooths']);
+    Route::get('get-galies/{booth_id}', [UserController::class, 'getGali']);
 
     //Route::get('get-volunteers/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
     Route::get('get-wards/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
