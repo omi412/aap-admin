@@ -15,7 +15,11 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleDetailController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
- 
+use App\Http\Controllers\MandalController;
+use App\Http\Controllers\WardController;
+use App\Http\Controllers\BoothController;
+use App\Http\Controllers\GaliController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +126,31 @@ Auth::routes();
     Route::get('edit-contact/{id}', [ContactController::class, 'edit']);
     Route::put('update-contact/{id}', [ContactController::class, 'update']);
     Route::delete('delete-contact/{id}', [ContactController::class, 'destroy']);
+
+
+    /* Master crud */
+
+    Route::get('mandals', [MandalController::class, 'index']);
+    Route::post('add-update-mandal', [MandalController::class, 'store']);
+    Route::post('edit-mandal', [MandalController::class, 'edit']);
+    Route::post('delete-mandal', [MandalController::class, 'destroy']);
+
+    Route::get('wards', [WardController::class, 'index']);
+    Route::post('add-update-ward', [WardController::class, 'store']);
+    Route::post('edit-ward', [WardController::class, 'edit']);
+    Route::post('delete-ward', [WardController::class, 'destroy']);
+
+    Route::get('booths', [BoothController::class, 'index']);
+    Route::post('add-update-booth', [BoothController::class, 'store']);
+    Route::post('edit-booth', [BoothController::class, 'edit']);
+    Route::post('delete-booth', [BoothController::class, 'destroy']);
+
+    Route::get('galies', [GaliController::class, 'index']);
+    Route::post('add-update-gali', [GaliController::class, 'store']);
+    Route::post('edit-gali', [GaliController::class, 'edit']);
+    Route::post('delete-gali', [GaliController::class, 'destroy']);
+
+    /* Master crud */
 
 
     /*Route::get('/volunteer-types', function () {
