@@ -139,7 +139,7 @@ class UserController extends Controller
              'mobileno'=> 'required|max:100',
              'approval'=> 'required',
              'designation'=> 'nullable|max:250',
-             'manager'=> 'required',
+             'manager'=> 'nullable|max:150',
             ]);
 
         if($validator->fails())
@@ -155,17 +155,22 @@ class UserController extends Controller
             if($user)
             {
                 try{
-                    $user->update([
-                        'name'=>$request->name,
-                        'mobileno'=>$request->mobileno,
-                        'approval'=>$request->approval,
-                        'designation'=>$request->role,
-                        'manager'=>$request->manager
-                    ]);
-                    return response()->json([
-                        'status'=>200,
-                        'message'=>'Pending Approval Updated Successfully.'
-                    ]);
+                    if($request->approval==2){ // 2=rejected 1 = approved
+                        $user->status = 2;
+                        $user->updated_at = Carbon::now();
+                        $user->save();    
+                        return response()->json(['status'=>200,'message'=>'Approval rejected Successfully.']);
+                    }else{
+                        $user->update([
+                            'name'=>$request->name,
+                            'mobileno'=>$request->mobileno,
+                            'approval'=>$request->approval,
+                            'designation'=>$request->role,
+                            'manager'=>$request->manager
+                        ]);
+                        return response()->json(['status'=>200,'message'=>'Pending Approval Updated Successfully.']);
+                        }
+                    
                 }catch(Exception $e){
                     return response()->json([
                         'status'=>500,

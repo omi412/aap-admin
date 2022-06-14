@@ -74,124 +74,6 @@
 </div>
 </div>
 
-<div class="modal fade pending_approval" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Pending Approval</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-       <ul id="save_msgList"></ul>
-      <form action="POST" id="pending-approval-form">
-        @csrf
-        <input type="hidden" name="pending_approval_id" id="pending-approval-id" value="">
-        <div class="modal-body">
-          <div class="form-group row">
-            <div class="col-md-3">
-              <label for="name">Name</label>
-            </div>
-            <div class="col-md-9">
-              <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter name" required >
-            <!-- <small id="emailHelp" class="form-text text-muted">Your information is safe with us.</small> -->
-          </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-md-3">
-              <label for="password1">Mobile No</label>
-            </div>
-            <div class="col-md-9">
-              <input type="text" class="form-control" name="mobileno" id="mobileno" placeholder="Enter mobile no" minlength="10" maxlength="10" required >
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-md-3">
-              <label for="password1">Designation</label>
-            </div>
-            <div class="col-md-9">
-              <select name="role" id="ddl-role" class="form-control role" required >
-                <!-- <option value="">Select Designation</option> -->
-                @foreach(getRoles() as $role)
-                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                @endforeach
-              </select>
-            </div>
-          </div>
-          <div class="form-group row" id="div-mandal">
-            <div class="col-md-3">
-              <label for="password1">Mandal</label>
-            </div>
-            <div class="col-md-9">
-              <select name="mandal_id" id="ddl-mandal" class="form-control role_mandal" required >
-                <option value="">Select Mandal</option>
-                @foreach($mandals as $mandal)
-                <option value="{{ $mandal->id }}">{{ $mandal->name }}</option>
-                @endforeach
-              </select>
-            </div>
-          </div>
-          <div class="form-group row" id="div-ward" style="display: none;">
-            <div class="col-md-3">
-              <label for="password1">Ward</label>
-            </div>
-            <div class="col-md-9">
-              <select name="ward_id" id="ddl-ward" class="form-control ward_id">
-                <option value="">Select Ward</option>
-               
-              </select>
-            </div>
-          </div>
-          <div class="form-group row" id="div-booth" style="display: none;">
-            <div class="col-md-3">
-              <label for="password1">Booth</label>
-            </div>
-            <div class="col-md-9">
-              <select name="booth_id" id="ddl-booth" class="form-control booth_id">
-                <option value="">Select Booth</option>
-                <
-              </select>
-            </div>
-          </div>
-          <div class="form-group row" id="div-gali" style="display: none;">
-            <div class="col-md-3">
-              <label for="password1">Gali</label>
-            </div>
-            <div class="col-md-9">
-              <select name="gali_id" id="ddl-gali" class="form-control gali_id">
-                <option value="">Select Gali</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-md-3">
-            <label for="password1">Approval</label>
-          </div>
-          <div class="col-md-9">
-           <!--  <input type="text" class="form-control" id="approval"> -->
-            <select name="approval" id="edit_approval" class="form-control">
-                  <option value="1" selected>Approved</option>
-                  <option value="2">Rejected</option>
-                </select>
-          </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-md-3">
-            <label for="password1">Manager</label>
-          </div>
-          <div class="col-md-9">
-            <input type="text" class="form-control" name="manager" id="edit_manager" placeholder="Manager">
-          </div>
-          </div>
-        </div>
-        <div class="modal-footer border-top-0 d-flex justify-content-center">
-          <button type="submit" class="btn btn-success">Submit</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 
 {{-- Edit Modal --}}
 
@@ -204,9 +86,10 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form method="POST" id="pending-approval-form">
       <div class="modal-body">
-       <form action="POST" id="pending-approval-form">
         @csrf
+        @method('PUT')
         <input type="hidden" name="user_id" id="user-id" value="">
         <div class="modal-body">
           <div class="form-group row">
@@ -288,8 +171,9 @@
           </div>
           <div class="col-md-9">
             <select name="approval" id="approval" class="form-control">
-                  <option value="0" selected>Approved</option>
-                  <option value="1">Rejected</option>
+                  <option value="0" selected>Pending</option>
+                  <option value="1">Approved</option>
+                  <option value="2">Rejected</option>
                 </select>
           </div>
           </div>
@@ -302,11 +186,12 @@
           </div>
           </div>
         </div>
-      </form>
+      
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary update_approval">Update</button>
+        <button type="submit" class="btn btn-primary">Update</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
@@ -379,7 +264,7 @@
                 success: function (response) {
                     $('tbody').html("");
                     var counter = 1;
-                    $.each(response.user, function (key, item) {
+                    $.each(response.users, function (key, item) {
                         let tr_html=`<tr>
                             <td>` +counter+ `</td>
                             <td>` + item.name + `</td>
@@ -548,16 +433,10 @@
 
        $('#pending-approval-form').on('submit', function(e) {
             e.preventDefault();
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
+            let user_id = $('#user-id').val();
             $.ajax({
                 type: "POST",
-                url: "{{ url('pending-approval') }}",
+                url: "{{ url('users') }}/"+user_id,
                 data: $('#pending-approval-form').serialize(),
                 dataType: "json",
                 success: function (response) {
@@ -593,7 +472,7 @@
             $('#editModal').modal('show');
             $.ajax({
                 type: "GET",
-                url: "/edit-pending-approval/" + user_id,
+                url: "{{ url('users') }}/" + user_id+"/edit",
                 success: function (response) {
                     if (response.status == 404) {
                         $('#success_message').addClass('alert alert-success');
@@ -617,56 +496,56 @@
 
         });
 
-        $(document).on('click', '.update_approval', function (e) {
-            e.preventDefault();
+        // $(document).on('click', '.update_approval', function (e) {
+        //     e.preventDefault();
 
-            $(this).text('Updating..');
-            var id = $('#pending-approval-id').val();
-             //alert(id);
+        //     $(this).text('Updating..');
+        //     var id = $('#pending-approval-id').val();
+        //      //alert(id);
 
-            var data = {
-                'name': $('#name').val(),
-                'mobileno': $('#mobileno').val(),
-                'approval': $('#approval').val(),
-                'designation': $('#ddl-role').val(),
-                'manager': $('#manager').val(),
-            }
+        //     var data = {
+        //         'name': $('#name').val(),
+        //         'mobileno': $('#mobileno').val(),
+        //         'approval': $('#approval').val(),
+        //         'designation': $('#ddl-role').val(),
+        //         'manager': $('#manager').val(),
+        //     }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
 
-            $.ajax({
-                type: "POST",
-                url: "/update-pending-approval/" + id,
-                data: data,
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                    if (response.status == 400) {
-                        $('#update_msgList').html("");
-                        $('#update_msgList').addClass('alert alert-danger');
-                        $.each(response.errors, function (key, err_value) {
-                            $('#update_msgList').append('<li>' + err_value +
-                                '</li>');
-                        });
-                        $('.update_approval').text('Update');
-                    } else {
-                        $('#update_msgList').html("");
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/update-pending-approval/" + id,
+        //         data: data,
+        //         dataType: "json",
+        //         success: function (response) {
+        //             console.log(response);
+        //             if (response.status == 400) {
+        //                 $('#update_msgList').html("");
+        //                 $('#update_msgList').addClass('alert alert-danger');
+        //                 $.each(response.errors, function (key, err_value) {
+        //                     $('#update_msgList').append('<li>' + err_value +
+        //                         '</li>');
+        //                 });
+        //                 $('.update_approval').text('Update');
+        //             } else {
+        //                 $('#update_msgList').html("");
 
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#editModal').find('input').val('');
-                        $('.update_approval').text('Update');
-                        $('#editModal').modal('hide');
-                        fetchPendingApproval();
-                    }
-                }
-            });
+        //                 $('#success_message').addClass('alert alert-success');
+        //                 $('#success_message').text(response.message);
+        //                 $('#editModal').find('input').val('');
+        //                 $('.update_approval').text('Update');
+        //                 $('#editModal').modal('hide');
+        //                 fetchPendingApproval();
+        //             }
+        //         }
+        //     });
 
-        });
+        // });
 
        /* edit ajax*/
 
