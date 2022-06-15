@@ -22,7 +22,7 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="welcome_div">
-        <h2>Welcome to Admin Dashboard </h2>
+        <h2>Welcome to Dashboard </h2>
       </div>
     </div>
     <div class="col-md-6">
@@ -110,7 +110,7 @@
                 
                   <div class="h4 mb-0">
 
-                    {{ $taskStatus->count() }}</div>
+                    {{ $taskComplete->count() }}</div>
                  
                   <small class="text-muted text-uppercase font-weight-bold">Complete</small>
                   <div class="progress progress-xs mt-3 mb-0">
@@ -123,7 +123,7 @@
                   <!-- <div class="h1 text-muted text-right mb-4">
                     <i class="icon-basket-loaded"></i>
                   </div> -->
-                  <div class="h4 mb-0">{{ $taskStatus->count() }}</div>
+                  <div class="h4 mb-0">{{ $taskPending->count() }}</div>
                   <small class="text-muted text-uppercase font-weight-bold">Pending</small>
                   <div class="progress progress-xs mt-3 mb-0">
                     <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
