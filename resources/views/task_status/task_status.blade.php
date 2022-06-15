@@ -206,7 +206,7 @@
                     <!-- <input type="file" name="image" id="image" style="display: block;" placeholder="form-control"> -->
                     <input type="file" name="image" id="file-upload">
                     <label class="label_file" for="file-upload">Upload Image</label>   
-                    <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail">
+                    <img src="" id="preview" class="img-thumbnail">
                 </div>
               </div>
               <div class="form-group row" id="div-remark" style="display: none;">

@@ -24959,13 +24959,13 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 /*
 * Font Face
 */
-@font-face {
+/*@font-face {
   font-family: 'simple-line-icons';
   src: url('Simple-Line-Icons.eot?v=2.4.0');
   src: url('Simple-Line-Icons.eot?v=2.4.0#iefix') format('embedded-opentype'), url('Simple-Line-Icons.woff2?v=2.4.0') format('woff2'), url('Simple-Line-Icons.ttf?v=2.4.0') format('truetype'), url('Simple-Line-Icons.woff?v=2.4.0') format('woff'), url('Simple-Line-Icons.svg?v=2.4.0#simple-line-icons') format('svg');
   font-weight: normal;
   font-style: normal;
-}
+}*/
 /*
  Use the following code if you want to have a class per icon.
  Instead of a list of all class selectors, you can use the generic [class*="icon-"] selector,
@@ -24973,6 +24973,13 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 */
 .icon-user,
 .icon-people,
+
+
+
+
+
+
+
 .icon-user-female,
 .icon-user-follow,
 .icon-user-following,
