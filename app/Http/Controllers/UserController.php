@@ -164,7 +164,7 @@ class UserController extends Controller
                         $user->update([
                             'name'=>$request->name,
                             'mobileno'=>$request->mobileno,
-                            'approval'=>$request->approval,
+                            'status'=>$request->approval,
                             'designation'=>$request->role,
                             'manager'=>$request->manager
                         ]);
