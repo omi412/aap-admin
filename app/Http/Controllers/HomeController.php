@@ -37,8 +37,10 @@ class HomeController extends Controller
         $booths =  RoleDetail::where('role_id',5)->select('id','name')->get();
         $galies =  RoleDetail::where('role_id',6)->select('id','name')->get();
         $taskStatus =  TaskStatus::all();
+        $taskComplete =  TaskStatus::where('status',1)->select('id');
+        $taskPending =  TaskStatus::where('status',0)->select('id');
         //dd($taskStatus);
-        return view('dashboard/dashboard',compact('mandals','wards','booths','galies','taskStatus'));
+        return view('dashboard/dashboard',compact('mandals','wards','booths','galies','taskStatus','taskComplete','taskPending'));
     }
 
     public function checkMobileNo(Request $request){
