@@ -55,8 +55,8 @@
               <tbody id="myTable"> 
                 @foreach ($booths as $booth)
                 <tr>
-                    <td>{{ $booth->id }}</td>
-                    <td> {{ $booth->title }}</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td> {{ $booth->name }}</td>
                     <td style="text-align: right;">
                        <button type="button" data-id="{{ $booth->id }}" class="btn btn-info edit btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
                       <button type="button" data-id="{{ $booth->id }}" class="btn btn-danger delete btn-sm" title="Delete"><i class="fa fa-trash"></i></button>
@@ -83,10 +83,22 @@
           <div class="modal-body">
             <form action="javascript:void(0)" id="addEditBookForm" name="addEditBookForm" class="form-horizontal" method="POST">
               <input type="hidden" name="id" id="id">
+              <input type="hidden" name="role_id" id="role_id">
+              <div class="form-group">
+                <label for="name" class="col-sm-4 control-label">Ward Name</label>
+                <div class="col-sm-12">
+                  <select name="parent_id" id="ddl-ward" class="form-control volunteer">
+                      <option value="">Select Ward</option>
+                      @foreach($wards as $ward)
+                      <option value="{{ $ward->id }}">{{ $ward->name }}</option>
+                      @endforeach
+                    </select>
+                </div>
+              </div> 
               <div class="form-group">
                 <label for="name" class="col-sm-4 control-label">Booth Name</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" id="title" name="title" placeholder="Enter Booth Name" value="" maxlength="50" required="">
+                  <input type="text" class="form-control" id="title" name="name" placeholder="Enter Booth Name" value="" maxlength="50" required="">
                 </div>
               </div>  
               <div class="col-sm-offset-2 col-sm-10">
@@ -151,7 +163,7 @@ $(document).ready(function(){
               $('#ajaxBookModel').html("Edit Booth");
               $('#ajax-book-model').modal('show');
               $('#id').val(res.id);
-              $('#title').val(res.title);
+              $('#title').val(res.name);
            }
         });
     });
@@ -172,19 +184,22 @@ $(document).ready(function(){
        }
     });
     $('body').on('click', '#btn-save', function (event) {
-          var id = $("#id").val();
+          let id = $('#id').val();
           var title = $("#title").val();
+            let url = "{{ url('add-update-booth') }}";
+  
+            if(id!=''){
+              url = "{{ url('update-booth') }}/"+id;
+            }
+          
           $("#btn-save").html('Please Wait...');
           $("#btn-save"). attr("disabled", true);
          
         // ajax
         $.ajax({
             type:"POST",
-            url: "{{ url('add-update-booth') }}",
-            data: {
-              id:id,
-              title:title,
-            },
+            url: url,
+            data: $('#addEditBookForm').serialize(),
             dataType: 'json',
             success: function(res){
              window.location.reload();

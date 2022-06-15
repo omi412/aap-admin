@@ -55,7 +55,7 @@
               <tbody id="myTable"> 
                 @foreach ($mandals as $mandal)
                 <tr>
-                    <td>{{ $mandal->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td> {{ $mandal->name }}</td>
                     <td style="text-align: right;">
                        <button type="button" data-id="{{ $mandal->id }}" class="btn btn-info edit btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>

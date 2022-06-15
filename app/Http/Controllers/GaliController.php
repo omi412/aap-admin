@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Gali;
+use App\Models\RoleDetail;
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class GaliController extends Controller
 {
     public function index()
     {
-        $data['galies'] = Gali::orderBy('id','desc')->paginate(5);
+        $galies = RoleDetail::where('role_id',6)->select('id','name')->get();
+        $booths  = RoleDetail::where('role_id',7)->select('id','name')->get();
    
-        return view('master.gali.gali',$data);
+        return view('master.gali.gali',compact('booths','galies'));
     }
     
    
@@ -23,14 +26,15 @@ class GaliController extends Controller
      */
     public function store(Request $request)
     {
-        $gali   =   Gali::updateOrCreate(
-
-        	        [
-                        'id' => $request->id
-                    ],
-                    [
-                        'title' => $request->title, 
-                    ]);
+        $booths = RoleDetail::where('role_id',7)->select('id','name')->get();
+        $role = Role::where('name','Gali Prabhari')->first();
+        //dd($mandals);
+        $roleDetail = new RoleDetail;
+        $roleDetail->role_id = $role->id;
+        $roleDetail->parent_id = $request->parent_id;
+        $roleDetail->name = $request->name;
+        //dd($roleDetail);
+        $roleDetail->save();
     
         return response()->json(['success' => true]);
     }
@@ -45,9 +49,56 @@ class GaliController extends Controller
     public function edit(Request $request)
     {   
         $where = array('id' => $request->id);
-        $gali  = Gali::where($where)->first();
+        $gali  = RoleDetail::where($where)->first();
  
         return response()->json($gali);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+             'name'=> 'required|max:100',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages()
+            ]);
+        }
+        else
+        {
+            $roleDetail = RoleDetail::find($id);
+            if($roleDetail)
+            {
+                try{
+                    $roleDetail->update([
+                        'name'=>$request->name,
+                        'parent_id'=>$request->parent_id
+
+                    ]);
+                    return response()->json([
+                        'status'=>200,
+                        'message'=>'Gali Updated Successfully.'
+                    ]);
+                }catch(Exception $e){
+                    return response()->json([
+                        'status'=>500,
+                        'message'=>$e->getMessage()
+                    ]);
+                }
+                
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Gali Not Found'
+                ]);
+            }
+
+        }
     }
  
    
@@ -59,7 +110,7 @@ class GaliController extends Controller
      */
     public function destroy(Request $request)
     {
-        $gali = Gali::where('id',$request->id)->delete();
+        $gali = RoleDetail::where('id',$request->id)->delete();
    
         return response()->json(['success' => true]);
     }

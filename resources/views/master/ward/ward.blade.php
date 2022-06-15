@@ -55,7 +55,7 @@
               <tbody id="myTable"> 
                 @foreach ($wards as $ward)
                 <tr>
-                    <td>{{ $ward->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td> {{ $ward->name }}</td>
                     <td style="text-align: right;">
                        <button type="button" data-id="{{ $ward->id }}" class="btn btn-info edit btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>

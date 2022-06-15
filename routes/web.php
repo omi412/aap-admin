@@ -145,11 +145,13 @@ Auth::routes();
     Route::get('booths', [BoothController::class, 'index']);
     Route::post('add-update-booth', [BoothController::class, 'store']);
     Route::post('edit-booth', [BoothController::class, 'edit']);
+    Route::post('update-booth/{id}', [BoothController::class,'update']);
     Route::post('delete-booth', [BoothController::class, 'destroy']);
 
     Route::get('galies', [GaliController::class, 'index']);
     Route::post('add-update-gali', [GaliController::class, 'store']);
     Route::post('edit-gali', [GaliController::class, 'edit']);
+    Route::post('update-gali/{id}', [GaliController::class,'update']);
     Route::post('delete-gali', [GaliController::class, 'destroy']);
 
     /* Master crud */
