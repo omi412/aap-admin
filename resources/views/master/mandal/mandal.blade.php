@@ -79,6 +79,9 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="ajaxBookModel"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body">
             <form action="javascript:void(0)" id="addEditBookForm" name="addEditBookForm" class="form-horizontal" method="POST">
@@ -96,9 +99,6 @@
                 </button>
               </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            
           </div>
         </div>
       </div>
