@@ -57,7 +57,7 @@
                 @foreach ($booths as $booth)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td> {{ $booth->parent->name }}</td>
+                    <td> {{ $booth->parent_id }}</td>
                     <td> {{ $booth->name }}</td>
                     <td style="text-align: right;">
                        <button type="button" data-id="{{ $booth->id }}" class="btn btn-info edit btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>

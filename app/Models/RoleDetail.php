@@ -22,6 +22,6 @@ class RoleDetail extends Model
     }
 
     public function parent() {
-        return $this->belongsTo(RoleDetail::class,'parent_id');
+        return $this->belongsTo(RoleDetail::class,'organisation_id', 'id');
       }
 }
