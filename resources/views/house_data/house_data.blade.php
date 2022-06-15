@@ -243,7 +243,7 @@
                             <td>`  +counter+ `</td>
                             <td>` + item.owner + `</td>
                             <td>` + item.house_no + `</td>
-                            <td>` + item.address_line_1 +` `+item.address_line_2+ `</td>
+                            <td>` + item.address_line_1 +` `+ item.address_line_2 + `</td>
                             <td>` + item.role_detail.name + `</td>
                             
                             <td style='display:flex;'>`;

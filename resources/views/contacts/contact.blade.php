@@ -85,7 +85,7 @@
                 <select class="form-control" name="house_id" id="select-state1" placeholder="Pick a House..." required >
                   <option value>Select House</option>
                   @foreach($house_data as $key)
-                    <option value="{{$key->id}}">{{ $key->owner }} - {{ $key->address_line_1 }} (ward-{{ $key->ward }})</option>
+                    <option value="{{$key->id}}">{{ $key->owner }} - {{ $key->address_line_1 }} (ward-{{ $key->role_detail_id }})</option>
                   @endforeach
                 </select>
               </div>
@@ -232,7 +232,7 @@
                         let tr_html = `<tr>
                             <td>` + counter + `</td>
                             <td>` + item.first_name + ` ` + item.last_name + `</td>
-                            <td>` + item.house_data.house_no+' '+item.house_data.address_line_1+' ward - '+item.house_data.ward+ `</td>
+                            <td>` + item.house_data.house_no +' '+ item.house_data.address_line_1 +' ward - '+ item.house_data.role_detail_id + `</td>
                             <td>` + usetType[item.user_type] + `</td>
                             <td style='display:flex;text-align:right'>`;
                             if(can_edit){
