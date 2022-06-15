@@ -68,8 +68,8 @@
                         <ul class="nav-group-items" style="height: auto;">
                         <li class="nav-item"><a class="has-arrow1 nav-link" href="{{ url('mandals') }}"><i class="icon icon-app-store"></i> Mandal</a></li>
                         <li class="nav-item"><a class="has-arrow1 nav-link" href="{{ url('wards') }}"><i class="icon icon-app-store"></i> Ward</a></li>
-                        <!-- <li class="nav-item"><a class="has-arrow1 nav-link" href="{{ url('booths') }}"><i class="icon icon-app-store"></i> Booth</a></li>
-                        <li class="nav-item"><a class="has-arrow1 nav-link" href="{{ url('galies') }}"><i class="icon icon-app-store"></i> Gali</a></li> -->
+                        <li class="nav-item"><a class="has-arrow1 nav-link" href="{{ url('booths') }}"><i class="icon icon-app-store"></i> Booth</a></li>
+                        <li class="nav-item"><a class="has-arrow1 nav-link" href="{{ url('galies') }}"><i class="icon icon-app-store"></i> Gali</a></li>
                         </ul>
                     </li>
                      @endcan

@@ -53,7 +53,7 @@
                 <th>Task Title</th>
                 <th>Task Description</th>
                 <th>Assign To</th>
-                <th>Volunteer</th>
+                <!-- <th>Volunteer</th> -->
                 <!-- <th>Date</th> -->
                 <th>Status</th>
                 <th style="text-align: right;">Action</th>
@@ -337,7 +337,7 @@
                             <td>` + item.task_title + `</td>`;
                             tr_html +=`<td>` + item.task_description + `</td>
                             <td>` + item.role.name + `</td>
-                            <td>` + item.role_detail.name + `</td>
+                            
                             <td>`+status[item.status]+`</td>
                             
                             <td style='display:flex;text-align:right'>`;

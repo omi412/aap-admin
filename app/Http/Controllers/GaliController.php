@@ -12,7 +12,7 @@ class GaliController extends Controller
     public function index()
     {
         $galies = RoleDetail::where('role_id',6)->select('id','name')->get();
-        $booths  = RoleDetail::where('role_id',7)->select('id','name')->get();
+        $booths  = RoleDetail::where('role_id',5)->select('id','name')->get();
    
         return view('master.gali.gali',compact('booths','galies'));
     }
@@ -26,7 +26,7 @@ class GaliController extends Controller
      */
     public function store(Request $request)
     {
-        $booths = RoleDetail::where('role_id',7)->select('id','name')->get();
+        $booths = RoleDetail::where('role_id',5)->select('id','name')->get();
         $role = Role::where('name','Gali Prabhari')->first();
         //dd($mandals);
         $roleDetail = new RoleDetail;
