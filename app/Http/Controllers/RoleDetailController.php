@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoleDetail;
-use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleDetailController extends Controller
@@ -43,8 +42,8 @@ class RoleDetailController extends Controller
         'name' => 'required',
         'status' => 'required'
         ]);
-        $role = Role::with('roles')->where('roles.name','=','admin')->get();
-        dd($role);
+        //$role = Role::with('roles')->where('roles.name','=','admin')->get();
+        //dd($role);
 
         $roleDetail = new RoleDetail;
         $roleDetail->role_id = $request->user_name;

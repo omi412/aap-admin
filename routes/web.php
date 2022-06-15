@@ -8,14 +8,18 @@ use App\Http\Controllers\addAssignController;
 use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\HouseDataController;
-use App\Http\Controllers\PendingApprovalController;
+use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleDetailController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
- 
+use App\Http\Controllers\MandalController;
+use App\Http\Controllers\WardController;
+use App\Http\Controllers\BoothController;
+use App\Http\Controllers\GaliController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -91,26 +95,26 @@ Auth::routes();
     Route::delete('delete-house-data/{id}', [HouseDataController::class, 'destroy']);
 
 
-    Route::resource('users', PendingApprovalController::class);
-    Route::post('users', [PendingApprovalController::class, 'store']);
-    Route::get('edit-user/{id}', [PendingApprovalController::class, 'edit']);
-    Route::post('update-user/{id}', [PendingApprovalController::class,'update']);
-    Route::delete('delete-user/{id}', [PendingApprovalController::class, 'destroy']);
+    Route::resource('users', UserController::class);
+    Route::post('users', [UserController::class, 'store']);
+    Route::get('edit-user/{id}', [UserController::class, 'edit']);
+    Route::post('update-user/{id}', [UserController::class,'update']);
+    Route::delete('delete-user/{id}', [UserController::class, 'destroy']);
 
 
-    Route::resource('pending-approval', PendingApprovalController::class);
-    Route::post('pending-approval', [PendingApprovalController::class, 'store']);
-    Route::get('edit-pending-approval/{id}', [PendingApprovalController::class, 'edit']);
-    Route::post('update-pending-approval/{id}', [PendingApprovalController::class,'update']);
-    Route::delete('delete-pending-approval/{id}', [PendingApprovalController::class, 'destroy']);
+    Route::resource('users', UserController::class);
+    Route::get('edit-pending-approval/{id}', [UserController::class, 'edit']);
+    Route::post('update-pending-approval/{id}', [UserController::class,'update']);
+    Route::delete('delete-pending-approval/{id}', [UserController::class, 'destroy']);
+    Route::any('pending-approval', [UserController::class, 'pendingApproval']);
 
     Route::resource('roles', RoleController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('role-details', RoleDetailController::class);
 
-    Route::get('get-wards/{mandal_id}', [PendingApprovalController::class, 'getWards']);
-    Route::get('get-booths/{ward_id}', [PendingApprovalController::class, 'getBooths']);
-    Route::get('get-galies/{booth_id}', [PendingApprovalController::class, 'getGali']);
+    Route::get('get-wards/{mandal_id}', [UserController::class, 'getWards']);
+    Route::get('get-booths/{ward_id}', [UserController::class, 'getBooths']);
+    Route::get('get-galies/{booth_id}', [UserController::class, 'getGali']);
 
     //Route::get('get-volunteers/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
     Route::get('get-wards/{volunteer_id}', [TaskStatusController::class, 'getVolunteers']);
@@ -122,6 +126,33 @@ Auth::routes();
     Route::get('edit-contact/{id}', [ContactController::class, 'edit']);
     Route::put('update-contact/{id}', [ContactController::class, 'update']);
     Route::delete('delete-contact/{id}', [ContactController::class, 'destroy']);
+
+
+    /* Master crud */
+
+    Route::get('mandals', [MandalController::class, 'index']);
+    Route::post('add-update-mandal', [MandalController::class, 'store']);
+    Route::post('edit-mandal', [MandalController::class, 'edit']);
+    Route::post('update-mandal/{id}', [MandalController::class,'update']);
+    Route::post('delete-mandal', [MandalController::class, 'destroy']);
+
+    Route::get('wards', [WardController::class, 'index']);
+    Route::post('add-update-ward', [WardController::class, 'store']);
+    Route::post('edit-ward', [WardController::class, 'edit']);
+    Route::post('update-ward/{id}', [WardController::class,'update']);
+    Route::post('delete-ward', [WardController::class, 'destroy']);
+
+    Route::get('booths', [BoothController::class, 'index']);
+    Route::post('add-update-booth', [BoothController::class, 'store']);
+    Route::post('edit-booth', [BoothController::class, 'edit']);
+    Route::post('delete-booth', [BoothController::class, 'destroy']);
+
+    Route::get('galies', [GaliController::class, 'index']);
+    Route::post('add-update-gali', [GaliController::class, 'store']);
+    Route::post('edit-gali', [GaliController::class, 'edit']);
+    Route::post('delete-gali', [GaliController::class, 'destroy']);
+
+    /* Master crud */
 
 
     /*Route::get('/volunteer-types', function () {
