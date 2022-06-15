@@ -56,6 +56,7 @@
                           @endforeach
                       </select> -->
                       <select class="send_to" id="ddl-role" name="send_to" required>
+                          <option value="">Select Volunteer Type</option>
                           @foreach(getRoles() as $role)
                             <option value="{{ $role->id }}">{{ $role->name }}</option>
                           @endforeach

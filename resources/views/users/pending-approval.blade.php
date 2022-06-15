@@ -115,7 +115,7 @@
             </div>
             <div class="col-md-9">
               <select name="role" id="ddl-role" class="form-control">
-                
+                <option value="">Select Volunteer Type</option>
                 @foreach(getRoles() as $role)
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach

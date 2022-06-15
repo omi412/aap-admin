@@ -112,6 +112,7 @@
             <div class="col-md-9">
               <select name="role" id="ddl-role" class="form-control role" required >
                 <!-- <option value="">Select Designation</option> -->
+                <option value="">Select Volunteer Type</option>
                 @foreach(getRoles() as $role)
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach
@@ -231,8 +232,8 @@
               <label for="password1">Designation</label>
             </div>
             <div class="col-md-9">
-              <select name="role" id="ddl-role" class="form-control">
-                
+              <select name="role" id="ddl-role1" class="form-control">
+                <option value="">Select Volunteer Type</option>
                 @foreach(getRoles() as $role)
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach
@@ -403,6 +404,27 @@
     });
     //$('#pending_approval').modal('show');
     $('#ddl-role').change(function(){
+      let role = $(this).val();
+      if(role==''){
+        $('#div-ward,#div-booth,#div-gali').hide();
+      }else if(role==3){ // mandal
+        $('#div-ward,#div-booth,#div-gali').hide();
+        $('#div-mandal').show();
+      }else if(role==4){ //ward
+        $('#div-booth,#div-gali').hide();
+        $('#div-ward,#div-mandal').show();
+        $('#ddl-ward').attr('required',true);
+      }else if(role==5){ // booth
+        $('#div-gali').hide();
+        $('#div-mandal,#div-ward,#div-booth').show();
+        $('#ddl-ward,#ddl-booth').attr('required',true);
+      }else if(role==6){ // gali
+        $('#div-mandal,#div-ward,#div-booth,#div-gali').show();
+        $('#ddl-ward,#ddl-booth,#ddl-gali').attr('required',true);
+      }
+    });
+
+    $('#ddl-role1').change(function(){
       let role = $(this).val();
       if(role==''){
         $('#div-ward,#div-booth,#div-gali').hide();
@@ -628,7 +650,7 @@
                 'name': $('#name').val(),
                 'mobileno': $('#mobileno').val(),
                 'approval': $('#approval').val(),
-                'designation': $('#ddl-role').val(),
+                'designation': $('#ddl-role1').val(),
                 'manager': $('#manager').val(),
             }
 
