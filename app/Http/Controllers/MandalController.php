@@ -12,9 +12,11 @@ class MandalController extends Controller
     public function index()
     {
         //$data['mandals'] = RoleDetail::orderBy('id','desc')->paginate(5);
-        $data['mandals']  = RoleDetail::where('role_id',3)->select('id','name')->get();
+         $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+        
+        $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
    
-        return view('master.mandal.mandal',$data);
+        return view('master.mandal.mandal',compact('mandals'));
     }
     
    

@@ -12,8 +12,10 @@ class WardController extends Controller
 {
     public function index()
     {
-        $mandals = RoleDetail::where('role_id',3)->select('id','name')->get();
-        $wards  = RoleDetail::where('role_id',4)->select('id','name')->get();
+        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+        
+        $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
+        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name','parent_id')->get();
    
         return view('master.ward.ward',compact('mandals', 'wards'));
     }
@@ -27,7 +29,7 @@ class WardController extends Controller
      */
     public function store(Request $request)
     {
-        $mandals = RoleDetail::where('role_id',3)->select('id','name')->get();
+        //$mandals = RoleDetail::where('role_id',3)->select('id','name')->get();
         $role = Role::where('name','Ward Prabhari')->first();
         //dd($role);
         $roleDetail = new RoleDetail;

@@ -48,6 +48,7 @@
             <thead>
                 <tr>
                   <th scope="col">S No.</th>
+                  <th scope="col">Mandal Name</th>
                   <th scope="col">Ward Name</th>
                   <th scope="col" style="text-align: right;">Action</th>
                 </tr>
@@ -56,6 +57,7 @@
                 @foreach ($wards as $ward)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td> {{ $ward->parent_id }}</td>
                     <td> {{ $ward->name }}</td>
                     <td style="text-align: right;">
                        <button type="button" data-id="{{ $ward->id }}" class="btn btn-info edit btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>

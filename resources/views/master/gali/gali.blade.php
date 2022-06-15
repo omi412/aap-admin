@@ -48,6 +48,7 @@
             <thead>
                 <tr>
                   <th scope="col">S No.</th>
+                  <th scope="col">Booth Name</th>
                   <th scope="col">Gali Name</th>
                   <th scope="col" style="text-align: right;">Action</th>
                 </tr>
@@ -56,6 +57,7 @@
                 @foreach ($galies as $gali)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td> {{ $gali->parent_id }}</td>
                     <td> {{ $gali->name }}</td>
                     <td style="text-align: right;">
                        <button type="button" data-id="{{ $gali->id }}" class="btn btn-info edit btn-sm" title="Edit"><i class="fa fa-pencil fa-lg"></i></button>
@@ -87,7 +89,7 @@
               <div class="form-group">
                 <label for="name" class="col-sm-4 control-label">Booth Name</label>
                 <div class="col-sm-12">
-                  <select name="parent_id" id="ddl-ward" class="form-control volunteer">
+                  <select name="parent_id" id="ddl-booth" class="form-control volunteer">
                       <option value="">Select Booth</option>
                       @foreach($booths as $booth)
                       <option value="{{ $booth->id }}">{{ $booth->name }}</option>
@@ -186,6 +188,8 @@ $(document).ready(function(){
     $('body').on('click', '#btn-save', function (event) {
           let id = $('#id').val();
           var title = $("#title").val();
+          var parent_id = $("#parent_id").val();
+          alert(parent_id);
             let url = "{{ url('add-update-gali') }}";
   
             if(id!=''){

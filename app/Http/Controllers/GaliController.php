@@ -11,8 +11,14 @@ class GaliController extends Controller
 {
     public function index()
     {
-        $galies = RoleDetail::where('role_id',6)->select('id','name')->get();
-        $booths  = RoleDetail::where('role_id',5)->select('id','name')->get();
+        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+
+        $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name')->get();
+        $galies = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name','parent_id')->get();
+
+        //$roleDetails = RoleDetail::orderBy('id','desc')->paginate(5);
+        
+        //dd($galies);
    
         return view('master.gali.gali',compact('booths','galies'));
     }
@@ -26,7 +32,7 @@ class GaliController extends Controller
      */
     public function store(Request $request)
     {
-        $booths = RoleDetail::where('role_id',5)->select('id','name')->get();
+        //$booths = RoleDetail::where('role_id',5)->select('id','name')->get();
         $role = Role::where('name','Gali Prabhari')->first();
         //dd($mandals);
         $roleDetail = new RoleDetail;

@@ -11,8 +11,9 @@ class BoothController extends Controller
 {
     public function index()
     {
-        $booths = RoleDetail::where('role_id',7)->select('id','name')->get();
-        $wards  = RoleDetail::where('role_id',4)->select('id','name')->get();
+        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+         $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
+        $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name','parent_id')->with('parent')->get();
    
         return view('master.booth.booth',compact('booths','wards'));
     }
@@ -27,7 +28,7 @@ class BoothController extends Controller
     public function store(Request $request)
     {
         
-        $wards = RoleDetail::where('role_id',4)->select('id','name')->get();
+        //$wards = RoleDetail::where('role_id',4)->select('id','name')->get();
         $role = Role::where('name','Booth Prabhari')->first();
         //dd($mandals);
         $roleDetail = new RoleDetail;

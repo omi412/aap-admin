@@ -20,4 +20,8 @@ class RoleDetail extends Model
     {
         return $this->hasMany('role');
     }
+
+    public function parent() {
+        return $this->belongsTo(RoleDetail::class,'parent_id');
+      }
 }
