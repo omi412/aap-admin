@@ -134,7 +134,7 @@
         </div>
       </div>
     </div><!--/.col-->
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
       <div class="card">
         <div class="card-header">
           Panding Approval
@@ -152,7 +152,7 @@
             </div>
         </div>
       </div>
-    </div><!--/.col-->
+    </div> --><!--/.col-->
   </div><!--/.row-->
 </div>
   
