@@ -106,6 +106,7 @@
                 </select> -->
                   <select name="assign_to" id="ddl-role" class="form-control assign_to role" required >
                     <!-- <option value="">Select Designation</option> -->
+                    <option value="">Select Volunteer Type</option>
                     @foreach(getRoles() as $role)
                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
