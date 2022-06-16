@@ -15,8 +15,8 @@ class WardController extends Controller
         $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
         
         $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
-        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name','parent_id')->first();
-        //dd($wards->parent->name);
+        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name','parent_id')->get();
+        //dd($wards);
    
         return view('master.ward.ward',compact('mandals', 'wards'));
     }
