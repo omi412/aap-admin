@@ -63,7 +63,7 @@
                       </select>
                     </div>
                 </div>
-                <div class="form-group row" id="div-mandal">
+                <div class="form-group row" id="div-mandal" style="display: none;">
                   <div class="col-md-3">
                     <label for="name">Mandal</label>
                   </div>

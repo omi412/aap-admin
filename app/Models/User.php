@@ -74,5 +74,8 @@ class User extends Authenticatable
 
     //     return false;
     // }
+    public function roleUser(){
+        return $this->hasOne(RoleUser::class,'user_id');//->withPivot('company_id')
+    }
     
 }

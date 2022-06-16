@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Auth;
 use Spatie\Permission\Models\Role;
 use App\Traits\FileUploadTrait;
-
+use DB;
 class TaskStatusController extends Controller
 {
     use FileUploadTrait;
@@ -34,7 +34,13 @@ class TaskStatusController extends Controller
 
     public function fetchtaskstatus()
     {
-        $taskStatus = TaskStatus::with(['role','roleDetail'])->get();
+        $loggedInUser = Auth::user();
+        $taskStatus = [];
+        if($loggedInUser->roles[0]->name=='Admin'){
+            $taskStatus = TaskStatus::with(['role','roleDetail'])->get();
+        }else{
+            $taskStatus = TaskStatus::where('created_by',auth()->id())->orWhere('volunteer',$loggedInUser->roleUser->role_details_id)->with(['role','roleDetail'])->get();
+        }
         
         return response()->json([
             'taskStatus'=>$taskStatus,
