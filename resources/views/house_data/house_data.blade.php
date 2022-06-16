@@ -113,14 +113,14 @@
               </div>
               <div class="form-group row">
                 <div class="col-md-3">
-                <label for="password1">Ward</label>
+                <label for="password1">Gali</label>
               </div>
               <div class="col-md-9">
                 <!-- <input type="text" class="form-control" id="ward" name="ward" placeholder="Ward" required > -->
                 <select id="ward" name="role_detail_id" placeholder="Ward" class="form-control" required>
-                  <option value="">Select Ward</option>
-                  @foreach($wards as $ward)
-                  <option value="{{ $ward->id }}">{{ $ward->name }}</option>
+                  <option value="">Select Gali</option>
+                  @foreach($galies as $gali)
+                  <option value="{{ $gali->id }}">{{ $gali->name }}</option>
                   @endforeach
                 </select>
               </div>

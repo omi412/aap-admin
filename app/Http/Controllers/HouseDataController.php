@@ -26,8 +26,8 @@ class HouseDataController extends Controller
             return response()->json(['house_data'=>$house_data]);
         }
         $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
-        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
-        return view('house_data.house_data',compact('wards'));
+        $galies = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name')->get();
+        return view('house_data.house_data',compact('galies'));
         
     }
 
