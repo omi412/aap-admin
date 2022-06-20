@@ -77,6 +77,35 @@ class HomeController extends Controller
             return redirect()->back()->with('error',$e->getMessage());
         }    
     }
+
+    
+    public function getWards($mandal_id)
+    {
+        $wards = RoleDetail::select('id','name')->where("parent_id",$mandal_id)->get();
+        return response()->json(['status'=>200,'wards'=>$wards]);
+    }
+    public function getBooths($ward_id)
+    {
+        $booths = RoleDetail::select('id','name')->where("parent_id",$ward_id)->get();
+        return response()->json(['status'=>200,'booths'=>$booths]);
+    }
+    public function getGali($booth_id)
+    {
+        $galies = RoleDetail::select('id','name')->where("parent_id",$booth_id)->get();
+        return response()->json(['status'=>200,'galies'=>$galies]);
+    }
+
+    public function hierarchy()
+    {
+        $roles = Role::whereIn('name',['Mandal Prabhari','Ward Prabhari','Booth Prabhari','Gali Prabhari'])->select('id','name')->pluck('id','name')->toArray();
+                
+        $mandals = RoleDetail::where('role_id',$roles['Mandal Prabhari'])->select('id','name')->get();
+        $wards = RoleDetail::where('role_id',$roles['Ward Prabhari'])->select('id','name')->get();
+        $booths = RoleDetail::where('role_id',$roles['Booth Prabhari'])->select('id','name')->get();
+        $galies = RoleDetail::where('role_id',$roles['Gali Prabhari'])->select('id','name')->get();
+        //dd($booths);
+        return view('hierarchy/hierarchy',compact('mandals','wards','booths','galies'));
+    }
 }
 
 

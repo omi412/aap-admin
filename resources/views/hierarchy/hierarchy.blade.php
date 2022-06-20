@@ -40,283 +40,24 @@
                       </div>
                     </a>
                     <ul class="active" class="hierarchy_child" id="section_child_status" style="display: none;">
-                        <li>
-                            <a href="javascript:void(0);" id="show_child2">
+                        @foreach($mandals as $mandal)
+                        <li id="ddl-mandal">
+                            <a href="javascript:void(0);" id="show_child2" class="show_childs">
+                            <input type="hidden" name="role_mandal" value="{{ $mandal->id }}" class="mandal_val">
                             <div class="member-view-box">
                               <div class="member-image">
                                 <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
                               </div>
                               <div class="member-details">
-                                  <h3>Ward 1</h3>
+                                  <h3>{{ $mandal->name }}</h3>
                               </div>
                             </div>
                             </a>
-                            <ul class="child2_status" id="section_child2_status" style="display: none;" >
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="member-view-box">
-                                            <div class="member-image">
-                                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                              </div>
-                                                <div class="member-details">
-                                                    <h3>Mandal Prabhari</h3>
-                                                </div>
-                                            </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="member-view-box">
-                                            <div class="member-image">
-                                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                              </div>
-                                                <div class="member-details">
-                                                    <h3>Mandal Prabhari</h3>
-                                                </div>
-                                            </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" id="show_child3">
-                                        <div class="member-view-box">
-                                            <div class="member-image">
-                                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                              </div>
-                                                <div class="member-details">
-                                                    <h3>Mandal Prabhari</h3>
-                                                </div>
-                                            </div>
-                                      
-                                    </a>
-                                    <ul class="child3_status" id="section_child3_status"  style="display: none;">
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                    <div class="member-image">
-                                                        <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                      </div>
-                                                        <div class="member-details">
-                                                            <h3>Mandal Prabhari</h3>
-                                                        </div>
-                                                    </div>
-                                          
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                    <div class="member-image">
-                                                        <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                      </div>
-                                                        <div class="member-details">
-                                                            <h3>Mandal Prabhari</h3>
-                                                        </div>
-                                                    </div>
-                                               
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                    <div class="member-image">
-                                                        <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                      </div>
-                                                        <div class="member-details">
-                                                            <h3>Mandal Prabhari</h3>
-                                                        </div>
-                                                   
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="member-view-box">
-                                            <div class="member-image">
-                                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                              </div>
-                                                <div class="member-details">
-                                                    <h3>Mandal Prabhari</h3>
-                                                </div>
-                                            </div>
-                                       
-                                    </a>
-                                    <ul id="section_child4_status" style="display: none;"> 
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                    <div class="member-image">
-                                                        <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                      </div>
-                                                        <div class="member-details">
-                                                            <h3>Mandal Prabhari</h3>
-                                                     
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                    <div class="member-image">
-                                                        <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                      </div>
-                                                        <div class="member-details">
-                                                            <h3>Mandal Prabhari</h3>
-                                                        </div>
-                                                   
-                                                </div>
-                                            </a>
-                                            <ul id="section_child5_status">
-                                                <li>
-                                                    <a href="javascript:void(0);">
-                                                        <div class="member-view-box">
-                                                            <div class="member-image">
-                                                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                              </div>
-                                                                <div class="member-details">
-                                                                    <h3>Mandal Prabhari</h3>
-                                                                </div>
-                                                         
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">
-                                                        <div class="member-view-box">
-                                                            <div class="member-image">
-                                                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                              </div>
-                                                                <div class="member-details">
-                                                                    <h3>Mandal Prabhari</h3>
-                                                                </div>
-                                                        
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">
-                                                        <div class="member-view-box">
-                                                            <div class="member-image">
-                                                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                              </div>
-                                                                <div class="member-details">
-                                                                    <h3>Mandal Prabhari</h3>
-                                                                </div>
-                                                            
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                    <div class="member-image">
-                                                        <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                      </div>
-                                                        <div class="member-details">
-                                                            <h3>Mandal Prabhari</h3>
-                                                        </div>
-                                                    </div>
-                                                
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
+                            <ul class="child2_status"  id="ddl-ward">
+
                             </ul>
                         </li>
-                        <li>
-                          <a href="javascript:void(0);" id="show_child4">
-                            <div class="member-view-box">
-                              <div class="member-image">
-                                <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                              </div>
-                              <div class="member-details">
-                                <h3>Ward 2</h3>
-                              </div>
-                            </div>
-                          </a>
-                            <ul class="child4_status" id="section_child4_status" style="display: none;">
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="member-view-box">
-                                          <div class="member-image">
-                                            <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                          </div>
-                                          <div class="member-details">
-                                            <h3>Mandal Prabhari</h3>
-                                          </div>
-                                        </div>
-                                    </a>
-                                  <ul style="display: none;">
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                  <div class="member-image">
-                                                    <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                  </div>
-                                                  <div class="member-details">
-                                                    <h3>Mandal Prabhari</h3>
-                                                  </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                               <div class="member-view-box">
-                                                <div class="member-image">
-                                                  <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                </div>
-                                                <div class="member-details">
-                                                  <h3>Mandal Prabhari</h3>
-                                                </div>
-                                              </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);">
-                                                <div class="member-view-box">
-                                                  <div class="member-image">
-                                                    <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                                  </div>
-                                                  <div class="member-details">
-                                                    <h3>Mandal Prabhari</h3>
-                                                  </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="member-view-box">
-                                          <div class="member-image">
-                                            <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                          </div>
-                                          <div class="member-details">
-                                            <h3>Mandal Prabhari</h3>
-                                          </div>
-                                        </div>
-                                    </a>
-                                    
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="member-view-box">
-                                          <div class="member-image">
-                                            <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
-                                          </div>
-                                          <div class="member-details">
-                                            <h3>Mandal Prabhari</h3>
-                                          </div>
-                                        </div>
-                                    </a>
-                                  
-                                </li>
-                            </ul>
-                        </li>
+                       @endforeach
                     </ul>
                 </li>
             </ul>
@@ -326,6 +67,11 @@
   </div>
 </div>
 
+<style>
+  #ddl-gali a{
+    cursor: default;
+  }
+</style>
 
 
 @endsection
@@ -359,5 +105,133 @@
     $("#section_child2_status").hide();
   });
 
+$(document).ready(function(){
+      //let mandal_id = $('.mandal_val').val();
+      $(document).on('click', '.show_childs', function () {
+      var mandal_id = $(this).find('.mandal_val').val();
+      //$("#setindex").val(index);
+      //alert(mandal_id);
+      let ward_opt = ``;
+      if(mandal_id!=''){
+        $.ajax({
+          "url":"{{ url('get-wards') }}/"+mandal_id,
+          "type":"GET",
+          "success":function(response){
+            if(response.status==200){
+              let wards = response.wards;
+              for (var i = 0; i < wards.length; i++) {
+                ward_opt +=`<li>
+                            <a href="javascript:void(0);" class="show_booth">
+                            <div class="member-view-box">
+                                <div class="member-image">
+                                    <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
+                                  </div>
+                                    <div class="member-details">
+                                      <input type="hidden" class="ward_val" name="role_ward" value="`+wards[i].id+`">
+                                        <h3>`+wards[i].name+`</h3>
+                                    </div>
+                                </div>
+                        </a><ul class="child2_status" id="ddl-booth" style="display:none;"></ul></li>`;
+              }
+              $('#ddl-ward').html(ward_opt);
+              //$('#ddl-mandal li.active').removeClass('active');
+              //$('#ddl-mandal li').addClass('active');
+            }else{
+              notification('danger',response.error);
+            }
+          },error:function(error){
+            notification('danger','Oops! Something went wrong');
+          }
+
+        });
+      }else{
+        $('#ddl-ward').html(`<option value=''>Select Ward</option>`);
+      }
+    });
+
+     $(document).on('click', '.show_booth', function () {
+      var ward_id = $(this).find('.ward_val').val();
+      //$("#setindex").val(index);
+      //alert(ward_id);
+      let booth_opt = ``;
+      //alert(ward_id);
+      if(ward_id!=''){
+        $.ajax({
+          "url":"{{ url('get-booths') }}/"+ward_id,
+          "type":"GET",
+          "success":function(response){
+            if(response.status==200){
+              let booth = response.booths;
+              for (var i = 0; i < booth.length; i++) {
+                booth_opt +=`<li>
+                            <a href="javascript:void(0);" class="show_gali">
+                            <div class="member-view-box">
+                                <div class="member-image">
+                                    <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
+                                  </div>
+                                    <div class="member-details">
+                                      <input type="hidden" class="booth_val" name="role_ward" value="`+booth[i].id+`">
+                                        <h3>`+booth[i].name+`</h3>
+                                    </div>
+                                </div></a><ul class="child2_status"  id="ddl-gali" style="display:none;"></ul></li>`;
+              }
+              $('#ddl-booth').html(booth_opt);
+              $('#ddl-booth').show();
+            }else{
+              notification('danger',response.error);
+            }
+          },error:function(error){
+            notification('danger','Oops! Something went wrong');
+          }
+
+        });
+      }else{
+        $('#ddl-booth').html(`<option value=''>Select Booth</option>`);
+      }
+    });
+
+     $(document).on('click', '.show_gali', function () {
+      var booth_id = $(this).find('.booth_val').val();
+      //$("#setindex").val(index);
+      //alert(booth_id);
+      let gali_opt = ``;
+      //alert(booth_id);
+      if(booth_id!=''){
+        $.ajax({
+          "url":"{{ url('get-galies') }}/"+booth_id,
+          "type":"GET",
+          "success":function(response){
+            if(response.status==200){
+              let gali = response.galies;
+              for (var i = 0; i < gali.length; i++) {
+                gali_opt +=`<li>
+                            <a href="javascript:void(0);" class="">
+                            <div class="member-view-box">
+                                <div class="member-image">
+                                    <img src="{{ asset ('assets/images/hierarchy/Circle-icons-profile.png')}}" alt="Member">
+                                  </div>
+                                    <div class="member-details">
+                                      <input type="hidden" class="gali_val" name="role_ward" value="`+gali[i].id+`">
+                                        <h3>`+gali[i].name+`</h3>
+                                    </div>
+                                </div>
+                        </a></li>`;
+              }
+              $('#ddl-gali').html(gali_opt);
+              $('#ddl-gali').show();
+            }else{
+              notification('danger',response.error);
+            }
+          },error:function(error){
+            notification('danger','Oops! Something went wrong');
+          }
+
+        });
+      }else{
+        $('#ddl-gali').html(`<option value=''>Select Gali</option>`);
+      }
+    });
+
+    });
 </script>
 @endsection

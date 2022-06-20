@@ -183,9 +183,15 @@ Auth::routes();
         return view('contacts/contact');
     });*/
 
-    Route::get('/hierarchy', function () {
+    /*Route::get('/hierarchy', function () {
         return view('hierarchy/hierarchy');
+    });*/
+    Route::get('/old-hierarchy', function () {
+        return view('hierarchy/old-hierarchy');
     });
+
+    Route::get('hierarchy', [HomeController::class, 'hierarchy']);
+
 
     /*Route::get('/pending-approval', function () {
         return view('pending_approval/pending_approval');
