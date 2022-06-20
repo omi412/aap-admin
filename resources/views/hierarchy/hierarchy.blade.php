@@ -53,7 +53,7 @@
                               </div>
                             </div>
                             </a>
-                            <ul class="child2_status"  id="ddl-ward">
+                            <ul class=""  id="ddl-ward">
 
                             </ul>
                         </li>
@@ -87,23 +87,23 @@
     $("#section_child4_status").hide();
   });
 
-  $("#show_child2").click(function(){
-    $("#section_child2_status").show();
-    $("#section_child3_status").hide();
-    $("#section_child4_status").hide();
-  });
+  // $("#show_child2").click(function(){
+  //   $("#section_child2_status").show();
+  //   $("#section_child3_status").hide();
+  //   $("#section_child4_status").hide();
+  // });
 
-  $("#show_child3").click(function(){
-    $("#section_child3_status").show();
-    $("#section_child2_status").hide();
-    $("#section_child4_status").hide();
-  });
+  // $("#show_child3").click(function(){
+  //   $("#section_child3_status").show();
+  //   $("#section_child2_status").hide();
+  //   $("#section_child4_status").hide();
+  // });
 
-  $("#show_child4").click(function(){
-    $("#section_child4_status").show();
-    $("#section_child3_status").hide();
-    $("#section_child2_status").hide();
-  });
+  // $("#show_child4").click(function(){
+  //   $("#section_child4_status").show();
+  //   $("#section_child3_status").hide();
+  //   $("#section_child2_status").hide();
+  // });
 
 $(document).ready(function(){
       //let mandal_id = $('.mandal_val').val();
@@ -131,7 +131,7 @@ $(document).ready(function(){
                                         <h3>`+wards[i].name+`</h3>
                                     </div>
                                 </div>
-                        </a><ul class="child2_status" id="ddl-booth" style="display:none;"></ul></li>`;
+                        </a><ul class="child2_status"></ul></li>`;
               }
               $('#ddl-ward').html(ward_opt);
               //$('#ddl-mandal li.active').removeClass('active');
@@ -151,11 +151,13 @@ $(document).ready(function(){
 
      $(document).on('click', '.show_booth', function () {
       var ward_id = $(this).find('.ward_val').val();
+      var currentObj = $(this);
       //$("#setindex").val(index);
       //alert(ward_id);
       let booth_opt = ``;
       //alert(ward_id);
       if(ward_id!=''){
+        $('.child2_status').html('');
         $.ajax({
           "url":"{{ url('get-booths') }}/"+ward_id,
           "type":"GET",
@@ -175,8 +177,9 @@ $(document).ready(function(){
                                     </div>
                                 </div></a><ul class="child2_status"  id="ddl-gali" style="display:none;"></ul></li>`;
               }
-              $('#ddl-booth').html(booth_opt);
-              $('#ddl-booth').show();
+              $(currentObj).siblings('.child2_status').html(booth_opt);
+              //$('#ddl-booth').html(booth_opt);
+              //$('#ddl-booth').show();
             }else{
               notification('danger',response.error);
             }
